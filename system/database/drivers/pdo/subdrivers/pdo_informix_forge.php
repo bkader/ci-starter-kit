@@ -109,17 +109,17 @@ class CI_DB_pdo_informix_forge extends CI_DB_pdo_forge {
 		{
 			case 'TINYINT':
 				$attributes['TYPE'] = 'SMALLINT';
-				$attributes['UNSIGNED'] = FALSE;
+				$attributes['UNSIGNED'] = false;
 				return;
 			case 'MEDIUMINT':
 				$attributes['TYPE'] = 'INTEGER';
-				$attributes['UNSIGNED'] = FALSE;
+				$attributes['UNSIGNED'] = false;
 				return;
 			case 'BYTE':
 			case 'TEXT':
 			case 'BLOB':
 			case 'CLOB':
-				$attributes['UNIQUE'] = FALSE;
+				$attributes['UNIQUE'] = false;
 				if (isset($attributes['DEFAULT']))
 				{
 					unset($attributes['DEFAULT']);
@@ -140,7 +140,7 @@ class CI_DB_pdo_informix_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _attr_unique(&$attributes, &$field)
 	{
-		if ( ! empty($attributes['UNIQUE']) && $attributes['UNIQUE'] === TRUE)
+		if ( ! empty($attributes['UNIQUE']) && $attributes['UNIQUE'] === true)
 		{
 			$field['unique'] = ' UNIQUE CONSTRAINT '.$this->db->escape_identifiers($field['name']);
 		}

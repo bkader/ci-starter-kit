@@ -153,7 +153,7 @@ class CI_DB_odbc_result extends CI_DB_result {
 		if (is_resource($this->result_id))
 		{
 			odbc_free_result($this->result_id);
-			$this->result_id = FALSE;
+			$this->result_id = false;
 		}
 	}
 
@@ -220,7 +220,7 @@ if ( ! function_exists('odbc_fetch_array'))
 		$rs = array();
 		if ( ! odbc_fetch_into($result, $rs, $rownumber))
 		{
-			return FALSE;
+			return false;
 		}
 
 		$rs_assoc = array();
@@ -253,7 +253,7 @@ if ( ! function_exists('odbc_fetch_object'))
 		$rs = array();
 		if ( ! odbc_fetch_into($result, $rs, $rownumber))
 		{
-			return FALSE;
+			return false;
 		}
 
 		$rs_object = new stdClass();

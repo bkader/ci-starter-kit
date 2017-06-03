@@ -72,7 +72,7 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 *
 	 * @var	string
 	 */
-	protected $_rename_table	= FALSE;
+	protected $_rename_table	= false;
 
 	/**
 	 * DROP TABLE IF statement
@@ -98,7 +98,7 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 *
 	 * @var	string
 	 */
-	protected $_default		= FALSE;
+	protected $_default		= false;
 
 	// --------------------------------------------------------------------
 
@@ -112,13 +112,13 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{
-		if (in_array($alter_type, array('ADD', 'DROP'), TRUE))
+		if (in_array($alter_type, array('ADD', 'DROP'), true))
 		{
 			return parent::_alter_table($alter_type, $table, $field);
 		}
 
 		// No method of modifying columns is supported
-		return FALSE;
+		return false;
 	}
 
 	// --------------------------------------------------------------------
@@ -154,11 +154,11 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 		{
 			case 'TINYINT':
 				$attributes['TYPE'] = 'SMALLINT';
-				$attributes['UNSIGNED'] = FALSE;
+				$attributes['UNSIGNED'] = false;
 				return;
 			case 'MEDIUMINT':
 				$attributes['TYPE'] = 'INTEGER';
-				$attributes['UNSIGNED'] = FALSE;
+				$attributes['UNSIGNED'] = false;
 				return;
 			case 'INTEGER':
 				$attributes['TYPE'] = 'INT';
@@ -181,12 +181,12 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _attr_unique(&$attributes, &$field)
 	{
-		if ( ! empty($attributes['UNIQUE']) && $attributes['UNIQUE'] === TRUE)
+		if ( ! empty($attributes['UNIQUE']) && $attributes['UNIQUE'] === true)
 		{
 			$field['unique'] = ' UNIQUE';
 
-			// UNIQUE must be used with NOT NULL
-			$field['null'] = ' NOT NULL';
+			// UNIQUE must be used with NOT null
+			$field['null'] = ' NOT null';
 		}
 	}
 
@@ -201,9 +201,9 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _attr_auto_increment(&$attributes, &$field)
 	{
-		if ( ! empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE)
+		if ( ! empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === true)
 		{
-			if (stripos($field['type'], 'int') !== FALSE)
+			if (stripos($field['type'], 'int') !== false)
 			{
 				$field['auto_increment'] = ' AUTO_INCREMENT';
 			}

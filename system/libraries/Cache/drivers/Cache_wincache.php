@@ -73,18 +73,18 @@ class CI_Cache_wincache extends CI_Driver {
 	 * Get
 	 *
 	 * Look for a value in the cache. If it exists, return the data,
-	 * if not, return FALSE
+	 * if not, return false
 	 *
 	 * @param	string	$id	Cache Ide
-	 * @return	mixed	Value that is stored/FALSE on failure
+	 * @return	mixed	Value that is stored/false on failure
 	 */
 	public function get($id)
 	{
-		$success = FALSE;
+		$success = false;
 		$data = wincache_ucache_get($id, $success);
 
 		// Success returned by reference from wincache_ucache_get()
-		return ($success) ? $data : FALSE;
+		return ($success) ? $data : false;
 	}
 
 	// ------------------------------------------------------------------------
@@ -98,7 +98,7 @@ class CI_Cache_wincache extends CI_Driver {
 	 * @param	bool	$raw	Whether to store the raw value (unused)
 	 * @return	bool	true on success/false on failure
 	 */
-	public function save($id, $data, $ttl = 60, $raw = FALSE)
+	public function save($id, $data, $ttl = 60, $raw = false)
 	{
 		return wincache_ucache_set($id, $data, $ttl);
 	}
@@ -123,14 +123,14 @@ class CI_Cache_wincache extends CI_Driver {
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to add
-	 * @return	mixed	New value on success or FALSE on failure
+	 * @return	mixed	New value on success or false on failure
 	 */
 	public function increment($id, $offset = 1)
 	{
-		$success = FALSE;
+		$success = false;
 		$value = wincache_ucache_inc($id, $offset, $success);
 
-		return ($success === TRUE) ? $value : FALSE;
+		return ($success === true) ? $value : false;
 	}
 
 	// ------------------------------------------------------------------------
@@ -140,14 +140,14 @@ class CI_Cache_wincache extends CI_Driver {
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to reduce by
-	 * @return	mixed	New value on success or FALSE on failure
+	 * @return	mixed	New value on success or false on failure
 	 */
 	public function decrement($id, $offset = 1)
 	{
-		$success = FALSE;
+		$success = false;
 		$value = wincache_ucache_dec($id, $offset, $success);
 
-		return ($success === TRUE) ? $value : FALSE;
+		return ($success === true) ? $value : false;
 	}
 
 	// ------------------------------------------------------------------------
@@ -171,7 +171,7 @@ class CI_Cache_wincache extends CI_Driver {
 	 */
 	 public function cache_info()
 	 {
-		 return wincache_ucache_info(TRUE);
+		 return wincache_ucache_info(true);
 	 }
 
 	// ------------------------------------------------------------------------
@@ -184,7 +184,7 @@ class CI_Cache_wincache extends CI_Driver {
 	 */
 	public function get_metadata($id)
 	{
-		if ($stored = wincache_ucache_info(FALSE, $id))
+		if ($stored = wincache_ucache_info(false, $id))
 		{
 			$age = $stored['ucache_entries'][1]['age_seconds'];
 			$ttl = $stored['ucache_entries'][1]['ttl_seconds'];
@@ -198,7 +198,7 @@ class CI_Cache_wincache extends CI_Driver {
 			);
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// ------------------------------------------------------------------------

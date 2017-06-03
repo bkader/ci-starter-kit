@@ -60,21 +60,21 @@ abstract class CI_DB_utility {
 	 *
 	 * @var	string
 	 */
-	protected $_list_databases		= FALSE;
+	protected $_list_databases		= false;
 
 	/**
 	 * OPTIMIZE TABLE statement
 	 *
 	 * @var	string
 	 */
-	protected $_optimize_table	= FALSE;
+	protected $_optimize_table	= false;
 
 	/**
 	 * REPAIR TABLE statement
 	 *
 	 * @var	string
 	 */
-	protected $_repair_table	= FALSE;
+	protected $_repair_table	= false;
 
 	// --------------------------------------------------------------------
 
@@ -104,15 +104,15 @@ abstract class CI_DB_utility {
 		{
 			return $this->db->data_cache['db_names'];
 		}
-		elseif ($this->_list_databases === FALSE)
+		elseif ($this->_list_databases === false)
 		{
-			return ($this->db->db_debug) ? $this->db->display_error('db_unsupported_feature') : FALSE;
+			return ($this->db->db_debug) ? $this->db->display_error('db_unsupported_feature') : false;
 		}
 
 		$this->db->data_cache['db_names'] = array();
 
 		$query = $this->db->query($this->_list_databases);
-		if ($query === FALSE)
+		if ($query === false)
 		{
 			return $this->db->data_cache['db_names'];
 		}
@@ -148,19 +148,19 @@ abstract class CI_DB_utility {
 	 */
 	public function optimize_table($table_name)
 	{
-		if ($this->_optimize_table === FALSE)
+		if ($this->_optimize_table === false)
 		{
-			return ($this->db->db_debug) ? $this->db->display_error('db_unsupported_feature') : FALSE;
+			return ($this->db->db_debug) ? $this->db->display_error('db_unsupported_feature') : false;
 		}
 
 		$query = $this->db->query(sprintf($this->_optimize_table, $this->db->escape_identifiers($table_name)));
-		if ($query !== FALSE)
+		if ($query !== false)
 		{
 			$query = $query->result_array();
 			return current($query);
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// --------------------------------------------------------------------
@@ -172,9 +172,9 @@ abstract class CI_DB_utility {
 	 */
 	public function optimize_database()
 	{
-		if ($this->_optimize_table === FALSE)
+		if ($this->_optimize_table === false)
 		{
-			return ($this->db->db_debug) ? $this->db->display_error('db_unsupported_feature') : FALSE;
+			return ($this->db->db_debug) ? $this->db->display_error('db_unsupported_feature') : false;
 		}
 
 		$result = array();
@@ -209,9 +209,9 @@ abstract class CI_DB_utility {
 	 */
 	public function repair_table($table_name)
 	{
-		if ($this->_repair_table === FALSE)
+		if ($this->_repair_table === false)
 		{
-			return ($this->db->db_debug) ? $this->db->display_error('db_unsupported_feature') : FALSE;
+			return ($this->db->db_debug) ? $this->db->display_error('db_unsupported_feature') : false;
 		}
 
 		$query = $this->db->query(sprintf($this->_repair_table, $this->db->escape_identifiers($table_name)));
@@ -335,10 +335,10 @@ abstract class CI_DB_utility {
 			'ignore'		=> array(),
 			'filename'		=> '',
 			'format'		=> 'gzip', // gzip, zip, txt
-			'add_drop'		=> TRUE,
-			'add_insert'		=> TRUE,
+			'add_drop'		=> true,
+			'add_insert'		=> true,
 			'newline'		=> "\n",
-			'foreign_key_checks'	=> TRUE
+			'foreign_key_checks'	=> true
 		);
 
 		// Did the user submit any preferences? If so set them....
@@ -361,7 +361,7 @@ abstract class CI_DB_utility {
 		}
 
 		// Validate the format
-		if ( ! in_array($prefs['format'], array('gzip', 'zip', 'txt'), TRUE))
+		if ( ! in_array($prefs['format'], array('gzip', 'zip', 'txt'), true))
 		{
 			$prefs['format'] = 'txt';
 		}

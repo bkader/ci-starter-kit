@@ -60,7 +60,7 @@ class CI_Session_database_driver extends CI_Session_driver implements SessionHan
 	 *
 	 * @var	bool
 	 */
-	protected $_row_exists = FALSE;
+	protected $_row_exists = false;
 
 	/**
 	 * Lock "driver" flag
@@ -99,11 +99,11 @@ class CI_Session_database_driver extends CI_Session_driver implements SessionHan
 		}
 
 		$db_driver = $this->_db->dbdriver.(empty($this->_db->subdriver) ? '' : '_'.$this->_db->subdriver);
-		if (strpos($db_driver, 'mysql') !== FALSE)
+		if (strpos($db_driver, 'mysql') !== false)
 		{
 			$this->_platform = 'mysql';
 		}
-		elseif (in_array($db_driver, array('postgre', 'pdo_pgsql'), TRUE))
+		elseif (in_array($db_driver, array('postgre', 'pdo_pgsql'), true))
 		{
 			$this->_platform = 'postgre';
 		}
@@ -148,7 +148,7 @@ class CI_Session_database_driver extends CI_Session_driver implements SessionHan
 	 */
 	public function read($session_id)
 	{
-		if ($this->_get_lock($session_id) !== FALSE)
+		if ($this->_get_lock($session_id) !== false)
 		{
 			// Prevent previous QB calls from messing with our queries
 			$this->_db->reset_query();
@@ -166,12 +166,12 @@ class CI_Session_database_driver extends CI_Session_driver implements SessionHan
 				$this->_db->where('ip_address', $_SERVER['REMOTE_ADDR']);
 			}
 
-			if ( ! ($result = $this->_db->get()) OR ($result = $result->row()) === NULL)
+			if ( ! ($result = $this->_db->get()) OR ($result = $result->row()) === null)
 			{
 				// PHP7 will reuse the same SessionHandler object after
 				// ID regeneration, so we need to explicitly set this to
-				// FALSE instead of relying on the default ...
-				$this->_row_exists = FALSE;
+				// false instead of relying on the default ...
+				$this->_row_exists = false;
 				$this->_fingerprint = md5('');
 				return '';
 			}
@@ -184,7 +184,7 @@ class CI_Session_database_driver extends CI_Session_driver implements SessionHan
 				: $result->data;
 
 			$this->_fingerprint = md5($result);
-			$this->_row_exists = TRUE;
+			$this->_row_exists = true;
 			return $result;
 		}
 
@@ -216,15 +216,15 @@ class CI_Session_database_driver extends CI_Session_driver implements SessionHan
 				return $this->_fail();
 			}
 
-			$this->_row_exists = FALSE;
+			$this->_row_exists = false;
 			$this->_session_id = $session_id;
 		}
-		elseif ($this->_lock === FALSE)
+		elseif ($this->_lock === false)
 		{
 			return $this->_fail();
 		}
 
-		if ($this->_row_exists === FALSE)
+		if ($this->_row_exists === false)
 		{
 			$insert_data = array(
 				'id' => $session_id,
@@ -236,7 +236,7 @@ class CI_Session_database_driver extends CI_Session_driver implements SessionHan
 			if ($this->_db->insert($this->_config['save_path'], $insert_data))
 			{
 				$this->_fingerprint = md5($session_data);
-				$this->_row_exists = TRUE;
+				$this->_row_exists = true;
 				return $this->_success;
 			}
 
@@ -358,10 +358,10 @@ class CI_Session_database_driver extends CI_Session_driver implements SessionHan
 			if ($this->_db->query("SELECT GET_LOCK('".$arg."', 300) AS ci_session_lock")->row()->ci_session_lock)
 			{
 				$this->_lock = $arg;
-				return TRUE;
+				return true;
 			}
 
-			return FALSE;
+			return false;
 		}
 		elseif ($this->_platform === 'postgre')
 		{
@@ -369,10 +369,10 @@ class CI_Session_database_driver extends CI_Session_driver implements SessionHan
 			if ($this->_db->simple_query('SELECT pg_advisory_lock('.$arg.')'))
 			{
 				$this->_lock = $arg;
-				return TRUE;
+				return true;
 			}
 
-			return FALSE;
+			return false;
 		}
 
 		return parent::_get_lock($session_id);
@@ -391,28 +391,28 @@ class CI_Session_database_driver extends CI_Session_driver implements SessionHan
 	{
 		if ( ! $this->_lock)
 		{
-			return TRUE;
+			return true;
 		}
 
 		if ($this->_platform === 'mysql')
 		{
 			if ($this->_db->query("SELECT RELEASE_LOCK('".$this->_lock."') AS ci_session_lock")->row()->ci_session_lock)
 			{
-				$this->_lock = FALSE;
-				return TRUE;
+				$this->_lock = false;
+				return true;
 			}
 
-			return FALSE;
+			return false;
 		}
 		elseif ($this->_platform === 'postgre')
 		{
 			if ($this->_db->simple_query('SELECT pg_advisory_unlock('.$this->_lock.')'))
 			{
-				$this->_lock = FALSE;
-				return TRUE;
+				$this->_lock = false;
+				return true;
 			}
 
-			return FALSE;
+			return false;
 		}
 
 		return parent::_release_lock();

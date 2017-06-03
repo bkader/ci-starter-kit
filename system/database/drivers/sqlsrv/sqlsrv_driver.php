@@ -64,7 +64,7 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 	 *
 	 * Determines what cursor type to use when executing queries.
 	 *
-	 * FALSE or SQLSRV_CURSOR_FORWARD would increase performance,
+	 * false or SQLSRV_CURSOR_FORWARD would increase performance,
 	 * but would disable num_rows() (and possibly insert_id())
 	 *
 	 * @var	mixed
@@ -88,7 +88,7 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 	 *
 	 * @var	bool
 	 */
-	protected $_quoted_identifier = TRUE;
+	protected $_quoted_identifier = true;
 
 	// --------------------------------------------------------------------
 
@@ -103,11 +103,11 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 		parent::__construct($params);
 
 		// This is only supported as of SQLSRV 3.0
-		if ($this->scrollable === NULL)
+		if ($this->scrollable === null)
 		{
 			$this->scrollable = defined('SQLSRV_CURSOR_CLIENT_BUFFERED')
 				? SQLSRV_CURSOR_CLIENT_BUFFERED
-				: FALSE;
+				: false;
 		}
 	}
 
@@ -119,18 +119,18 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 	 * @param	bool	$pooling
 	 * @return	resource
 	 */
-	public function db_connect($pooling = FALSE)
+	public function db_connect($pooling = false)
 	{
-		$charset = in_array(strtolower($this->char_set), array('utf-8', 'utf8'), TRUE)
+		$charset = in_array(strtolower($this->char_set), array('utf-8', 'utf8'), true)
 			? 'UTF-8' : SQLSRV_ENC_CHAR;
 
 		$connection = array(
 			'UID'			=> empty($this->username) ? '' : $this->username,
 			'PWD'			=> empty($this->password) ? '' : $this->password,
 			'Database'		=> $this->database,
-			'ConnectionPooling'	=> ($pooling === TRUE) ? 1 : 0,
+			'ConnectionPooling'	=> ($pooling === true) ? 1 : 0,
 			'CharacterSet'		=> $charset,
-			'Encrypt'		=> ($this->encrypt === TRUE) ? 1 : 0,
+			'Encrypt'		=> ($this->encrypt === true) ? 1 : 0,
 			'ReturnDatesAsStrings'	=> 1
 		);
 
@@ -141,12 +141,12 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 			unset($connection['UID'], $connection['PWD']);
 		}
 
-		if (FALSE !== ($this->conn_id = sqlsrv_connect($this->hostname, $connection)))
+		if (false !== ($this->conn_id = sqlsrv_connect($this->hostname, $connection)))
 		{
 			// Determine how identifiers are escaped
 			$query = $this->query('SELECT CASE WHEN (@@OPTIONS | 256) = @@OPTIONS THEN 1 ELSE 0 END AS qi');
 			$query = $query->row_array();
-			$this->_quoted_identifier = empty($query) ? FALSE : (bool) $query['qi'];
+			$this->_quoted_identifier = empty($query) ? false : (bool) $query['qi'];
 			$this->_escape_char = ($this->_quoted_identifier) ? '"' : array('[', ']');
 		}
 
@@ -172,10 +172,10 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 		{
 			$this->database = $database;
 			$this->data_cache = array();
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// --------------------------------------------------------------------
@@ -188,9 +188,9 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 	 */
 	protected function _execute($sql)
 	{
-		return ($this->scrollable === FALSE OR $this->is_write_type($sql))
+		return ($this->scrollable === false OR $this->is_write_type($sql))
 			? sqlsrv_query($this->conn_id, $sql)
-			: sqlsrv_query($this->conn_id, $sql, NULL, array('Scrollable' => $this->scrollable));
+			: sqlsrv_query($this->conn_id, $sql, null, array('Scrollable' => $this->scrollable));
 	}
 
 	// --------------------------------------------------------------------
@@ -269,9 +269,9 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 			return $this->data_cache['version'];
 		}
 
-		if ( ! $this->conn_id OR ($info = sqlsrv_server_info($this->conn_id)) === FALSE)
+		if ( ! $this->conn_id OR ($info = sqlsrv_server_info($this->conn_id)) === false)
 		{
-			return FALSE;
+			return false;
 		}
 
 		return $this->data_cache['version'] = $info['SQLServerVersion'];
@@ -287,13 +287,13 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 	 * @param	bool
 	 * @return	string	$prefix_limit
 	 */
-	protected function _list_tables($prefix_limit = FALSE)
+	protected function _list_tables($prefix_limit = false)
 	{
 		$sql = 'SELECT '.$this->escape_identifiers('name')
 			.' FROM '.$this->escape_identifiers('sysobjects')
 			.' WHERE '.$this->escape_identifiers('type')." = 'U'";
 
-		if ($prefix_limit === TRUE && $this->dbprefix !== '')
+		if ($prefix_limit === true && $this->dbprefix !== '')
 		{
 			$sql .= ' AND '.$this->escape_identifiers('name')." LIKE '".$this->escape_like_str($this->dbprefix)."%' "
 				.sprintf($this->_escape_like_str, $this->_escape_like_chr);
@@ -333,9 +333,9 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 			FROM INFORMATION_SCHEMA.Columns
 			WHERE UPPER(TABLE_NAME) = '.$this->escape(strtoupper($table));
 
-		if (($query = $this->query($sql)) === FALSE)
+		if (($query = $this->query($sql)) === false)
 		{
-			return FALSE;
+			return false;
 		}
 		$query = $query->result_object();
 
@@ -403,7 +403,7 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 	 */
 	protected function _update($table, $values)
 	{
-		$this->qb_limit = FALSE;
+		$this->qb_limit = false;
 		$this->qb_orderby = array();
 		return parent::_update($table, $values);
 	}
@@ -525,7 +525,7 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 			return parent::_insert_batch($table, $keys, $values);
 		}
 
-		return ($this->db_debug) ? $this->display_error('db_unsupported_feature') : FALSE;
+		return ($this->db_debug) ? $this->display_error('db_unsupported_feature') : false;
 	}
 
 	// --------------------------------------------------------------------

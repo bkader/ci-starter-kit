@@ -10,6 +10,7 @@
 	<!-- StyleSheets -->
 	<?php echo css('bootstrap.min', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'); ?>
 	<?php echo css('bootstrap-theme.min', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css'); ?>
+	<?php echo css('style.css'); ?>
 	<?php echo @$css_files; ?>
 
 	<?php echo js('modernizr.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js', null, 'common'); ?>
@@ -31,13 +32,14 @@
 	<!-- Feel free to remove this line because you don't need it -->
 	<script async defer src="https://buttons.github.io/buttons.js"></script>
 
-    <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-    <!-- (remove this line here)
+<?php if (config_item('ga_enabled') && (! empty(config_item('ga_siteid')) && config_item('ga_siteid') <> 'UA-XXXXX-Y')): ?>
+    <!-- Google Analytics-->
     <script>
         window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
-        ga('create','UA-XXXXX-Y','auto');ga('send','pageview')
+        ga('create','<?php echo config_item('ga_siteid'); ?>','auto');ga('send','pageview')
     </script>
     <script src="https://www.google-analytics.com/analytics.js" async defer></script>
-    (and this one here)-->
+
+<?php endif; ?>
 </body>
 </html>

@@ -55,7 +55,7 @@ class CI_Hooks {
 	 *
 	 * @var	bool
 	 */
-	public $enabled = FALSE;
+	public $enabled = false;
 
 	/**
 	 * List of all hooks set in config/hooks.php
@@ -78,7 +78,7 @@ class CI_Hooks {
 	 *
 	 * @var	bool
 	 */
-	protected $_in_progress = FALSE;
+	protected $_in_progress = false;
 
 	/**
 	 * Class constructor
@@ -92,7 +92,7 @@ class CI_Hooks {
 
 		// If hooks are not enabled in the config file
 		// there is nothing else to do
-		if ($CFG->item('enable_hooks') === FALSE)
+		if ($CFG->item('enable_hooks') === false)
 		{
 			return;
 		}
@@ -115,7 +115,7 @@ class CI_Hooks {
 		}
 
 		$this->hooks =& $hook;
-		$this->enabled = TRUE;
+		$this->enabled = true;
 	}
 
 	// --------------------------------------------------------------------
@@ -128,13 +128,13 @@ class CI_Hooks {
 	 * @uses	CI_Hooks::_run_hook()
 	 *
 	 * @param	string	$which	Hook name
-	 * @return	bool	TRUE on success or FALSE on failure
+	 * @return	bool	true on success or false on failure
 	 */
 	public function call_hook($which = '')
 	{
 		if ( ! $this->enabled OR ! isset($this->hooks[$which]))
 		{
-			return FALSE;
+			return false;
 		}
 
 		if (is_array($this->hooks[$which]) && ! isset($this->hooks[$which]['function']))
@@ -149,7 +149,7 @@ class CI_Hooks {
 			$this->_run_hook($this->hooks[$which]);
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -160,7 +160,7 @@ class CI_Hooks {
 	 * Runs a particular hook
 	 *
 	 * @param	array	$data	Hook details
-	 * @return	bool	TRUE on success or FALSE on failure
+	 * @return	bool	true on success or false on failure
 	 */
 	protected function _run_hook($data)
 	{
@@ -171,11 +171,11 @@ class CI_Hooks {
 				? $data[0]->{$data[1]}()
 				: $data();
 
-			return TRUE;
+			return true;
 		}
 		elseif ( ! is_array($data))
 		{
-			return FALSE;
+			return false;
 		}
 
 		// -----------------------------------
@@ -184,7 +184,7 @@ class CI_Hooks {
 
 		// If the script being called happens to have the same
 		// hook call within it a loop can happen
-		if ($this->_in_progress === TRUE)
+		if ($this->_in_progress === true)
 		{
 			return;
 		}
@@ -195,31 +195,31 @@ class CI_Hooks {
 
 		if ( ! isset($data['filepath'], $data['filename']))
 		{
-			return FALSE;
+			return false;
 		}
 
 		$filepath = APPPATH.$data['filepath'].'/'.$data['filename'];
 
 		if ( ! file_exists($filepath))
 		{
-			return FALSE;
+			return false;
 		}
 
 		// Determine and class and/or function names
-		$class		= empty($data['class']) ? FALSE : $data['class'];
-		$function	= empty($data['function']) ? FALSE : $data['function'];
+		$class		= empty($data['class']) ? false : $data['class'];
+		$function	= empty($data['function']) ? false : $data['function'];
 		$params		= isset($data['params']) ? $data['params'] : '';
 
 		if (empty($function))
 		{
-			return FALSE;
+			return false;
 		}
 
 		// Set the _in_progress flag
-		$this->_in_progress = TRUE;
+		$this->_in_progress = true;
 
 		// Call the requested class and/or function
-		if ($class !== FALSE)
+		if ($class !== false)
 		{
 			// The object is stored?
 			if (isset($this->_objects[$class]))
@@ -230,16 +230,16 @@ class CI_Hooks {
 				}
 				else
 				{
-					return $this->_in_progress = FALSE;
+					return $this->_in_progress = false;
 				}
 			}
 			else
 			{
-				class_exists($class, FALSE) OR require_once($filepath);
+				class_exists($class, false) OR require_once($filepath);
 
-				if ( ! class_exists($class, FALSE) OR ! method_exists($class, $function))
+				if ( ! class_exists($class, false) OR ! method_exists($class, $function))
 				{
-					return $this->_in_progress = FALSE;
+					return $this->_in_progress = false;
 				}
 
 				// Store the object and execute the method
@@ -253,14 +253,14 @@ class CI_Hooks {
 
 			if ( ! function_exists($function))
 			{
-				return $this->_in_progress = FALSE;
+				return $this->_in_progress = false;
 			}
 
 			$function($params);
 		}
 
-		$this->_in_progress = FALSE;
-		return TRUE;
+		$this->_in_progress = false;
+		return true;
 	}
 
 }

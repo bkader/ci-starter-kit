@@ -36,6 +36,10 @@
 				</div><!--/.form-group-->
 			</form><!--/.navbar-form-->
 
+			<div class="navbar-right">
+				<?php echo anchor('admin', 'Admin Panel', 'class="btn btn-primary navbar-btn"'); ?>
+			</div><!--/.navbar-right-->
+
 		</div><!-- /.navbar-collapse -->
 	</div><!--/.container-->
 </nav><!--/.navbar-->

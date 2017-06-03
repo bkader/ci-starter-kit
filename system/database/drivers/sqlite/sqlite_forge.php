@@ -51,21 +51,21 @@ class CI_DB_sqlite_forge extends CI_DB_forge {
 	 *
 	 * @var	string
 	 */
-	protected $_create_table_if	= FALSE;
+	protected $_create_table_if	= false;
 
 	/**
 	 * UNSIGNED support
 	 *
 	 * @var	bool|array
 	 */
-	protected $_unsigned		= FALSE;
+	protected $_unsigned		= false;
 
 	/**
-	 * NULL value representation in CREATE/ALTER TABLE statements
+	 * null value representation in CREATE/ALTER TABLE statements
 	 *
 	 * @var	string
 	 */
-	protected $_null		= 'NULL';
+	protected $_null		= 'null';
 
 	// --------------------------------------------------------------------
 
@@ -78,8 +78,8 @@ class CI_DB_sqlite_forge extends CI_DB_forge {
 	public function create_database($db_name)
 	{
 		// In SQLite, a database is created when you connect to the database.
-		// We'll return TRUE so that an error isn't generated
-		return TRUE;
+		// We'll return true so that an error isn't generated
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -94,18 +94,18 @@ class CI_DB_sqlite_forge extends CI_DB_forge {
 	{
 		if ( ! file_exists($this->db->database) OR ! @unlink($this->db->database))
 		{
-			return ($this->db->db_debug) ? $this->db->display_error('db_unable_to_drop') : FALSE;
+			return ($this->db->db_debug) ? $this->db->display_error('db_unable_to_drop') : false;
 		}
 		elseif ( ! empty($this->db->data_cache['db_names']))
 		{
-			$key = array_search(strtolower($this->db->database), array_map('strtolower', $this->db->data_cache['db_names']), TRUE);
-			if ($key !== FALSE)
+			$key = array_search(strtolower($this->db->database), array_map('strtolower', $this->db->data_cache['db_names']), true);
+			if ($key !== false)
 			{
 				unset($this->db->data_cache['db_names'][$key]);
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -133,7 +133,7 @@ class CI_DB_sqlite_forge extends CI_DB_forge {
 			//	DROP TABLE t1_backup;
 			//	COMMIT;
 
-			return FALSE;
+			return false;
 		}
 
 		return parent::_alter_table($alter_type, $table, $field);
@@ -190,7 +190,7 @@ class CI_DB_sqlite_forge extends CI_DB_forge {
 	 */
 	protected function _attr_auto_increment(&$attributes, &$field)
 	{
-		if ( ! empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE && stripos($field['type'], 'int') !== FALSE)
+		if ( ! empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === true && stripos($field['type'], 'int') !== false)
 		{
 			$field['type'] = 'INTEGER PRIMARY KEY';
 			$field['default'] = '';

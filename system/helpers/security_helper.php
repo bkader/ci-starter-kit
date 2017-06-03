@@ -58,7 +58,7 @@ if ( ! function_exists('xss_clean'))
 	 * @param	bool	whether or not the content is an image file
 	 * @return	string
 	 */
-	function xss_clean($str, $is_image = FALSE)
+	function xss_clean($str, $is_image = false)
 	{
 		return get_instance()->security->xss_clean($str, $is_image);
 	}

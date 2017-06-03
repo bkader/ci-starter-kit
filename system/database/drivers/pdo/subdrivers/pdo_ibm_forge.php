@@ -69,7 +69,7 @@ class CI_DB_pdo_ibm_forge extends CI_DB_pdo_forge {
 	 *
 	 * @var	string
 	 */
-	protected $_default		= FALSE;
+	protected $_default		= false;
 
 	// --------------------------------------------------------------------
 
@@ -107,11 +107,11 @@ class CI_DB_pdo_ibm_forge extends CI_DB_pdo_forge {
 		{
 			case 'TINYINT':
 				$attributes['TYPE'] = 'SMALLINT';
-				$attributes['UNSIGNED'] = FALSE;
+				$attributes['UNSIGNED'] = false;
 				return;
 			case 'MEDIUMINT':
 				$attributes['TYPE'] = 'INTEGER';
-				$attributes['UNSIGNED'] = FALSE;
+				$attributes['UNSIGNED'] = false;
 				return;
 			default: return;
 		}
@@ -128,12 +128,12 @@ class CI_DB_pdo_ibm_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _attr_unique(&$attributes, &$field)
 	{
-		if ( ! empty($attributes['UNIQUE']) && $attributes['UNIQUE'] === TRUE)
+		if ( ! empty($attributes['UNIQUE']) && $attributes['UNIQUE'] === true)
 		{
 			$field['unique'] = ' UNIQUE';
 
-			// UNIQUE must be used with NOT NULL
-			$field['null'] = ' NOT NULL';
+			// UNIQUE must be used with NOT null
+			$field['null'] = ' NOT null';
 		}
 	}
 

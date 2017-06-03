@@ -100,19 +100,19 @@ if ( ! function_exists('password_hash'))
 		if ($algo !== 1)
 		{
 			trigger_error('password_hash(): Unknown hashing algorithm: '.(int) $algo, E_USER_WARNING);
-			return NULL;
+			return null;
 		}
 
 		if (isset($options['cost']) && ($options['cost'] < 4 OR $options['cost'] > 31))
 		{
 			trigger_error('password_hash(): Invalid bcrypt cost parameter specified: '.(int) $options['cost'], E_USER_WARNING);
-			return NULL;
+			return null;
 		}
 
 		if (isset($options['salt']) && ($saltlen = ($func_overload ? mb_strlen($options['salt'], '8bit') : strlen($options['salt']))) < 22)
 		{
 			trigger_error('password_hash(): Provided salt is too short: '.$saltlen.' expecting 22', E_USER_WARNING);
-			return NULL;
+			return null;
 		}
 		elseif ( ! isset($options['salt']))
 		{
@@ -125,7 +125,7 @@ if ( ! function_exists('password_hash'))
 				catch (Exception $e)
 				{
 					log_message('error', 'compat/password: Error while trying to use random_bytes(): '.$e->getMessage());
-					return FALSE;
+					return false;
 				}
 			}
 			elseif (defined('MCRYPT_DEV_URANDOM'))
@@ -134,10 +134,10 @@ if ( ! function_exists('password_hash'))
 			}
 			elseif (DIRECTORY_SEPARATOR === '/' && (is_readable($dev = '/dev/arandom') OR is_readable($dev = '/dev/urandom')))
 			{
-				if (($fp = fopen($dev, 'rb')) === FALSE)
+				if (($fp = fopen($dev, 'rb')) === false)
 				{
 					log_message('error', 'compat/password: Unable to open '.$dev.' for reading.');
-					return FALSE;
+					return false;
 				}
 
 				// Try not to waste entropy ...
@@ -146,10 +146,10 @@ if ( ! function_exists('password_hash'))
 				$options['salt'] = '';
 				for ($read = 0; $read < 16; $read = ($func_overload) ? mb_strlen($options['salt'], '8bit') : strlen($options['salt']))
 				{
-					if (($read = fread($fp, 16 - $read)) === FALSE)
+					if (($read = fread($fp, 16 - $read)) === false)
 					{
 						log_message('error', 'compat/password: Error while reading from '.$dev.'.');
-						return FALSE;
+						return false;
 					}
 					$options['salt'] .= $read;
 				}
@@ -158,18 +158,18 @@ if ( ! function_exists('password_hash'))
 			}
 			elseif (function_exists('openssl_random_pseudo_bytes'))
 			{
-				$is_secure = NULL;
+				$is_secure = null;
 				$options['salt'] = openssl_random_pseudo_bytes(16, $is_secure);
-				if ($is_secure !== TRUE)
+				if ($is_secure !== true)
 				{
-					log_message('error', 'compat/password: openssl_random_pseudo_bytes() set the $cryto_strong flag to FALSE');
-					return FALSE;
+					log_message('error', 'compat/password: openssl_random_pseudo_bytes() set the $cryto_strong flag to false');
+					return false;
 				}
 			}
 			else
 			{
 				log_message('error', 'compat/password: No CSPRNG available.');
-				return FALSE;
+				return false;
 			}
 
 			$options['salt'] = str_replace('+', '.', rtrim(base64_encode($options['salt']), '='));
@@ -183,7 +183,7 @@ if ( ! function_exists('password_hash'))
 
 		return (strlen($password = crypt($password, sprintf('$2y$%02d$%s', $options['cost'], $options['salt']))) === 60)
 			? $password
-			: FALSE;
+			: false;
 	}
 }
 
@@ -206,7 +206,7 @@ if ( ! function_exists('password_needs_rehash'))
 
 		if ($algo !== $info['algo'])
 		{
-			return TRUE;
+			return true;
 		}
 		elseif ($algo === 1)
 		{
@@ -217,7 +217,7 @@ if ( ! function_exists('password_needs_rehash'))
 		// Odd at first glance, but according to a comment in PHP's own unit tests,
 		// because it is an unknown algorithm - it's valid and therefore doesn't
 		// need rehashing.
-		return FALSE;
+		return false;
 	}
 }
 
@@ -237,7 +237,7 @@ if ( ! function_exists('password_verify'))
 	{
 		if (strlen($hash) !== 60 OR strlen($password = crypt($password, $hash)) !== 60)
 		{
-			return FALSE;
+			return false;
 		}
 
 		$compare = 0;

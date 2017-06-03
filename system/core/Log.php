@@ -95,7 +95,7 @@ class CI_Log {
 	 *
 	 * @var bool
 	 */
-	protected $_enabled = TRUE;
+	protected $_enabled = true;
 
 	/**
 	 * Predefined logging levels
@@ -128,11 +128,11 @@ class CI_Log {
 		$this->_file_ext = (isset($config['log_file_extension']) && $config['log_file_extension'] !== '')
 			? ltrim($config['log_file_extension'], '.') : 'php';
 
-		file_exists($this->_log_path) OR mkdir($this->_log_path, 0755, TRUE);
+		file_exists($this->_log_path) OR mkdir($this->_log_path, 0755, true);
 
 		if ( ! is_dir($this->_log_path) OR ! is_really_writable($this->_log_path))
 		{
-			$this->_enabled = FALSE;
+			$this->_enabled = false;
 		}
 
 		if (is_numeric($config['log_threshold']))
@@ -169,9 +169,9 @@ class CI_Log {
 	 */
 	public function write_log($level, $msg)
 	{
-		if ($this->_enabled === FALSE)
+		if ($this->_enabled === false)
 		{
-			return FALSE;
+			return false;
 		}
 
 		$level = strtoupper($level);
@@ -179,7 +179,7 @@ class CI_Log {
 		if (( ! isset($this->_levels[$level]) OR ($this->_levels[$level] > $this->_threshold))
 			&& ! isset($this->_threshold_array[$this->_levels[$level]]))
 		{
-			return FALSE;
+			return false;
 		}
 
 		$filepath = $this->_log_path.'log-'.date('Y-m-d').'.'.$this->_file_ext;
@@ -187,7 +187,7 @@ class CI_Log {
 
 		if ( ! file_exists($filepath))
 		{
-			$newfile = TRUE;
+			$newfile = true;
 			// Only add protection to php files
 			if ($this->_file_ext === 'php')
 			{
@@ -197,15 +197,15 @@ class CI_Log {
 
 		if ( ! $fp = @fopen($filepath, 'ab'))
 		{
-			return FALSE;
+			return false;
 		}
 
 		flock($fp, LOCK_EX);
 
 		// Instantiating DateTime with microseconds appended to initial date is needed for proper support of this format
-		if (strpos($this->_date_fmt, 'u') !== FALSE)
+		if (strpos($this->_date_fmt, 'u') !== false)
 		{
-			$microtime_full = microtime(TRUE);
+			$microtime_full = microtime(true);
 			$microtime_short = sprintf("%06d", ($microtime_full - floor($microtime_full)) * 1000000);
 			$date = new DateTime(date('Y-m-d H:i:s.'.$microtime_short, $microtime_full));
 			$date = $date->format($this->_date_fmt);
@@ -219,7 +219,7 @@ class CI_Log {
 
 		for ($written = 0, $length = self::strlen($message); $written < $length; $written += $result)
 		{
-			if (($result = fwrite($fp, self::substr($message, $written))) === FALSE)
+			if (($result = fwrite($fp, self::substr($message, $written))) === false)
 			{
 				break;
 			}
@@ -228,7 +228,7 @@ class CI_Log {
 		flock($fp, LOCK_UN);
 		fclose($fp);
 
-		if (isset($newfile) && $newfile === TRUE)
+		if (isset($newfile) && $newfile === true)
 		{
 			chmod($filepath, $this->_file_permissions);
 		}
@@ -279,7 +279,7 @@ class CI_Log {
 	 * @param	int	$length
 	 * @return	string
 	 */
-	protected static function substr($str, $start, $length = NULL)
+	protected static function substr($str, $start, $length = null)
 	{
 		if (self::$func_overload)
 		{

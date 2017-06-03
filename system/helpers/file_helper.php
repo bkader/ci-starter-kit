@@ -86,14 +86,14 @@ if ( ! function_exists('write_file'))
 	{
 		if ( ! $fp = @fopen($path, $mode))
 		{
-			return FALSE;
+			return false;
 		}
 
 		flock($fp, LOCK_EX);
 
 		for ($result = $written = 0, $length = strlen($data); $written < $length; $written += $result)
 		{
-			if (($result = fwrite($fp, substr($data, $written))) === FALSE)
+			if (($result = fwrite($fp, substr($data, $written))) === false)
 			{
 				break;
 			}
@@ -115,7 +115,7 @@ if ( ! function_exists('delete_files'))
 	 *
 	 * Deletes all files contained in the supplied directory path.
 	 * Files must be writable or owned by the system in order to be deleted.
-	 * If the second parameter is set to TRUE, any directories contained
+	 * If the second parameter is set to true, any directories contained
 	 * within the supplied base directory will be nuked as well.
 	 *
 	 * @param	string	$path		File path
@@ -124,17 +124,17 @@ if ( ! function_exists('delete_files'))
 	 * @param	int	$_level		Current directory depth level (default: 0; internal use only)
 	 * @return	bool
 	 */
-	function delete_files($path, $del_dir = FALSE, $htdocs = FALSE, $_level = 0)
+	function delete_files($path, $del_dir = false, $htdocs = false, $_level = 0)
 	{
 		// Trim the trailing slash
 		$path = rtrim($path, '/\\');
 
 		if ( ! $current_dir = @opendir($path))
 		{
-			return FALSE;
+			return false;
 		}
 
-		while (FALSE !== ($filename = @readdir($current_dir)))
+		while (false !== ($filename = @readdir($current_dir)))
 		{
 			if ($filename !== '.' && $filename !== '..')
 			{
@@ -144,7 +144,7 @@ if ( ! function_exists('delete_files'))
 				{
 					delete_files($filepath, $del_dir, $htdocs, $_level + 1);
 				}
-				elseif ($htdocs !== TRUE OR ! preg_match('/^(\.htaccess|index\.(html|htm|php)|web\.config)$/i', $filename))
+				elseif ($htdocs !== true OR ! preg_match('/^(\.htaccess|index\.(html|htm|php)|web\.config)$/i', $filename))
 				{
 					@unlink($filepath);
 				}
@@ -153,9 +153,9 @@ if ( ! function_exists('delete_files'))
 
 		closedir($current_dir);
 
-		return ($del_dir === TRUE && $_level > 0)
+		return ($del_dir === true && $_level > 0)
 			? @rmdir($path)
-			: TRUE;
+			: true;
 	}
 }
 
@@ -174,28 +174,28 @@ if ( ! function_exists('get_filenames'))
 	 * @param	bool	internal variable to determine recursion status - do not use in calls
 	 * @return	array
 	 */
-	function get_filenames($source_dir, $include_path = FALSE, $_recursion = FALSE)
+	function get_filenames($source_dir, $include_path = false, $_recursion = false)
 	{
 		static $_filedata = array();
 
 		if ($fp = @opendir($source_dir))
 		{
 			// reset the array and make sure $source_dir has a trailing slash on the initial call
-			if ($_recursion === FALSE)
+			if ($_recursion === false)
 			{
 				$_filedata = array();
 				$source_dir = rtrim(realpath($source_dir), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
 			}
 
-			while (FALSE !== ($file = readdir($fp)))
+			while (false !== ($file = readdir($fp)))
 			{
 				if (is_dir($source_dir.$file) && $file[0] !== '.')
 				{
-					get_filenames($source_dir.$file.DIRECTORY_SEPARATOR, $include_path, TRUE);
+					get_filenames($source_dir.$file.DIRECTORY_SEPARATOR, $include_path, true);
 				}
 				elseif ($file[0] !== '.')
 				{
-					$_filedata[] = ($include_path === TRUE) ? $source_dir.$file : $file;
+					$_filedata[] = ($include_path === true) ? $source_dir.$file : $file;
 				}
 			}
 
@@ -203,7 +203,7 @@ if ( ! function_exists('get_filenames'))
 			return $_filedata;
 		}
 
-		return FALSE;
+		return false;
 	}
 }
 
@@ -224,7 +224,7 @@ if ( ! function_exists('get_dir_file_info'))
 	 * @param	bool	internal variable to determine recursion status - do not use in calls
 	 * @return	array
 	 */
-	function get_dir_file_info($source_dir, $top_level_only = TRUE, $_recursion = FALSE)
+	function get_dir_file_info($source_dir, $top_level_only = true, $_recursion = false)
 	{
 		static $_filedata = array();
 		$relative_path = $source_dir;
@@ -232,18 +232,18 @@ if ( ! function_exists('get_dir_file_info'))
 		if ($fp = @opendir($source_dir))
 		{
 			// reset the array and make sure $source_dir has a trailing slash on the initial call
-			if ($_recursion === FALSE)
+			if ($_recursion === false)
 			{
 				$_filedata = array();
 				$source_dir = rtrim(realpath($source_dir), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
 			}
 
 			// Used to be foreach (scandir($source_dir, 1) as $file), but scandir() is simply not as fast
-			while (FALSE !== ($file = readdir($fp)))
+			while (false !== ($file = readdir($fp)))
 			{
-				if (is_dir($source_dir.$file) && $file[0] !== '.' && $top_level_only === FALSE)
+				if (is_dir($source_dir.$file) && $file[0] !== '.' && $top_level_only === false)
 				{
-					get_dir_file_info($source_dir.$file.DIRECTORY_SEPARATOR, $top_level_only, TRUE);
+					get_dir_file_info($source_dir.$file.DIRECTORY_SEPARATOR, $top_level_only, true);
 				}
 				elseif ($file[0] !== '.')
 				{
@@ -256,7 +256,7 @@ if ( ! function_exists('get_dir_file_info'))
 			return $_filedata;
 		}
 
-		return FALSE;
+		return false;
 	}
 }
 
@@ -270,7 +270,7 @@ if ( ! function_exists('get_file_info'))
 	 * Given a file and path, returns the name, path, size, date modified
 	 * Second parameter allows you to explicitly declare what information you want returned
 	 * Options are: name, server_path, size, date, readable, writable, executable, fileperms
-	 * Returns FALSE if the file cannot be found.
+	 * Returns false if the file cannot be found.
 	 *
 	 * @param	string	path to file
 	 * @param	mixed	array or comma separated string of information returned
@@ -280,7 +280,7 @@ if ( ! function_exists('get_file_info'))
 	{
 		if ( ! file_exists($file))
 		{
-			return FALSE;
+			return false;
 		}
 
 		if (is_string($returned_values))
@@ -331,7 +331,7 @@ if ( ! function_exists('get_mime_by_extension'))
 	 * Get Mime by Extension
 	 *
 	 * Translates a file extension into a mime type based on config/mimes.php.
-	 * Returns FALSE if it can't determine the type, or open the mime config file
+	 * Returns false if it can't determine the type, or open the mime config file
 	 *
 	 * Note: this is NOT an accurate way of determining file mime types, and is here strictly as a convenience
 	 * It should NOT be trusted, and should certainly NOT be used for security
@@ -349,7 +349,7 @@ if ( ! function_exists('get_mime_by_extension'))
 
 			if (empty($mimes))
 			{
-				return FALSE;
+				return false;
 			}
 		}
 
@@ -362,7 +362,7 @@ if ( ! function_exists('get_mime_by_extension'))
 				: $mimes[$extension];
 		}
 
-		return FALSE;
+		return false;
 	}
 }
 

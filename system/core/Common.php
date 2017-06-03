@@ -57,7 +57,7 @@ if ( ! function_exists('is_php'))
 	 * Determines if the current version of PHP is equal to or greater than the supplied value
 	 *
 	 * @param	string
-	 * @return	bool	TRUE if the current version is $version or higher
+	 * @return	bool	true if the current version is $version or higher
 	 */
 	function is_php($version)
 	{
@@ -80,7 +80,7 @@ if ( ! function_exists('is_really_writable'))
 	/**
 	 * Tests for file writability
 	 *
-	 * is_writable() returns TRUE on Windows servers when you really can't write to
+	 * is_writable() returns true on Windows servers when you really can't write to
 	 * the file, based on the read-only attribute. is_writable() is also unreliable
 	 * on Unix servers if safe_mode is on.
 	 *
@@ -102,23 +102,23 @@ if ( ! function_exists('is_really_writable'))
 		if (is_dir($file))
 		{
 			$file = rtrim($file, '/').'/'.md5(mt_rand());
-			if (($fp = @fopen($file, 'ab')) === FALSE)
+			if (($fp = @fopen($file, 'ab')) === false)
 			{
-				return FALSE;
+				return false;
 			}
 
 			fclose($fp);
 			@chmod($file, 0777);
 			@unlink($file);
-			return TRUE;
+			return true;
 		}
-		elseif ( ! is_file($file) OR ($fp = @fopen($file, 'ab')) === FALSE)
+		elseif ( ! is_file($file) OR ($fp = @fopen($file, 'ab')) === false)
 		{
-			return FALSE;
+			return false;
 		}
 
 		fclose($fp);
-		return TRUE;
+		return true;
 	}
 }
 
@@ -138,7 +138,7 @@ if ( ! function_exists('load_class'))
 	 * @param	string	an optional argument to pass to the class constructor
 	 * @return	object
 	 */
-	function &load_class($class, $directory = 'libraries', $param = NULL)
+	function &load_class($class, $directory = 'libraries', $param = null)
 	{
 		static $_classes = array();
 
@@ -148,7 +148,7 @@ if ( ! function_exists('load_class'))
 			return $_classes[$class];
 		}
 
-		$name = FALSE;
+		$name = false;
 
 		// Look for the class first in the local application/libraries folder
 		// then in the native system/libraries folder
@@ -158,7 +158,7 @@ if ( ! function_exists('load_class'))
 			{
 				$name = 'CI_'.$class;
 
-				if (class_exists($name, FALSE) === FALSE)
+				if (class_exists($name, false) === false)
 				{
 					require_once($path.$directory.'/'.$class.'.php');
 				}
@@ -172,14 +172,14 @@ if ( ! function_exists('load_class'))
 		{
 			$name = config_item('subclass_prefix').$class;
 
-			if (class_exists($name, FALSE) === FALSE)
+			if (class_exists($name, false) === false)
 			{
 				require_once(APPPATH.$directory.'/'.$name.'.php');
 			}
 		}
 
 		// Did we find the class?
-		if ($name === FALSE)
+		if ($name === false)
 		{
 			// Note: We use exit() rather than show_error() in order to avoid a
 			// self-referencing loop with the Exceptions class
@@ -242,10 +242,10 @@ if ( ! function_exists('get_config'))
 		if (empty($config))
 		{
 			$file_path = APPPATH.'config/config.php';
-			$found = FALSE;
+			$found = false;
 			if (file_exists($file_path))
 			{
-				$found = TRUE;
+				$found = true;
 				require($file_path);
 			}
 
@@ -300,7 +300,7 @@ if ( ! function_exists('config_item'))
 			$_config[0] =& get_config();
 		}
 
-		return isset($_config[0][$item]) ? $_config[0][$item] : NULL;
+		return isset($_config[0][$item]) ? $_config[0][$item] : null;
 	}
 }
 
@@ -349,18 +349,18 @@ if ( ! function_exists('is_https'))
 	{
 		if ( ! empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off')
 		{
-			return TRUE;
+			return true;
 		}
 		elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
 		{
-			return TRUE;
+			return true;
 		}
 		elseif ( ! empty($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off')
 		{
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 }
 
@@ -434,7 +434,7 @@ if ( ! function_exists('show_404'))
 	 * @param	bool
 	 * @return	void
 	 */
-	function show_404($page = '', $log_error = TRUE)
+	function show_404($page = '', $log_error = true)
 	{
 		$_error =& load_class('Exceptions', 'core');
 		$_error->show_404($page, $log_error);
@@ -460,7 +460,7 @@ if ( ! function_exists('log_message'))
 	{
 		static $_log;
 
-		if ($_log === NULL)
+		if ($_log === null)
 		{
 			// references cannot be directly assigned to static variables, so we use an array
 			$_log[0] =& load_class('Log', 'core');
@@ -561,13 +561,13 @@ if ( ! function_exists('set_status_header'))
 
 		if (strpos(PHP_SAPI, 'cgi') === 0)
 		{
-			header('Status: '.$code.' '.$text, TRUE);
+			header('Status: '.$code.' '.$text, true);
 			return;
 		}
 
-		$server_protocol = (isset($_SERVER['SERVER_PROTOCOL']) && in_array($_SERVER['SERVER_PROTOCOL'], array('HTTP/1.0', 'HTTP/1.1', 'HTTP/2'), TRUE))
+		$server_protocol = (isset($_SERVER['SERVER_PROTOCOL']) && in_array($_SERVER['SERVER_PROTOCOL'], array('HTTP/1.0', 'HTTP/1.1', 'HTTP/2'), true))
 			? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
-		header($server_protocol.' '.$code.' '.$text, TRUE, $code);
+		header($server_protocol.' '.$code.' '.$text, true, $code);
 	}
 }
 
@@ -705,7 +705,7 @@ if ( ! function_exists('remove_invisible_characters'))
 	 * @param	bool
 	 * @return	string
 	 */
-	function remove_invisible_characters($str, $url_encoded = TRUE)
+	function remove_invisible_characters($str, $url_encoded = true)
 	{
 		$non_displayables = array();
 
@@ -738,10 +738,10 @@ if ( ! function_exists('html_escape'))
 	 * Returns HTML escaped variable.
 	 *
 	 * @param	mixed	$var		The input string or array of strings to be escaped.
-	 * @param	bool	$double_encode	$double_encode set to FALSE prevents escaping twice.
+	 * @param	bool	$double_encode	$double_encode set to false prevents escaping twice.
 	 * @return	mixed			The escaped string or array of strings as a result.
 	 */
-	function html_escape($var, $double_encode = TRUE)
+	function html_escape($var, $double_encode = true)
 	{
 		if (empty($var))
 		{
@@ -776,9 +776,9 @@ if ( ! function_exists('_stringify_attributes'))
 	 * @param	bool
 	 * @return	string
 	 */
-	function _stringify_attributes($attributes, $js = FALSE)
+	function _stringify_attributes($attributes, $js = false)
 	{
-		$atts = NULL;
+		$atts = null;
 
 		if (empty($attributes))
 		{
@@ -812,7 +812,7 @@ if ( ! function_exists('function_usable'))
 	 * extension is loaded - checks whether the function that is
 	 * checked might be disabled in there as well.
 	 *
-	 * This is useful as function_exists() will return FALSE for
+	 * This is useful as function_exists() will return false for
 	 * functions disabled via the *disable_functions* php.ini
 	 * setting, but not for *suhosin.executor.func.blacklist* and
 	 * *suhosin.executor.disable_eval*. These settings will just
@@ -825,8 +825,8 @@ if ( ! function_exists('function_usable'))
 	 *
 	 * @link	http://www.hardened-php.net/suhosin/
 	 * @param	string	$function_name	Function to check for
-	 * @return	bool	TRUE if the function exists and is safe to call,
-	 *			FALSE otherwise.
+	 * @return	bool	true if the function exists and is safe to call,
+	 *			false otherwise.
 	 */
 	function function_usable($function_name)
 	{
@@ -841,9 +841,9 @@ if ( ! function_exists('function_usable'))
 					: array();
 			}
 
-			return ! in_array($function_name, $_suhosin_func_blacklist, TRUE);
+			return ! in_array($function_name, $_suhosin_func_blacklist, true);
 		}
 
-		return FALSE;
+		return false;
 	}
 }

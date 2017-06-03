@@ -51,28 +51,28 @@ class CI_DB_pdo_oci_forge extends CI_DB_pdo_forge {
 	 *
 	 * @var	string
 	 */
-	protected $_create_database	= FALSE;
+	protected $_create_database	= false;
 
 	/**
 	 * CREATE TABLE IF statement
 	 *
 	 * @var	string
 	 */
-	protected $_create_table_if	= FALSE;
+	protected $_create_table_if	= false;
 
 	/**
 	 * DROP DATABASE statement
 	 *
 	 * @var	string
 	 */
-	protected $_drop_database	= FALSE;
+	protected $_drop_database	= false;
 
 	/**
 	 * UNSIGNED support
 	 *
 	 * @var	bool|array
 	 */
-	protected $_unsigned		= FALSE;
+	protected $_unsigned		= false;
 
 	// --------------------------------------------------------------------
 
@@ -99,7 +99,7 @@ class CI_DB_pdo_oci_forge extends CI_DB_pdo_forge {
 		$sqls = array();
 		for ($i = 0, $c = count($field); $i < $c; $i++)
 		{
-			if ($field[$i]['_literal'] !== FALSE)
+			if ($field[$i]['_literal'] !== false)
 			{
 				$field[$i] = "\n\t".$field[$i]['_literal'];
 			}

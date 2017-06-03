@@ -78,7 +78,7 @@ class CI_Trackback {
 	 *
 	 * @var	bool
 	 */
-	public $convert_ascii = TRUE;
+	public $convert_ascii = true;
 
 	/**
 	 * Response
@@ -119,7 +119,7 @@ class CI_Trackback {
 		if ( ! is_array($tb_data))
 		{
 			$this->set_error('The send() method must be passed an array');
-			return FALSE;
+			return false;
 		}
 
 		// Pre-process the Trackback Data
@@ -128,7 +128,7 @@ class CI_Trackback {
 			if ( ! isset($tb_data[$item]))
 			{
 				$this->set_error('Required item missing: '.$item);
-				return FALSE;
+				return false;
 			}
 
 			switch ($item)
@@ -148,7 +148,7 @@ class CI_Trackback {
 			}
 
 			// Convert High ASCII Characters
-			if ($this->convert_ascii === TRUE && in_array($item, array('excerpt', 'title', 'blog_name'), TRUE))
+			if ($this->convert_ascii === true && in_array($item, array('excerpt', 'title', 'blog_name'), true))
 			{
 				$$item = $this->convert_ascii($$item);
 			}
@@ -161,14 +161,14 @@ class CI_Trackback {
 			.'&excerpt='.rawurlencode($excerpt).'&charset='.rawurlencode($charset);
 
 		// Send Trackback(s)
-		$return = TRUE;
+		$return = true;
 		if (count($ping_url) > 0)
 		{
 			foreach ($ping_url as $url)
 			{
-				if ($this->process($url, $data) === FALSE)
+				if ($this->process($url, $data) === false)
 				{
-					$return = FALSE;
+					$return = false;
 				}
 			}
 		}
@@ -182,7 +182,7 @@ class CI_Trackback {
 	 * Receive Trackback  Data
 	 *
 	 * This function simply validates the incoming TB data.
-	 * It returns FALSE on failure and TRUE on success.
+	 * It returns false on failure and true on success.
 	 * If the data is valid it is set to the $this->data array
 	 * so that it can be inserted into a database.
 	 *
@@ -195,18 +195,18 @@ class CI_Trackback {
 			if (empty($_POST[$val]))
 			{
 				$this->set_error('The following required POST variable is missing: '.$val);
-				return FALSE;
+				return false;
 			}
 
 			$this->data['charset'] = isset($_POST['charset']) ? strtoupper(trim($_POST['charset'])) : 'auto';
 
-			if ($val !== 'url' && MB_ENABLED === TRUE)
+			if ($val !== 'url' && MB_ENABLED === true)
 			{
-				if (MB_ENABLED === TRUE)
+				if (MB_ENABLED === true)
 				{
 					$_POST[$val] = mb_convert_encoding($_POST[$val], $this->charset, $this->data['charset']);
 				}
-				elseif (ICONV_ENABLED === TRUE)
+				elseif (ICONV_ENABLED === true)
 				{
 					$_POST[$val] = @iconv($this->data['charset'], $this->charset.'//IGNORE', $_POST[$val]);
 				}
@@ -222,7 +222,7 @@ class CI_Trackback {
 			$this->data[$val] = $_POST[$val];
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -276,7 +276,7 @@ class CI_Trackback {
 	 * Process Trackback
 	 *
 	 * Opens a socket connection and passes the data to
-	 * the server. Returns TRUE on success, FALSE on failure
+	 * the server. Returns true on success, false on failure
 	 *
 	 * @param	string
 	 * @param	string
@@ -290,7 +290,7 @@ class CI_Trackback {
 		if ( ! $fp = @fsockopen($target['host'], 80))
 		{
 			$this->set_error('Invalid Connection: '.$url);
-			return FALSE;
+			return false;
 		}
 
 		// Build the path
@@ -320,16 +320,16 @@ class CI_Trackback {
 		}
 		@fclose($fp);
 
-		if (stripos($this->response, '<error>0</error>') === FALSE)
+		if (stripos($this->response, '<error>0</error>') === false)
 		{
 			$message = preg_match('/<message>(.*?)<\/message>/is', $this->response, $match)
 				? trim($match[1])
 				: 'An unknown error was encountered';
 			$this->set_error($message);
-			return FALSE;
+			return false;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -388,7 +388,7 @@ class CI_Trackback {
 	{
 		$tb_id = '';
 
-		if (strpos($url, '?') !== FALSE)
+		if (strpos($url, '?') !== false)
 		{
 			$tb_array = explode('/', $url);
 			$tb_end   = $tb_array[count($tb_array)-1];
@@ -414,7 +414,7 @@ class CI_Trackback {
 			}
 		}
 
-		return ctype_digit((string) $tb_id) ? $tb_id : FALSE;
+		return ctype_digit((string) $tb_id) ? $tb_id : false;
 	}
 
 	// --------------------------------------------------------------------

@@ -22,7 +22,7 @@ $config['iteration_count'] = 8;
 | Default: false
 |
 */
-$config['portable_hashes'] = FALSE;
+$config['portable_hashes'] = false;
 
 /* End of file bcrypt.php */
 /* Location: ./system/application/config/bcrypt.php */

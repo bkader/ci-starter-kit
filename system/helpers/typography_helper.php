@@ -73,10 +73,10 @@ if ( ! function_exists('auto_typography'))
 	 * Auto Typography Wrapper Function
 	 *
 	 * @param	string	$str
-	 * @param	bool	$reduce_linebreaks = FALSE	whether to reduce multiple instances of double newlines to two
+	 * @param	bool	$reduce_linebreaks = false	whether to reduce multiple instances of double newlines to two
 	 * @return	string
 	 */
-	function auto_typography($str, $reduce_linebreaks = FALSE)
+	function auto_typography($str, $reduce_linebreaks = false)
 	{
 		$CI =& get_instance();
 		$CI->load->library('typography');
@@ -97,7 +97,7 @@ if ( ! function_exists('entity_decode'))
 	 * @param	string
 	 * @return	string
 	 */
-	function entity_decode($str, $charset = NULL)
+	function entity_decode($str, $charset = null)
 	{
 		return get_instance()->security->entity_decode($str, $charset);
 	}

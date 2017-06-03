@@ -69,7 +69,7 @@ class CI_Encrypt {
 	 *
 	 * @var bool
 	 */
-	protected $_mcrypt_exists	= FALSE;
+	protected $_mcrypt_exists	= false;
 
 	/**
 	 * Current cipher to be used with mcrypt
@@ -92,7 +92,7 @@ class CI_Encrypt {
 	 */
 	public function __construct()
 	{
-		if (($this->_mcrypt_exists = function_exists('mcrypt_encrypt')) === FALSE)
+		if (($this->_mcrypt_exists = function_exists('mcrypt_encrypt')) === false)
 		{
 			show_error('The Encrypt library requires the Mcrypt extension.');
 		}
@@ -182,7 +182,7 @@ class CI_Encrypt {
 	{
 		if (preg_match('/[^a-zA-Z0-9\/\+=]/', $string) OR base64_encode(base64_decode($string)) !== $string)
 		{
-			return FALSE;
+			return false;
 		}
 
 		return $this->mcrypt_decode(base64_decode($string), $this->get_key($key));
@@ -209,7 +209,7 @@ class CI_Encrypt {
 	{
 		if (preg_match('/[^a-zA-Z0-9\/\+=]/', $string))
 		{
-			return FALSE;
+			return false;
 		}
 
 		// decode it first
@@ -220,10 +220,10 @@ class CI_Encrypt {
 
 		$key = $this->get_key($key);
 		$dec = base64_decode($string);
-		if (($dec = $this->mcrypt_decode($dec, $key)) === FALSE)
+		if (($dec = $this->mcrypt_decode($dec, $key)) === false)
 		{
 			$this->set_mode($current_mode);
-			return FALSE;
+			return false;
 		}
 
 		$dec = $this->_xor_decode($dec, $key);
@@ -316,7 +316,7 @@ class CI_Encrypt {
 
 		if ($init_size > self::strlen($data))
 		{
-			return FALSE;
+			return false;
 		}
 
 		$init_vect = self::substr($data, 0, $init_size);
@@ -428,7 +428,7 @@ class CI_Encrypt {
 	 */
 	protected function _get_cipher()
 	{
-		if ($this->_mcrypt_cipher === NULL)
+		if ($this->_mcrypt_cipher === null)
 		{
 			return $this->_mcrypt_cipher = MCRYPT_RIJNDAEL_256;
 		}
@@ -445,7 +445,7 @@ class CI_Encrypt {
 	 */
 	protected function _get_mode()
 	{
-		if ($this->_mcrypt_mode === NULL)
+		if ($this->_mcrypt_mode === null)
 		{
 			return $this->_mcrypt_mode = MCRYPT_MODE_CBC;
 		}
@@ -504,7 +504,7 @@ class CI_Encrypt {
 	 * @param	int	$length
 	 * @return	string
 	 */
-	protected static function substr($str, $start, $length = NULL)
+	protected static function substr($str, $start, $length = null)
 	{
 		if (defined('MB_OVERLOAD_STRING'))
 		{

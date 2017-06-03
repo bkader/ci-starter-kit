@@ -129,7 +129,7 @@ class CI_DB_postgre_result extends CI_DB_result {
 		if (is_resource($this->result_id))
 		{
 			pg_free_result($this->result_id);
-			$this->result_id = FALSE;
+			$this->result_id = false;
 		}
 	}
 
@@ -176,7 +176,7 @@ class CI_DB_postgre_result extends CI_DB_result {
 	 */
 	protected function _fetch_object($class_name = 'stdClass')
 	{
-		return pg_fetch_object($this->result_id, NULL, $class_name);
+		return pg_fetch_object($this->result_id, null, $class_name);
 	}
 
 }

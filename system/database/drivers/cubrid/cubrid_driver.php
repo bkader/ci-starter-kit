@@ -64,7 +64,7 @@ class CI_DB_cubrid_driver extends CI_DB {
 	 *
 	 * @var	bool
 	 */
-	public $auto_commit = TRUE;
+	public $auto_commit = true;
 
 	// --------------------------------------------------------------------
 
@@ -96,9 +96,9 @@ class CI_DB_cubrid_driver extends CI_DB {
 
 		if (preg_match('/^CUBRID:[^:]+(:[0-9][1-9]{0,4})?:[^:]+:[^:]*:[^:]*:(\?.+)?$/', $this->dsn, $matches))
 		{
-			if (stripos($matches[2], 'autocommit=off') !== FALSE)
+			if (stripos($matches[2], 'autocommit=off') !== false)
 			{
-				$this->auto_commit = FALSE;
+				$this->auto_commit = false;
 			}
 		}
 		else
@@ -116,17 +116,17 @@ class CI_DB_cubrid_driver extends CI_DB {
 	 * @param	bool	$persistent
 	 * @return	resource
 	 */
-	public function db_connect($persistent = FALSE)
+	public function db_connect($persistent = false)
 	{
 		if (preg_match('/^CUBRID:[^:]+(:[0-9][1-9]{0,4})?:[^:]+:([^:]*):([^:]*):(\?.+)?$/', $this->dsn, $matches))
 		{
-			$func = ($persistent !== TRUE) ? 'cubrid_connect_with_url' : 'cubrid_pconnect_with_url';
+			$func = ($persistent !== true) ? 'cubrid_connect_with_url' : 'cubrid_pconnect_with_url';
 			return ($matches[2] === '' && $matches[3] === '' && $this->username !== '' && $this->password !== '')
 				? $func($this->dsn, $this->username, $this->password)
 				: $func($this->dsn);
 		}
 
-		$func = ($persistent !== TRUE) ? 'cubrid_connect' : 'cubrid_pconnect';
+		$func = ($persistent !== true) ? 'cubrid_connect' : 'cubrid_pconnect';
 		return ($this->username !== '')
 			? $func($this->hostname, $this->port, $this->database, $this->username, $this->password)
 			: $func($this->hostname, $this->port, $this->database);
@@ -144,9 +144,9 @@ class CI_DB_cubrid_driver extends CI_DB {
 	 */
 	public function reconnect()
 	{
-		if (cubrid_ping($this->conn_id) === FALSE)
+		if (cubrid_ping($this->conn_id) === false)
 		{
-			$this->conn_id = FALSE;
+			$this->conn_id = false;
 		}
 	}
 
@@ -164,8 +164,8 @@ class CI_DB_cubrid_driver extends CI_DB {
 			return $this->data_cache['version'];
 		}
 
-		return ( ! $this->conn_id OR ($version = cubrid_get_server_info($this->conn_id)) === FALSE)
-			? FALSE
+		return ( ! $this->conn_id OR ($version = cubrid_get_server_info($this->conn_id)) === false)
+			? false
 			: $this->data_cache['version'] = $version;
 	}
 
@@ -191,16 +191,16 @@ class CI_DB_cubrid_driver extends CI_DB {
 	 */
 	protected function _trans_begin()
 	{
-		if (($autocommit = cubrid_get_autocommit($this->conn_id)) === NULL)
+		if (($autocommit = cubrid_get_autocommit($this->conn_id)) === null)
 		{
-			return FALSE;
+			return false;
 		}
-		elseif ($autocommit === TRUE)
+		elseif ($autocommit === true)
 		{
-			return cubrid_set_autocommit($this->conn_id, CUBRID_AUTOCOMMIT_FALSE);
+			return cubrid_set_autocommit($this->conn_id, CUBRID_AUTOCOMMIT_false);
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -214,15 +214,15 @@ class CI_DB_cubrid_driver extends CI_DB {
 	{
 		if ( ! cubrid_commit($this->conn_id))
 		{
-			return FALSE;
+			return false;
 		}
 
 		if ($this->auto_commit && ! cubrid_get_autocommit($this->conn_id))
 		{
-			return cubrid_set_autocommit($this->conn_id, CUBRID_AUTOCOMMIT_TRUE);
+			return cubrid_set_autocommit($this->conn_id, CUBRID_AUTOCOMMIT_true);
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -236,15 +236,15 @@ class CI_DB_cubrid_driver extends CI_DB {
 	{
 		if ( ! cubrid_rollback($this->conn_id))
 		{
-			return FALSE;
+			return false;
 		}
 
 		if ($this->auto_commit && ! cubrid_get_autocommit($this->conn_id))
 		{
-			cubrid_set_autocommit($this->conn_id, CUBRID_AUTOCOMMIT_TRUE);
+			cubrid_set_autocommit($this->conn_id, CUBRID_AUTOCOMMIT_true);
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -294,11 +294,11 @@ class CI_DB_cubrid_driver extends CI_DB {
 	 * @param	bool	$prefix_limit
 	 * @return	string
 	 */
-	protected function _list_tables($prefix_limit = FALSE)
+	protected function _list_tables($prefix_limit = false)
 	{
 		$sql = 'SHOW TABLES';
 
-		if ($prefix_limit !== FALSE && $this->dbprefix !== '')
+		if ($prefix_limit !== false && $this->dbprefix !== '')
 		{
 			return $sql." LIKE '".$this->escape_like_str($this->dbprefix)."%'";
 		}
@@ -318,7 +318,7 @@ class CI_DB_cubrid_driver extends CI_DB {
 	 */
 	protected function _list_columns($table = '')
 	{
-		return 'SHOW COLUMNS FROM '.$this->protect_identifiers($table, TRUE, NULL, FALSE);
+		return 'SHOW COLUMNS FROM '.$this->protect_identifiers($table, true, null, false);
 	}
 
 	// --------------------------------------------------------------------
@@ -331,9 +331,9 @@ class CI_DB_cubrid_driver extends CI_DB {
 	 */
 	public function field_data($table)
 	{
-		if (($query = $this->query('SHOW COLUMNS FROM '.$this->protect_identifiers($table, TRUE, NULL, FALSE))) === FALSE)
+		if (($query = $this->query('SHOW COLUMNS FROM '.$this->protect_identifiers($table, true, null, false))) === false)
 		{
-			return FALSE;
+			return false;
 		}
 		$query = $query->result_object();
 

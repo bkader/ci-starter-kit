@@ -83,16 +83,16 @@ class CI_Cache_memcached extends CI_Driver {
 		$CI =& get_instance();
 		$defaults = $this->_config['default'];
 
-		if ($CI->config->load('memcached', TRUE, TRUE))
+		if ($CI->config->load('memcached', true, true))
 		{
 			$this->_config = $CI->config->config['memcached'];
 		}
 
-		if (class_exists('Memcached', FALSE))
+		if (class_exists('Memcached', false))
 		{
 			$this->_memcached = new Memcached();
 		}
-		elseif (class_exists('Memcache', FALSE))
+		elseif (class_exists('Memcache', false))
 		{
 			$this->_memcached = new Memcache();
 		}
@@ -110,11 +110,11 @@ class CI_Cache_memcached extends CI_Driver {
 
 			if ($this->_memcached instanceof Memcache)
 			{
-				// Third parameter is persistence and defaults to TRUE.
+				// Third parameter is persistence and defaults to true.
 				$this->_memcached->addServer(
 					$cache_server['hostname'],
 					$cache_server['port'],
-					TRUE,
+					true,
 					$cache_server['weight']
 				);
 			}
@@ -135,7 +135,7 @@ class CI_Cache_memcached extends CI_Driver {
 	 * Fetch from cache
 	 *
 	 * @param	string	$id	Cache ID
-	 * @return	mixed	Data on success, FALSE on failure
+	 * @return	mixed	Data on success, false on failure
 	 */
 	public function get($id)
 	{
@@ -153,11 +153,11 @@ class CI_Cache_memcached extends CI_Driver {
 	 * @param	mixed	$data	Data being cached
 	 * @param	int	$ttl	Time to live
 	 * @param	bool	$raw	Whether to store the raw value
-	 * @return	bool	TRUE on success, FALSE on failure
+	 * @return	bool	true on success, false on failure
 	 */
-	public function save($id, $data, $ttl = 60, $raw = FALSE)
+	public function save($id, $data, $ttl = 60, $raw = false)
 	{
-		if ($raw !== TRUE)
+		if ($raw !== true)
 		{
 			$data = array($data, time(), $ttl);
 		}
@@ -171,7 +171,7 @@ class CI_Cache_memcached extends CI_Driver {
 			return $this->_memcached->set($id, $data, 0, $ttl);
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// ------------------------------------------------------------------------
@@ -194,7 +194,7 @@ class CI_Cache_memcached extends CI_Driver {
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to add
-	 * @return	mixed	New value on success or FALSE on failure
+	 * @return	mixed	New value on success or false on failure
 	 */
 	public function increment($id, $offset = 1)
 	{
@@ -208,7 +208,7 @@ class CI_Cache_memcached extends CI_Driver {
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to reduce by
-	 * @return	mixed	New value on success or FALSE on failure
+	 * @return	mixed	New value on success or false on failure
 	 */
 	public function decrement($id, $offset = 1)
 	{
@@ -245,7 +245,7 @@ class CI_Cache_memcached extends CI_Driver {
 	 * Get Cache Metadata
 	 *
 	 * @param	mixed	$id	key to get cache metadata on
-	 * @return	mixed	FALSE on failure, array on success.
+	 * @return	mixed	false on failure, array on success.
 	 */
 	public function get_metadata($id)
 	{
@@ -253,7 +253,7 @@ class CI_Cache_memcached extends CI_Driver {
 
 		if (count($stored) !== 3)
 		{
-			return FALSE;
+			return false;
 		}
 
 		list($data, $time, $ttl) = $stored;
@@ -270,8 +270,8 @@ class CI_Cache_memcached extends CI_Driver {
 	/**
 	 * Is supported
 	 *
-	 * Returns FALSE if memcached is not supported on the system.
-	 * If it is, we setup the memcached object & return TRUE
+	 * Returns false if memcached is not supported on the system.
+	 * If it is, we setup the memcached object & return true
 	 *
 	 * @return	bool
 	 */

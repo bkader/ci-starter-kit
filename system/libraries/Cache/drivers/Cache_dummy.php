@@ -51,14 +51,14 @@ class CI_Cache_dummy extends CI_Driver {
 	/**
 	 * Get
 	 *
-	 * Since this is the dummy class, it's always going to return FALSE.
+	 * Since this is the dummy class, it's always going to return false.
 	 *
 	 * @param	string
-	 * @return	bool	FALSE
+	 * @return	bool	false
 	 */
 	public function get($id)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// ------------------------------------------------------------------------
@@ -70,11 +70,11 @@ class CI_Cache_dummy extends CI_Driver {
 	 * @param	mixed	Data to store
 	 * @param	int	Length of time (in seconds) to cache the data
 	 * @param	bool	Whether to store the raw value
-	 * @return	bool	TRUE, Simulating success
+	 * @return	bool	true, Simulating success
 	 */
-	public function save($id, $data, $ttl = 60, $raw = FALSE)
+	public function save($id, $data, $ttl = 60, $raw = false)
 	{
-		return TRUE;
+		return true;
 	}
 
 	// ------------------------------------------------------------------------
@@ -83,11 +83,11 @@ class CI_Cache_dummy extends CI_Driver {
 	 * Delete from Cache
 	 *
 	 * @param	mixed	unique identifier of the item in the cache
-	 * @return	bool	TRUE, simulating success
+	 * @return	bool	true, simulating success
 	 */
 	public function delete($id)
 	{
-		return TRUE;
+		return true;
 	}
 
 	// ------------------------------------------------------------------------
@@ -97,11 +97,11 @@ class CI_Cache_dummy extends CI_Driver {
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to add
-	 * @return	mixed	New value on success or FALSE on failure
+	 * @return	mixed	New value on success or false on failure
 	 */
 	public function increment($id, $offset = 1)
 	{
-		return TRUE;
+		return true;
 	}
 
 	// ------------------------------------------------------------------------
@@ -111,11 +111,11 @@ class CI_Cache_dummy extends CI_Driver {
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to reduce by
-	 * @return	mixed	New value on success or FALSE on failure
+	 * @return	mixed	New value on success or false on failure
 	 */
 	public function decrement($id, $offset = 1)
 	{
-		return TRUE;
+		return true;
 	}
 
 	// ------------------------------------------------------------------------
@@ -123,11 +123,11 @@ class CI_Cache_dummy extends CI_Driver {
 	/**
 	 * Clean the cache
 	 *
-	 * @return	bool	TRUE, simulating success
+	 * @return	bool	true, simulating success
 	 */
 	public function clean()
 	{
-		return TRUE;
+		return true;
 	}
 
 	// ------------------------------------------------------------------------
@@ -136,11 +136,11 @@ class CI_Cache_dummy extends CI_Driver {
 	 * Cache Info
 	 *
 	 * @param	string	user/filehits
-	 * @return	bool	FALSE
+	 * @return	bool	false
 	 */
-	 public function cache_info($type = NULL)
+	 public function cache_info($type = null)
 	 {
-		 return FALSE;
+		 return false;
 	 }
 
 	// ------------------------------------------------------------------------
@@ -149,11 +149,11 @@ class CI_Cache_dummy extends CI_Driver {
 	 * Get Cache Metadata
 	 *
 	 * @param	mixed	key to get cache metadata on
-	 * @return	bool	FALSE
+	 * @return	bool	false
 	 */
 	public function get_metadata($id)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// ------------------------------------------------------------------------
@@ -162,11 +162,11 @@ class CI_Cache_dummy extends CI_Driver {
 	 * Is this caching driver supported on the system?
 	 * Of course this one is.
 	 *
-	 * @return	bool	TRUE
+	 * @return	bool	true
 	 */
 	public function is_supported()
 	{
-		return TRUE;
+		return true;
 	}
 
 }

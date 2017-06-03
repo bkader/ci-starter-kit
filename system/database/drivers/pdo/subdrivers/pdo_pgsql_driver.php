@@ -112,7 +112,7 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 	 * @param	bool	$persistent
 	 * @return	object
 	 */
-	public function db_connect($persistent = FALSE)
+	public function db_connect($persistent = false)
 	{
 		$this->conn_id = parent::db_connect($persistent);
 
@@ -132,9 +132,9 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 	 * @param	string	$name
 	 * @return	int
 	 */
-	public function insert_id($name = NULL)
+	public function insert_id($name = null)
 	{
-		if ($name === NULL && version_compare($this->version(), '8.1', '>='))
+		if ($name === null && version_compare($this->version(), '8.1', '>='))
 		{
 			$query = $this->query('SELECT LASTVAL() AS ins_id');
 			$query = $query->row();
@@ -156,7 +156,7 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 	{
 		if (preg_match('#^(INSERT|UPDATE).*RETURNING\s.+(\,\s?.+)*$#is', $sql))
 		{
-			return FALSE;
+			return false;
 		}
 
 		return parent::is_write_type($sql);
@@ -176,7 +176,7 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 	{
 		if (is_bool($str))
 		{
-			return ($str) ? 'TRUE' : 'FALSE';
+			return ($str) ? 'true' : 'false';
 		}
 
 		return parent::escape($str);
@@ -192,7 +192,7 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 	 * @param	bool	$escape
 	 * @return	object
 	 */
-	public function order_by($orderby, $direction = '', $escape = NULL)
+	public function order_by($orderby, $direction = '', $escape = null)
 	{
 		$direction = strtoupper(trim($direction));
 		if ($direction === 'RANDOM')
@@ -211,7 +211,7 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 
 			$orderby = $this->_random_keyword[0];
 			$direction = '';
-			$escape = FALSE;
+			$escape = false;
 		}
 
 		return parent::order_by($orderby, $direction, $escape);
@@ -227,11 +227,11 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 	 * @param	bool	$prefix_limit
 	 * @return	string
 	 */
-	protected function _list_tables($prefix_limit = FALSE)
+	protected function _list_tables($prefix_limit = false)
 	{
 		$sql = 'SELECT "table_name" FROM "information_schema"."tables" WHERE "table_schema" = \''.$this->schema."'";
 
-		if ($prefix_limit === TRUE && $this->dbprefix !== '')
+		if ($prefix_limit === true && $this->dbprefix !== '')
 		{
 			return $sql.' AND "table_name" LIKE \''
 				.$this->escape_like_str($this->dbprefix)."%' "
@@ -272,9 +272,9 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 			FROM "information_schema"."columns"
 			WHERE LOWER("table_name") = '.$this->escape(strtolower($table));
 
-		if (($query = $this->query($sql)) === FALSE)
+		if (($query = $this->query($sql)) === false)
 		{
-			return FALSE;
+			return false;
 		}
 		$query = $query->result_object();
 
@@ -304,7 +304,7 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _update($table, $values)
 	{
-		$this->qb_limit = FALSE;
+		$this->qb_limit = false;
 		$this->qb_orderby = array();
 		return parent::_update($table, $values);
 	}
@@ -345,7 +345,7 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 				.'ELSE '.$k.' END), ';
 		}
 
-		$this->where($val[$index]['field'].' IN('.implode(',', $ids).')', NULL, FALSE);
+		$this->where($val[$index]['field'].' IN('.implode(',', $ids).')', null, false);
 
 		return 'UPDATE '.$table.' SET '.substr($cases, 0, -2).$this->_compile_wh('qb_where');
 	}
@@ -362,7 +362,7 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _delete($table)
 	{
-		$this->qb_limit = FALSE;
+		$this->qb_limit = false;
 		return parent::_delete($table);
 	}
 

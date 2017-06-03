@@ -69,7 +69,7 @@ class CI_Benchmark {
 	 */
 	public function mark($name)
 	{
-		$this->marker[$name] = microtime(TRUE);
+		$this->marker[$name] = microtime(true);
 	}
 
 	// --------------------------------------------------------------------
@@ -106,7 +106,7 @@ class CI_Benchmark {
 
 		if ( ! isset($this->marker[$point2]))
 		{
-			$this->marker[$point2] = microtime(TRUE);
+			$this->marker[$point2] = microtime(true);
 		}
 
 		return number_format($this->marker[$point2] - $this->marker[$point1], $decimals);

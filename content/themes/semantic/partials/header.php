@@ -22,6 +22,12 @@
 			</div><!--/.div-group-->
 		</div><!--/.navbar-div-->
 
+		<div class="right menu">
+			<div class="item">
+				<?php echo anchor('admin', 'Admin Panel', 'class="ui primary button"'); ?>
+			</div><!--/.item-->
+		</div><!--/.navbar-right-->
+
 		</div><!-- /.navbar-collapse -->
 	</div><!--/.ui container-->
 </nav><!--/.ui.fixed.inverted.menu-->

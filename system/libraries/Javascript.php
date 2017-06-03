@@ -66,7 +66,7 @@ class CI_Javascript {
 	 */
 	public function __construct($params = array())
 	{
-		$defaults = array('js_library_driver' => 'jquery', 'autoload' => TRUE);
+		$defaults = array('js_library_driver' => 'jquery', 'autoload' => true);
 
 		foreach ($defaults as $key => $val)
 		{
@@ -134,7 +134,7 @@ class CI_Javascript {
 	 * @param	bool	whether or not to return false
 	 * @return	string
 	 */
-	public function click($element = 'this', $js = '', $ret_false = TRUE)
+	public function click($element = 'this', $js = '', $ret_false = true)
 	{
 		return $this->js->_click($element, $js, $ret_false);
 	}
@@ -609,7 +609,7 @@ class CI_Javascript {
 	 * @param	bool	$script_tags
 	 * @return	string
 	 */
-	public function compile($view_var = 'script_foot', $script_tags = TRUE)
+	public function compile($view_var = 'script_foot', $script_tags = true)
 	{
 		$this->js->_compile($view_var, $script_tags);
 	}
@@ -639,7 +639,7 @@ class CI_Javascript {
 	 * @param	bool	$relative
 	 * @return	string
 	 */
-	public function external($external_file = '', $relative = FALSE)
+	public function external($external_file = '', $relative = false)
 	{
 		if ($external_file !== '')
 		{
@@ -650,11 +650,11 @@ class CI_Javascript {
 			$this->_javascript_location = $this->CI->config->item('javascript_location');
 		}
 
-		if ($relative === TRUE OR strpos($external_file, 'http://') === 0 OR strpos($external_file, 'https://') === 0)
+		if ($relative === true OR strpos($external_file, 'http://') === 0 OR strpos($external_file, 'https://') === 0)
 		{
 			$str = $this->_open_script($external_file);
 		}
-		elseif (strpos($this->_javascript_location, 'http://') !== FALSE)
+		elseif (strpos($this->_javascript_location, 'http://') !== false)
 		{
 			$str = $this->_open_script($this->_javascript_location.$external_file);
 		}
@@ -677,7 +677,7 @@ class CI_Javascript {
 	 * @param	bool	If a CDATA section should be added
 	 * @return	string
 	 */
-	public function inline($script, $cdata = TRUE)
+	public function inline($script, $cdata = true)
 	{
 		return $this->_open_script()
 			. ($cdata ? "\n// <![CDATA[\n".$script."\n// ]]>\n" : "\n".$script."\n")
@@ -745,11 +745,11 @@ class CI_Javascript {
 	 * @param	bool	match array types (defaults to objects)
 	 * @return	string	a json formatted string
 	 */
-	public function generate_json($result = NULL, $match_array_type = FALSE)
+	public function generate_json($result = null, $match_array_type = false)
 	{
 		// JSON data can optionally be passed to this function
 		// either as a database result object or an array, or a user supplied array
-		if ($result !== NULL)
+		if ($result !== null)
 		{
 			if (is_object($result))
 			{
@@ -770,7 +770,7 @@ class CI_Javascript {
 		}
 
 		$json = array();
-		$_is_assoc = TRUE;
+		$_is_assoc = true;
 
 		if ( ! is_array($json_result) && empty($json_result))
 		{
@@ -785,7 +785,7 @@ class CI_Javascript {
 		{
 			if ($_is_assoc)
 			{
-				$json[] = $this->_prep_args($k, TRUE).':'.$this->generate_json($v, $match_array_type);
+				$json[] = $this->_prep_args($k, true).':'.$this->generate_json($v, $match_array_type);
 			}
 			else
 			{
@@ -815,11 +815,11 @@ class CI_Javascript {
 		{
 			if ($key !== $val)
 			{
-				return TRUE;
+				return true;
 			}
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// --------------------------------------------------------------------
@@ -830,18 +830,18 @@ class CI_Javascript {
 	 * Ensures a standard json value and escapes values
 	 *
 	 * @param	mixed	$result
-	 * @param	bool	$is_key = FALSE
+	 * @param	bool	$is_key = false
 	 * @return	string
 	 */
-	protected function _prep_args($result, $is_key = FALSE)
+	protected function _prep_args($result, $is_key = false)
 	{
-		if ($result === NULL)
+		if ($result === null)
 		{
 			return 'null';
 		}
 		elseif (is_bool($result))
 		{
-			return ($result === TRUE) ? 'true' : 'false';
+			return ($result === true) ? 'true' : 'false';
 		}
 		elseif (is_string($result) OR $is_key)
 		{

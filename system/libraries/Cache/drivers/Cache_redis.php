@@ -57,7 +57,7 @@ class CI_Cache_redis extends CI_Driver
 	protected static $_default_config = array(
 		'socket_type' => 'tcp',
 		'host' => '127.0.0.1',
-		'password' => NULL,
+		'password' => null,
 		'port' => 6379,
 		'timeout' => 0
 	);
@@ -99,7 +99,7 @@ class CI_Cache_redis extends CI_Driver
 
 		$CI =& get_instance();
 
-		if ($CI->config->load('redis', TRUE, TRUE))
+		if ($CI->config->load('redis', true, true))
 		{
 			$config = array_merge(self::$_default_config, $CI->config->item('redis'));
 		}
@@ -153,7 +153,7 @@ class CI_Cache_redis extends CI_Driver
 	{
 		$value = $this->_redis->get($key);
 
-		if ($value !== FALSE && isset($this->_serialized[$key]))
+		if ($value !== false && isset($this->_serialized[$key]))
 		{
 			return unserialize($value);
 		}
@@ -170,23 +170,23 @@ class CI_Cache_redis extends CI_Driver
 	 * @param	mixed	$data	Data to save
 	 * @param	int	$ttl	Time to live in seconds
 	 * @param	bool	$raw	Whether to store the raw value (unused)
-	 * @return	bool	TRUE on success, FALSE on failure
+	 * @return	bool	true on success, false on failure
 	 */
-	public function save($id, $data, $ttl = 60, $raw = FALSE)
+	public function save($id, $data, $ttl = 60, $raw = false)
 	{
 		if (is_array($data) OR is_object($data))
 		{
 			if ( ! $this->_redis->sIsMember('_ci_redis_serialized', $id) && ! $this->_redis->sAdd('_ci_redis_serialized', $id))
 			{
-				return FALSE;
+				return false;
 			}
 
-			isset($this->_serialized[$id]) OR $this->_serialized[$id] = TRUE;
+			isset($this->_serialized[$id]) OR $this->_serialized[$id] = true;
 			$data = serialize($data);
 		}
 		elseif (isset($this->_serialized[$id]))
 		{
-			$this->_serialized[$id] = NULL;
+			$this->_serialized[$id] = null;
 			$this->_redis->sRemove('_ci_redis_serialized', $id);
 		}
 
@@ -205,16 +205,16 @@ class CI_Cache_redis extends CI_Driver
 	{
 		if ($this->_redis->delete($key) !== 1)
 		{
-			return FALSE;
+			return false;
 		}
 
 		if (isset($this->_serialized[$key]))
 		{
-			$this->_serialized[$key] = NULL;
+			$this->_serialized[$key] = null;
 			$this->_redis->sRemove('_ci_redis_serialized', $key);
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// ------------------------------------------------------------------------
@@ -224,7 +224,7 @@ class CI_Cache_redis extends CI_Driver
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to add
-	 * @return	mixed	New value on success or FALSE on failure
+	 * @return	mixed	New value on success or false on failure
 	 */
 	public function increment($id, $offset = 1)
 	{
@@ -238,7 +238,7 @@ class CI_Cache_redis extends CI_Driver
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to reduce by
-	 * @return	mixed	New value on success or FALSE on failure
+	 * @return	mixed	New value on success or false on failure
 	 */
 	public function decrement($id, $offset = 1)
 	{
@@ -269,7 +269,7 @@ class CI_Cache_redis extends CI_Driver
 	 * @return	array
 	 * @see		Redis::info()
 	 */
-	public function cache_info($type = NULL)
+	public function cache_info($type = null)
 	{
 		return $this->_redis->info();
 	}
@@ -286,7 +286,7 @@ class CI_Cache_redis extends CI_Driver
 	{
 		$value = $this->get($key);
 
-		if ($value !== FALSE)
+		if ($value !== false)
 		{
 			return array(
 				'expire' => time() + $this->_redis->ttl($key),
@@ -294,7 +294,7 @@ class CI_Cache_redis extends CI_Driver
 			);
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// ------------------------------------------------------------------------

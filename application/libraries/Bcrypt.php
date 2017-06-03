@@ -38,7 +38,7 @@ class Bcrypt {
 	 * Options
 	 */
 	private $_iteration_count = 8;
-	private $_portable_hashes = FALSE;
+	private $_portable_hashes = false;
 
 	/**
 	 * Constructor
@@ -166,9 +166,9 @@ class Bcrypt {
 		# consequently in lower iteration counts and hashes that are
 		# quicker to crack (by non-PHP code).
 		if (PHP_VERSION >= '5') {
-			$hash = md5($salt . $password, TRUE);
+			$hash = md5($salt . $password, true);
 			do {
-				$hash = md5($hash . $password, TRUE);
+				$hash = md5($hash . $password, true);
 			} while (--$count);
 		} else {
 			$hash = pack('H*', md5($salt . $password));

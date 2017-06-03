@@ -183,7 +183,7 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 	{
 		if (preg_match('#^(INSERT|UPDATE).*RETURNING\s.+(\,\s?.+)*$#is', $sql))
 		{
-			return FALSE;
+			return false;
 		}
 
 		return parent::is_write_type($sql);
@@ -199,11 +199,11 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 	 * @param	bool	$prefix_limit
 	 * @return	string
 	 */
-	protected function _list_tables($prefix_limit = FALSE)
+	protected function _list_tables($prefix_limit = false)
 	{
 		$sql = "SELECT table_name FROM information_schema.tables WHERE table_schema = '".$this->schema."'";
 
-		if ($prefix_limit !== FALSE && $this->dbprefix !== '')
+		if ($prefix_limit !== false && $this->dbprefix !== '')
 		{
 			return $sql." AND table_name LIKE '".$this->escape_like_str($this->dbprefix)."%' "
 				.sprintf($this->_like_escape_str, $this->_like_escape_chr);

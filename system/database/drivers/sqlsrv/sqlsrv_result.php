@@ -79,8 +79,8 @@ class CI_DB_sqlsrv_result extends CI_DB_result {
 	 */
 	public function num_rows()
 	{
-		// sqlsrv_num_rows() doesn't work with the FORWARD and DYNAMIC cursors (FALSE is the same as FORWARD)
-		if ( ! in_array($this->scrollable, array(FALSE, SQLSRV_CURSOR_FORWARD, SQLSRV_CURSOR_DYNAMIC), TRUE))
+		// sqlsrv_num_rows() doesn't work with the FORWARD and DYNAMIC cursors (false is the same as FORWARD)
+		if ( ! in_array($this->scrollable, array(false, SQLSRV_CURSOR_FORWARD, SQLSRV_CURSOR_DYNAMIC), true))
 		{
 			return parent::num_rows();
 		}
@@ -157,7 +157,7 @@ class CI_DB_sqlsrv_result extends CI_DB_result {
 		if (is_resource($this->result_id))
 		{
 			sqlsrv_free_stmt($this->result_id);
-			$this->result_id = FALSE;
+			$this->result_id = false;
 		}
 	}
 

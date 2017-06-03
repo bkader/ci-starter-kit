@@ -94,7 +94,7 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 			SQLITE3_FLOAT	=> 'float',
 			SQLITE3_TEXT	=> 'text',
 			SQLITE3_BLOB	=> 'blob',
-			SQLITE3_NULL	=> 'null'
+			SQLITE3_null	=> 'null'
 		);
 
 		$retval = array();
@@ -106,7 +106,7 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 			$type = $this->result_id->columnType($i);
 			$retval[$i]->type		= isset($data_types[$type]) ? $data_types[$type] : $type;
 
-			$retval[$i]->max_length		= NULL;
+			$retval[$i]->max_length		= null;
 		}
 
 		return $retval;
@@ -124,7 +124,7 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 		if (is_object($this->result_id))
 		{
 			$this->result_id->finalize();
-			$this->result_id = NULL;
+			$this->result_id = null;
 		}
 	}
 
@@ -155,9 +155,9 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	protected function _fetch_object($class_name = 'stdClass')
 	{
 		// No native support for fetching rows as objects
-		if (($row = $this->result_id->fetchArray(SQLITE3_ASSOC)) === FALSE)
+		if (($row = $this->result_id->fetchArray(SQLITE3_ASSOC)) === false)
 		{
-			return FALSE;
+			return false;
 		}
 		elseif ($class_name === 'stdClass')
 		{
@@ -188,7 +188,7 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	public function data_seek($n = 0)
 	{
 		// Only resetting to the start of the result set is supported
-		return ($n > 0) ? FALSE : $this->result_id->reset();
+		return ($n > 0) ? false : $this->result_id->reset();
 	}
 
 }

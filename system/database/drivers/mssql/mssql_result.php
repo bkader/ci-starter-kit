@@ -132,7 +132,7 @@ class CI_DB_mssql_result extends CI_DB_result {
 		if (is_resource($this->result_id))
 		{
 			mssql_free_result($this->result_id);
-			$this->result_id = FALSE;
+			$this->result_id = false;
 		}
 	}
 

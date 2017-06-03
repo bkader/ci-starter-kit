@@ -74,7 +74,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 	 *
 	 * @var bool
 	 */
-	protected $_key_exists = FALSE;
+	protected $_key_exists = false;
 
 	// ------------------------------------------------------------------------
 
@@ -97,10 +97,10 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 			isset($matches[3]) OR $matches[3] = ''; // Just to avoid undefined index notices below
 			$this->_config['save_path'] = array(
 				'host' => $matches[1],
-				'port' => empty($matches[2]) ? NULL : $matches[2],
-				'password' => preg_match('#auth=([^\s&]+)#', $matches[3], $match) ? $match[1] : NULL,
-				'database' => preg_match('#database=(\d+)#', $matches[3], $match) ? (int) $match[1] : NULL,
-				'timeout' => preg_match('#timeout=(\d+\.\d+)#', $matches[3], $match) ? (float) $match[1] : NULL
+				'port' => empty($matches[2]) ? null : $matches[2],
+				'password' => preg_match('#auth=([^\s&]+)#', $matches[3], $match) ? $match[1] : null,
+				'database' => preg_match('#database=(\d+)#', $matches[3], $match) ? (int) $match[1] : null,
+				'timeout' => preg_match('#timeout=(\d+\.\d+)#', $matches[3], $match) ? (float) $match[1] : null
 			);
 
 			preg_match('#prefix=([^\s&]+)#', $matches[3], $match) && $this->_key_prefix = $match[1];
@@ -110,7 +110,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 			log_message('error', 'Session: Invalid Redis save path format: '.$this->_config['save_path']);
 		}
 
-		if ($this->_config['match_ip'] === TRUE)
+		if ($this->_config['match_ip'] === true)
 		{
 			$this->_key_prefix .= $_SERVER['REMOTE_ADDR'].':';
 		}
@@ -176,7 +176,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 			$session_data = $this->_redis->get($this->_key_prefix.$session_id);
 
 			is_string($session_data)
-				? $this->_key_exists = TRUE
+				? $this->_key_exists = true
 				: $session_data = '';
 
 			$this->_fingerprint = md5($session_data);
@@ -211,17 +211,17 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 				return $this->_fail();
 			}
 
-			$this->_key_exists = FALSE;
+			$this->_key_exists = false;
 			$this->_session_id = $session_id;
 		}
 
 		$this->_redis->setTimeout($this->_lock_key, 300);
-		if ($this->_fingerprint !== ($fingerprint = md5($session_data)) OR $this->_key_exists === FALSE)
+		if ($this->_fingerprint !== ($fingerprint = md5($session_data)) OR $this->_key_exists === false)
 		{
 			if ($this->_redis->set($this->_key_prefix.$session_id, $session_data, $this->_config['expiration']))
 			{
 				$this->_fingerprint = $fingerprint;
-				$this->_key_exists = TRUE;
+				$this->_key_exists = true;
 				return $this->_success;
 			}
 
@@ -250,7 +250,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 				if ($this->_redis->ping() === '+PONG')
 				{
 					$this->_release_lock();
-					if ($this->_redis->close() === FALSE)
+					if ($this->_redis->close() === false)
 					{
 						return $this->_fail();
 					}
@@ -261,7 +261,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 				log_message('error', 'Session: Got RedisException on close(): '.$e->getMessage());
 			}
 
-			$this->_redis = NULL;
+			$this->_redis = null;
 			return $this->_success;
 		}
 
@@ -284,7 +284,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 		{
 			if (($result = $this->_redis->delete($this->_key_prefix.$session_id)) !== 1)
 			{
-				log_message('debug', 'Session: Redis::delete() expected to return 1, got '.var_export($result, TRUE).' instead.');
+				log_message('debug', 'Session: Redis::delete() expected to return 1, got '.var_export($result, true).' instead.');
 			}
 
 			$this->_cookie_destroy();
@@ -344,7 +344,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 			if ( ! $this->_redis->setex($lock_key, 300, time()))
 			{
 				log_message('error', 'Session: Error while trying to obtain lock for '.$this->_key_prefix.$session_id);
-				return FALSE;
+				return false;
 			}
 
 			$this->_lock_key = $lock_key;
@@ -355,15 +355,15 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 		if ($attempt === 30)
 		{
 			log_message('error', 'Session: Unable to obtain lock for '.$this->_key_prefix.$session_id.' after 30 attempts, aborting.');
-			return FALSE;
+			return false;
 		}
 		elseif ($ttl === -1)
 		{
 			log_message('debug', 'Session: Lock for '.$this->_key_prefix.$session_id.' had no TTL, overriding.');
 		}
 
-		$this->_lock = TRUE;
-		return TRUE;
+		$this->_lock = true;
+		return true;
 	}
 
 	// ------------------------------------------------------------------------
@@ -382,14 +382,14 @@ class CI_Session_redis_driver extends CI_Session_driver implements SessionHandle
 			if ( ! $this->_redis->delete($this->_lock_key))
 			{
 				log_message('error', 'Session: Error while trying to free lock for '.$this->_lock_key);
-				return FALSE;
+				return false;
 			}
 
-			$this->_lock_key = NULL;
-			$this->_lock = FALSE;
+			$this->_lock_key = null;
+			$this->_lock = false;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 }

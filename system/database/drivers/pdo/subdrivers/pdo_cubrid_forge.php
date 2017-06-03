@@ -51,14 +51,14 @@ class CI_DB_pdo_cubrid_forge extends CI_DB_pdo_forge {
 	 *
 	 * @var	string
 	 */
-	protected $_create_database	= FALSE;
+	protected $_create_database	= false;
 
 	/**
 	 * DROP DATABASE statement
 	 *
 	 * @var	string
 	 */
-	protected $_drop_database	= FALSE;
+	protected $_drop_database	= false;
 
 	/**
 	 * CREATE TABLE keys flag
@@ -68,7 +68,7 @@ class CI_DB_pdo_cubrid_forge extends CI_DB_pdo_forge {
 	 *
 	 * @var	bool
 	 */
-	protected $_create_table_keys	= TRUE;
+	protected $_create_table_keys	= true;
 
 	/**
 	 * DROP TABLE IF statement
@@ -104,7 +104,7 @@ class CI_DB_pdo_cubrid_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{
-		if (in_array($alter_type, array('DROP', 'ADD'), TRUE))
+		if (in_array($alter_type, array('DROP', 'ADD'), true))
 		{
 			return parent::_alter_table($alter_type, $table, $field);
 		}
@@ -113,7 +113,7 @@ class CI_DB_pdo_cubrid_forge extends CI_DB_pdo_forge {
 		$sqls = array();
 		for ($i = 0, $c = count($field); $i < $c; $i++)
 		{
-			if ($field[$i]['_literal'] !== FALSE)
+			if ($field[$i]['_literal'] !== false)
 			{
 				$sqls[] = $sql.' CHANGE '.$field[$i]['_literal'];
 			}
@@ -140,7 +140,7 @@ class CI_DB_pdo_cubrid_forge extends CI_DB_pdo_forge {
 		$extra_clause = isset($field['after'])
 			? ' AFTER '.$this->db->escape_identifiers($field['after']) : '';
 
-		if (empty($extra_clause) && isset($field['first']) && $field['first'] === TRUE)
+		if (empty($extra_clause) && isset($field['first']) && $field['first'] === true)
 		{
 			$extra_clause = ' FIRST';
 		}
@@ -172,11 +172,11 @@ class CI_DB_pdo_cubrid_forge extends CI_DB_pdo_forge {
 		{
 			case 'TINYINT':
 				$attributes['TYPE'] = 'SMALLINT';
-				$attributes['UNSIGNED'] = FALSE;
+				$attributes['UNSIGNED'] = false;
 				return;
 			case 'MEDIUMINT':
 				$attributes['TYPE'] = 'INTEGER';
-				$attributes['UNSIGNED'] = FALSE;
+				$attributes['UNSIGNED'] = false;
 				return;
 			case 'LONGTEXT':
 				$attributes['TYPE'] = 'STRING';

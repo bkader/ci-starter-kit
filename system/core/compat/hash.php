@@ -72,16 +72,16 @@ if ( ! function_exists('hash_equals'))
 		if ( ! is_string($known_string))
 		{
 			trigger_error('hash_equals(): Expected known_string to be a string, '.strtolower(gettype($known_string)).' given', E_USER_WARNING);
-			return FALSE;
+			return false;
 		}
 		elseif ( ! is_string($user_string))
 		{
 			trigger_error('hash_equals(): Expected user_string to be a string, '.strtolower(gettype($user_string)).' given', E_USER_WARNING);
-			return FALSE;
+			return false;
 		}
 		elseif (($length = strlen($known_string)) !== strlen($user_string))
 		{
-			return FALSE;
+			return false;
 		}
 
 		$diff = 0;
@@ -117,12 +117,12 @@ if ( ! function_exists('hash_pbkdf2'))
 	 * @param	bool	$raw_output
 	 * @return	string
 	 */
-	function hash_pbkdf2($algo, $password, $salt, $iterations, $length = 0, $raw_output = FALSE)
+	function hash_pbkdf2($algo, $password, $salt, $iterations, $length = 0, $raw_output = false)
 	{
-		if ( ! in_array(strtolower($algo), hash_algos(), TRUE))
+		if ( ! in_array(strtolower($algo), hash_algos(), true))
 		{
 			trigger_error('hash_pbkdf2(): Unknown hashing algorithm: '.$algo, E_USER_WARNING);
-			return FALSE;
+			return false;
 		}
 
 		if (($type = gettype($iterations)) !== 'integer')
@@ -139,14 +139,14 @@ if ( ! function_exists('hash_pbkdf2'))
 			else
 			{
 				trigger_error('hash_pbkdf2() expects parameter 4 to be long, '.$type.' given', E_USER_WARNING);
-				return NULL;
+				return null;
 			}
 		}
 
 		if ($iterations < 1)
 		{
 			trigger_error('hash_pbkdf2(): Iterations must be a positive integer: '.$iterations, E_USER_WARNING);
-			return FALSE;
+			return false;
 		}
 
 		if (($type = gettype($length)) !== 'integer')
@@ -163,19 +163,19 @@ if ( ! function_exists('hash_pbkdf2'))
 			else
 			{
 				trigger_error('hash_pbkdf2() expects parameter 5 to be long, '.$type.' given', E_USER_WARNING);
-				return NULL;
+				return null;
 			}
 		}
 
 		if ($length < 0)
 		{
 			trigger_error('hash_pbkdf2(): Length must be greater than or equal to 0: '.$length, E_USER_WARNING);
-			return FALSE;
+			return false;
 		}
 
 		$hash_length = defined('MB_OVERLOAD_STRING')
-			? mb_strlen(hash($algo, NULL, TRUE), '8bit')
-			: strlen(hash($algo, NULL, TRUE));
+			? mb_strlen(hash($algo, null, true), '8bit')
+			: strlen(hash($algo, null, true));
 		empty($length) && $length = $hash_length;
 
 		// Pre-hash password inputs longer than the algorithm's block size
@@ -225,17 +225,17 @@ if ( ! function_exists('hash_pbkdf2'))
 
 		if (isset($block_sizes[$algo], $password[$block_sizes[$algo]]))
 		{
-			$password = hash($algo, $password, TRUE);
+			$password = hash($algo, $password, true);
 		}
 
 		$hash = '';
 		// Note: Blocks are NOT 0-indexed
 		for ($bc = (int) ceil($length / $hash_length), $bi = 1; $bi <= $bc; $bi++)
 		{
-			$key = $derived_key = hash_hmac($algo, $salt.pack('N', $bi), $password, TRUE);
+			$key = $derived_key = hash_hmac($algo, $salt.pack('N', $bi), $password, true);
 			for ($i = 1; $i < $iterations; $i++)
 			{
-				$derived_key ^= $key = hash_hmac($algo, $key, $password, TRUE);
+				$derived_key ^= $key = hash_hmac($algo, $key, $password, true);
 			}
 
 			$hash .= $derived_key;

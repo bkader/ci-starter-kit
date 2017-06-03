@@ -71,19 +71,19 @@ if ( ! function_exists('form_open'))
 			$action = $CI->config->site_url($CI->uri->uri_string());
 		}
 		// If an action is not a full URL then turn it into one
-		elseif (strpos($action, '://') === FALSE)
+		elseif (strpos($action, '://') === false)
 		{
 			$action = $CI->config->site_url($action);
 		}
 
 		$attributes = _attributes_to_string($attributes);
 
-		if (stripos($attributes, 'method=') === FALSE)
+		if (stripos($attributes, 'method=') === false)
 		{
 			$attributes .= ' method="post"';
 		}
 
-		if (stripos($attributes, 'accept-charset=') === FALSE)
+		if (stripos($attributes, 'accept-charset=') === false)
 		{
 			$attributes .= ' accept-charset="'.strtolower(config_item('charset')).'"';
 		}
@@ -99,11 +99,11 @@ if ( ! function_exists('form_open'))
 		}
 
 		// Add CSRF field if enabled, but leave it out for GET requests and requests to external websites
-		if ($CI->config->item('csrf_protection') === TRUE && strpos($action, $CI->config->base_url()) !== FALSE && ! stripos($form, 'method="get"'))
+		if ($CI->config->item('csrf_protection') === true && strpos($action, $CI->config->base_url()) !== false && ! stripos($form, 'method="get"'))
 		{
 			// Prepend/append random-length "white noise" around the CSRF
 			// token input, as a form of protection against BREACH attacks
-			if (FALSE !== ($noise = $CI->security->get_random_bytes(1)))
+			if (false !== ($noise = $CI->security->get_random_bytes(1)))
 			{
 				list(, $noise) = unpack('c', $noise);
 			}
@@ -181,11 +181,11 @@ if ( ! function_exists('form_hidden'))
 	 * @param	bool	$recursing
 	 * @return	string
 	 */
-	function form_hidden($name, $value = '', $recursing = FALSE)
+	function form_hidden($name, $value = '', $recursing = false)
 	{
 		static $form;
 
-		if ($recursing === FALSE)
+		if ($recursing === false)
 		{
 			$form = "\n";
 		}
@@ -194,7 +194,7 @@ if ( ! function_exists('form_hidden'))
 		{
 			foreach ($name as $key => $val)
 			{
-				form_hidden($key, $val, TRUE);
+				form_hidden($key, $val, true);
 			}
 
 			return $form;
@@ -209,7 +209,7 @@ if ( ! function_exists('form_hidden'))
 			foreach ($value as $k => $v)
 			{
 				$k = is_int($k) ? '' : $k;
-				form_hidden($name.'['.$k.']', $v, TRUE);
+				form_hidden($name.'['.$k.']', $v, true);
 			}
 		}
 
@@ -339,7 +339,7 @@ if ( ! function_exists('form_multiselect'))
 	function form_multiselect($name = '', $options = array(), $selected = array(), $extra = '')
 	{
 		$extra = _attributes_to_string($extra);
-		if (stripos($extra, 'multiple') === FALSE)
+		if (stripos($extra, 'multiple') === false)
 		{
 			$extra .= ' multiple="multiple"';
 		}
@@ -405,7 +405,7 @@ if ( ! function_exists('form_dropdown'))
 
 		$extra = _attributes_to_string($extra);
 
-		$multiple = (count($selected) > 1 && stripos($extra, 'multiple') === FALSE) ? ' multiple="multiple"' : '';
+		$multiple = (count($selected) > 1 && stripos($extra, 'multiple') === false) ? ' multiple="multiple"' : '';
 
 		$form = '<select '.rtrim(_parse_form_attributes($data, $defaults)).$extra.$multiple.">\n";
 
@@ -456,7 +456,7 @@ if ( ! function_exists('form_checkbox'))
 	 * @param	mixed
 	 * @return	string
 	 */
-	function form_checkbox($data = '', $value = '', $checked = FALSE, $extra = '')
+	function form_checkbox($data = '', $value = '', $checked = false, $extra = '')
 	{
 		$defaults = array('type' => 'checkbox', 'name' => ( ! is_array($data) ? $data : ''), 'value' => $value);
 
@@ -464,7 +464,7 @@ if ( ! function_exists('form_checkbox'))
 		{
 			$checked = $data['checked'];
 
-			if ($checked == FALSE)
+			if ($checked == false)
 			{
 				unset($data['checked']);
 			}
@@ -474,7 +474,7 @@ if ( ! function_exists('form_checkbox'))
 			}
 		}
 
-		if ($checked == TRUE)
+		if ($checked == true)
 		{
 			$defaults['checked'] = 'checked';
 		}
@@ -500,7 +500,7 @@ if ( ! function_exists('form_radio'))
 	 * @param	mixed
 	 * @return	string
 	 */
-	function form_radio($data = '', $value = '', $checked = FALSE, $extra = '')
+	function form_radio($data = '', $value = '', $checked = false, $extra = '')
 	{
 		is_array($data) OR $data = array('name' => $data);
 		$data['type'] = 'radio';
@@ -695,7 +695,7 @@ if ( ! function_exists('form_prep'))
 	 */
 	function form_prep($str)
 	{
-		return html_escape($str, TRUE);
+		return html_escape($str, true);
 	}
 }
 
@@ -715,13 +715,13 @@ if ( ! function_exists('set_value'))
 	 * @param	bool	$html_escape	Whether to escape HTML special characters or not
 	 * @return	string
 	 */
-	function set_value($field, $default = '', $html_escape = TRUE)
+	function set_value($field, $default = '', $html_escape = true)
 	{
 		$CI =& get_instance();
 
 		$value = (isset($CI->form_validation) && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
 			? $CI->form_validation->set_value($field, $default)
-			: $CI->input->post($field, FALSE);
+			: $CI->input->post($field, false);
 
 		isset($value) OR $value = $default;
 		return ($html_escape) ? html_escape($value) : $value;
@@ -743,7 +743,7 @@ if ( ! function_exists('set_select'))
 	 * @param	bool
 	 * @return	string
 	 */
-	function set_select($field, $value = '', $default = FALSE)
+	function set_select($field, $value = '', $default = false)
 	{
 		$CI =& get_instance();
 
@@ -751,15 +751,15 @@ if ( ! function_exists('set_select'))
 		{
 			return $CI->form_validation->set_select($field, $value, $default);
 		}
-		elseif (($input = $CI->input->post($field, FALSE)) === NULL)
+		elseif (($input = $CI->input->post($field, false)) === null)
 		{
-			return ($default === TRUE) ? ' selected="selected"' : '';
+			return ($default === true) ? ' selected="selected"' : '';
 		}
 
 		$value = (string) $value;
 		if (is_array($input))
 		{
-			// Note: in_array('', array(0)) returns TRUE, do not use it
+			// Note: in_array('', array(0)) returns true, do not use it
 			foreach ($input as &$v)
 			{
 				if ($value === $v)
@@ -790,7 +790,7 @@ if ( ! function_exists('set_checkbox'))
 	 * @param	bool
 	 * @return	string
 	 */
-	function set_checkbox($field, $value = '', $default = FALSE)
+	function set_checkbox($field, $value = '', $default = false)
 	{
 		$CI =& get_instance();
 
@@ -801,11 +801,11 @@ if ( ! function_exists('set_checkbox'))
 
 		// Form inputs are always strings ...
 		$value = (string) $value;
-		$input = $CI->input->post($field, FALSE);
+		$input = $CI->input->post($field, false);
 
 		if (is_array($input))
 		{
-			// Note: in_array('', array(0)) returns TRUE, do not use it
+			// Note: in_array('', array(0)) returns true, do not use it
 			foreach ($input as &$v)
 			{
 				if ($value === $v)
@@ -823,7 +823,7 @@ if ( ! function_exists('set_checkbox'))
 			return ($input === $value) ? ' checked="checked"' : '';
 		}
 
-		return ($default === TRUE) ? ' checked="checked"' : '';
+		return ($default === true) ? ' checked="checked"' : '';
 	}
 }
 
@@ -842,7 +842,7 @@ if ( ! function_exists('set_radio'))
 	 * @param	bool	$default
 	 * @return	string
 	 */
-	function set_radio($field, $value = '', $default = FALSE)
+	function set_radio($field, $value = '', $default = false)
 	{
 		$CI =& get_instance();
 
@@ -853,11 +853,11 @@ if ( ! function_exists('set_radio'))
 
 		// Form inputs are always strings ...
 		$value = (string) $value;
-		$input = $CI->input->post($field, FALSE);
+		$input = $CI->input->post($field, false);
 
 		if (is_array($input))
 		{
-			// Note: in_array('', array(0)) returns TRUE, do not use it
+			// Note: in_array('', array(0)) returns true, do not use it
 			foreach ($input as &$v)
 			{
 				if ($value === $v)
@@ -875,7 +875,7 @@ if ( ! function_exists('set_radio'))
 			return ($input === $value) ? ' checked="checked"' : '';
 		}
 
-		return ($default === TRUE) ? ' checked="checked"' : '';
+		return ($default === true) ? ' checked="checked"' : '';
 	}
 }
 
@@ -896,7 +896,7 @@ if ( ! function_exists('form_error'))
 	 */
 	function form_error($field = '', $prefix = '', $suffix = '')
 	{
-		if (FALSE === ($OBJ =& _get_validation_object()))
+		if (false === ($OBJ =& _get_validation_object()))
 		{
 			return '';
 		}
@@ -921,7 +921,7 @@ if ( ! function_exists('validation_errors'))
 	 */
 	function validation_errors($prefix = '', $suffix = '')
 	{
-		if (FALSE === ($OBJ =& _get_validation_object()))
+		if (false === ($OBJ =& _get_validation_object()))
 		{
 			return '';
 		}
@@ -1023,7 +1023,7 @@ if ( ! function_exists('_attributes_to_string'))
 			return ' '.$attributes;
 		}
 
-		return FALSE;
+		return false;
 	}
 }
 
@@ -1044,9 +1044,9 @@ if ( ! function_exists('_get_validation_object'))
 		$CI =& get_instance();
 
 		// We set this as a variable since we're returning by reference.
-		$return = FALSE;
+		$return = false;
 
-		if (FALSE !== ($object = $CI->load->is_loaded('Form_validation')))
+		if (false !== ($object = $CI->load->is_loaded('Form_validation')))
 		{
 			if ( ! isset($CI->$object) OR ! is_object($CI->$object))
 			{

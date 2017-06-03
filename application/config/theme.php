@@ -26,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |  'theme.cache_lifetime' 	whether to cache output or not.
 |
 | CDN settings:
-|	'theme.cdn_enabled'		If TRUE, the 2nd param of css(), js() is used.
+|	'theme.cdn_enabled'		If true, the 2nd param of css(), js() is used.
 |	'theme.cdn_server'		If your host your assets on a CDN, privide URL.
 */
 

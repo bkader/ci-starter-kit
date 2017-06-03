@@ -108,8 +108,8 @@ class CI_DB_sqlite_result extends CI_DB_result {
 		{
 			$retval[$i]			= new stdClass();
 			$retval[$i]->name		= sqlite_field_name($this->result_id, $i);
-			$retval[$i]->type		= NULL;
-			$retval[$i]->max_length		= NULL;
+			$retval[$i]->type		= null;
+			$retval[$i]->max_length		= null;
 		}
 
 		return $retval;

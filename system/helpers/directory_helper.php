@@ -64,7 +64,7 @@ if ( ! function_exists('directory_map'))
 	 * @param	bool	$hidden			Whether to show hidden files
 	 * @return	array
 	 */
-	function directory_map($source_dir, $directory_depth = 0, $hidden = FALSE)
+	function directory_map($source_dir, $directory_depth = 0, $hidden = false)
 	{
 		if ($fp = @opendir($source_dir))
 		{
@@ -72,10 +72,10 @@ if ( ! function_exists('directory_map'))
 			$new_depth	= $directory_depth - 1;
 			$source_dir	= rtrim($source_dir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
 
-			while (FALSE !== ($file = readdir($fp)))
+			while (false !== ($file = readdir($fp)))
 			{
 				// Remove '.', '..', and hidden files [optional]
-				if ($file === '.' OR $file === '..' OR ($hidden === FALSE && $file[0] === '.'))
+				if ($file === '.' OR $file === '..' OR ($hidden === false && $file[0] === '.'))
 				{
 					continue;
 				}
@@ -96,6 +96,6 @@ if ( ! function_exists('directory_map'))
 			return $filedata;
 		}
 
-		return FALSE;
+		return false;
 	}
 }

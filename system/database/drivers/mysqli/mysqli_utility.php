@@ -81,7 +81,7 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 	{
 		if (count($params) === 0)
 		{
-			return FALSE;
+			return false;
 		}
 
 		// Extract the prefs for simplicity
@@ -91,7 +91,7 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 		$output = '';
 
 		// Do we need to include a statement to disable foreign key checks?
-		if ($foreign_key_checks === FALSE)
+		if ($foreign_key_checks === false)
 		{
 			$output .= 'SET foreign_key_checks = 0;'.$newline;
 		}
@@ -99,7 +99,7 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 		foreach ( (array) $tables as $table)
 		{
 			// Is the table in the "ignore" list?
-			if (in_array($table, (array) $ignore, TRUE))
+			if (in_array($table, (array) $ignore, true))
 			{
 				continue;
 			}
@@ -108,7 +108,7 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 			$query = $this->db->query('SHOW CREATE TABLE '.$this->db->escape_identifiers($this->db->database.'.'.$table));
 
 			// No result means the table name was invalid
-			if ($query === FALSE)
+			if ($query === false)
 			{
 				continue;
 			}
@@ -116,7 +116,7 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 			// Write out the table schema
 			$output .= '#'.$newline.'# TABLE STRUCTURE FOR: '.$table.$newline.'#'.$newline.$newline;
 
-			if ($add_drop === TRUE)
+			if ($add_drop === true)
 			{
 				$output .= 'DROP TABLE IF EXISTS '.$this->db->protect_identifiers($table).';'.$newline.$newline;
 			}
@@ -132,7 +132,7 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 			}
 
 			// If inserts are not needed we're done...
-			if ($add_insert === FALSE)
+			if ($add_insert === false)
 			{
 				continue;
 			}
@@ -157,7 +157,7 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 				// Most versions of MySQL store timestamp as a string
 				$is_int[$i] = in_array(strtolower($field->type),
 							array('tinyint', 'smallint', 'mediumint', 'int', 'bigint'), //, 'timestamp'),
-							TRUE);
+							true);
 
 				// Create a string of field names
 				$field_str .= $this->db->escape_identifiers($field->name).', ';
@@ -175,15 +175,15 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 				$i = 0;
 				foreach ($row as $v)
 				{
-					// Is the value NULL?
-					if ($v === NULL)
+					// Is the value null?
+					if ($v === null)
 					{
-						$val_str .= 'NULL';
+						$val_str .= 'null';
 					}
 					else
 					{
 						// Escape the data if it's not an integer
-						$val_str .= ($is_int[$i] === FALSE) ? $this->db->escape($v) : $v;
+						$val_str .= ($is_int[$i] === false) ? $this->db->escape($v) : $v;
 					}
 
 					// Append a comma
@@ -202,7 +202,7 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 		}
 
 		// Do we need to include a statement to re-enable foreign key checks?
-		if ($foreign_key_checks === FALSE)
+		if ($foreign_key_checks === false)
 		{
 			$output .= 'SET foreign_key_checks = 1;'.$newline;
 		}

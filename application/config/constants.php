@@ -6,12 +6,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Display Debug backtrace
 |--------------------------------------------------------------------------
 |
-| If set to TRUE, a backtrace will be displayed along with php errors. If
+| If set to true, a backtrace will be displayed along with php errors. If
 | error_reporting is disabled, the backtrace will not display, regardless
 | of this setting
 |
 */
-defined('SHOW_DEBUG_BACKTRACE') OR define('SHOW_DEBUG_BACKTRACE', TRUE);
+defined('SHOW_DEBUG_BACKTRACE') OR define('SHOW_DEBUG_BACKTRACE', true);
 
 /*
 |--------------------------------------------------------------------------
@@ -87,8 +87,8 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 // ------------------------------------------------------------------------
 // Application-specific constants.
 // ------------------------------------------------------------------------
-defined('login_url')         OR define('login_url', 'login');
-defined('register_url')      OR define('register_url', 'register');
+defined('LOGIN_URL')         OR define('LOGIN_URL', 'login');
+defined('REGISTER_URL')      OR define('REGISTER_URL', 'register');
 defined('ROUTE_DOMAIN_NAME') OR define('ROUTE_DOMAIN_NAME', ''); //the domain name of your server
 
 /* End of file constants.php */

@@ -180,13 +180,13 @@ if ( ! function_exists('reduce_multiples'))
 	 *
 	 * @param	string
 	 * @param	string	the character you wish to reduce
-	 * @param	bool	TRUE/FALSE - whether to trim the character from the beginning/end
+	 * @param	bool	true/false - whether to trim the character from the beginning/end
 	 * @return	string
 	 */
-	function reduce_multiples($str, $character = ',', $trim = FALSE)
+	function reduce_multiples($str, $character = ',', $trim = false)
 	{
 		$str = preg_replace('#'.preg_quote($character, '#').'{2,}#', $character, $str);
-		return ($trim === TRUE) ? trim($str, $character) : $str;
+		return ($trim === true) ? trim($str, $character) : $str;
 	}
 }
 
@@ -232,7 +232,7 @@ if ( ! function_exists('random_string'))
 				return md5(uniqid(mt_rand()));
 			case 'encrypt': // todo: remove in 3.1+
 			case 'sha1':
-				return sha1(uniqid(mt_rand(), TRUE));
+				return sha1(uniqid(mt_rand(), true));
 		}
 	}
 }

@@ -113,11 +113,11 @@ class CI_Driver_Library {
 
 		// Get package paths and filename case variations to search
 		$CI = get_instance();
-		$paths = $CI->load->get_package_paths(TRUE);
+		$paths = $CI->load->get_package_paths(true);
 
 		// Is there an extension?
 		$class_name = $prefix.$child_name;
-		$found = class_exists($class_name, FALSE);
+		$found = class_exists($class_name, false);
 		if ( ! $found)
 		{
 			// Check for subclass file
@@ -139,7 +139,7 @@ class CI_Driver_Library {
 					// Include both sources and mark found
 					include_once($basepath);
 					include_once($file);
-					$found = TRUE;
+					$found = true;
 					break;
 				}
 			}
@@ -150,7 +150,7 @@ class CI_Driver_Library {
 		{
 			// Use standard class name
 			$class_name = 'CI_'.$child_name;
-			if ( ! class_exists($class_name, FALSE))
+			if ( ! class_exists($class_name, false))
 			{
 				// Check package paths
 				foreach ($paths as $path)
@@ -168,9 +168,9 @@ class CI_Driver_Library {
 		}
 
 		// Did we finally find the class?
-		if ( ! class_exists($class_name, FALSE))
+		if ( ! class_exists($class_name, false))
 		{
-			if (class_exists($child_name, FALSE))
+			if (class_exists($child_name, false))
 			{
 				$class_name = $child_name;
 			}

@@ -232,7 +232,7 @@ class CI_Zip {
 	 * @param	string	$data		Single file contents
 	 * @return	void
 	 */
-	public function add_data($filepath, $data = NULL)
+	public function add_data($filepath, $data = null)
 	{
 		if (is_array($filepath))
 		{
@@ -311,9 +311,9 @@ class CI_Zip {
 	 * @param	bool	$archive_filepath
 	 * @return	bool
 	 */
-	public function read_file($path, $archive_filepath = FALSE)
+	public function read_file($path, $archive_filepath = false)
 	{
-		if (file_exists($path) && FALSE !== ($data = file_get_contents($path)))
+		if (file_exists($path) && false !== ($data = file_get_contents($path)))
 		{
 			if (is_string($archive_filepath))
 			{
@@ -323,17 +323,17 @@ class CI_Zip {
 			{
 				$name = str_replace('\\', '/', $path);
 
-				if ($archive_filepath === FALSE)
+				if ($archive_filepath === false)
 				{
 					$name = preg_replace('|.*/(.+)|', '\\1', $name);
 				}
 			}
 
 			$this->add_data($name, $data);
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// ------------------------------------------------------------------------
@@ -350,21 +350,21 @@ class CI_Zip {
 	 * @param	string	$root_path
 	 * @return	bool
 	 */
-	public function read_dir($path, $preserve_filepath = TRUE, $root_path = NULL)
+	public function read_dir($path, $preserve_filepath = true, $root_path = null)
 	{
 		$path = rtrim($path, '/\\').DIRECTORY_SEPARATOR;
 		if ( ! $fp = @opendir($path))
 		{
-			return FALSE;
+			return false;
 		}
 
 		// Set the original directory root for child dir's to use as relative
-		if ($root_path === NULL)
+		if ($root_path === null)
 		{
 			$root_path = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, dirname($path)).DIRECTORY_SEPARATOR;
 		}
 
-		while (FALSE !== ($file = readdir($fp)))
+		while (false !== ($file = readdir($fp)))
 		{
 			if ($file[0] === '.')
 			{
@@ -375,10 +375,10 @@ class CI_Zip {
 			{
 				$this->read_dir($path.$file.DIRECTORY_SEPARATOR, $preserve_filepath, $root_path);
 			}
-			elseif (FALSE !== ($data = file_get_contents($path.$file)))
+			elseif (false !== ($data = file_get_contents($path.$file)))
 			{
 				$name = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $path);
-				if ($preserve_filepath === FALSE)
+				if ($preserve_filepath === false)
 				{
 					$name = str_replace($root_path, '', $name);
 				}
@@ -388,7 +388,7 @@ class CI_Zip {
 		}
 
 		closedir($fp);
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -403,7 +403,7 @@ class CI_Zip {
 		// Is there any data to return?
 		if ($this->entries === 0)
 		{
-			return FALSE;
+			return false;
 		}
 
 		return $this->zipdata
@@ -429,14 +429,14 @@ class CI_Zip {
 	{
 		if ( ! ($fp = @fopen($filepath, 'w+b')))
 		{
-			return FALSE;
+			return false;
 		}
 
 		flock($fp, LOCK_EX);
 
 		for ($result = $written = 0, $data = $this->get_zip(), $length = self::strlen($data); $written < $length; $written += $result)
 		{
-			if (($result = fwrite($fp, self::substr($data, $written))) === FALSE)
+			if (($result = fwrite($fp, self::substr($data, $written))) === false)
 			{
 				break;
 			}
@@ -515,7 +515,7 @@ class CI_Zip {
 	 * @param	int	$length
 	 * @return	string
 	 */
-	protected static function substr($str, $start, $length = NULL)
+	protected static function substr($str, $start, $length = null)
 	{
 		if (self::$func_overload)
 		{

@@ -105,11 +105,11 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 	 * @param	bool	$prefix_limit
 	 * @return	string
 	 */
-	protected function _list_tables($prefix_limit = FALSE)
+	protected function _list_tables($prefix_limit = false)
 	{
 		$sql = 'SELECT "NAME" FROM "SQLITE_MASTER" WHERE "TYPE" = \'table\'';
 
-		if ($prefix_limit === TRUE && $this->dbprefix !== '')
+		if ($prefix_limit === true && $this->dbprefix !== '')
 		{
 			return $sql.' AND "NAME" LIKE \''.$this->escape_like_str($this->dbprefix)."%' "
 				.sprintf($this->_like_escape_str, $this->_like_escape_chr);
@@ -134,9 +134,9 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 			return $this->data_cache['field_names'][$table];
 		}
 
-		if (($result = $this->query('PRAGMA TABLE_INFO('.$this->protect_identifiers($table, TRUE, NULL, FALSE).')')) === FALSE)
+		if (($result = $this->query('PRAGMA TABLE_INFO('.$this->protect_identifiers($table, true, null, false).')')) === false)
 		{
-			return FALSE;
+			return false;
 		}
 
 		$this->data_cache['field_names'][$table] = array();
@@ -158,15 +158,15 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 	 */
 	public function field_data($table)
 	{
-		if (($query = $this->query('PRAGMA TABLE_INFO('.$this->protect_identifiers($table, TRUE, NULL, FALSE).')')) === FALSE)
+		if (($query = $this->query('PRAGMA TABLE_INFO('.$this->protect_identifiers($table, true, null, false).')')) === false)
 		{
-			return FALSE;
+			return false;
 		}
 
 		$query = $query->result_array();
 		if (empty($query))
 		{
-			return FALSE;
+			return false;
 		}
 
 		$retval = array();
@@ -175,7 +175,7 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 			$retval[$i]			= new stdClass();
 			$retval[$i]->name		= $query[$i]['name'];
 			$retval[$i]->type		= $query[$i]['type'];
-			$retval[$i]->max_length		= NULL;
+			$retval[$i]->max_length		= null;
 			$retval[$i]->default		= $query[$i]['dflt_value'];
 			$retval[$i]->primary_key	= isset($query[$i]['pk']) ? (int) $query[$i]['pk'] : 0;
 		}

@@ -61,15 +61,15 @@ if ( ! function_exists('force_download'))
 	 * @param	bool	whether to try and send the actual file MIME type
 	 * @return	void
 	 */
-	function force_download($filename = '', $data = '', $set_mime = FALSE)
+	function force_download($filename = '', $data = '', $set_mime = false)
 	{
 		if ($filename === '' OR $data === '')
 		{
 			return;
 		}
-		elseif ($data === NULL)
+		elseif ($data === null)
 		{
-			if ( ! @is_file($filename) OR ($filesize = @filesize($filename)) === FALSE)
+			if ( ! @is_file($filename) OR ($filesize = @filesize($filename)) === false)
 			{
 				return;
 			}
@@ -89,7 +89,7 @@ if ( ! function_exists('force_download'))
 		$x = explode('.', $filename);
 		$extension = end($x);
 
-		if ($set_mime === TRUE)
+		if ($set_mime === true)
 		{
 			if (count($x) === 1 OR $extension === '')
 			{
@@ -121,13 +121,13 @@ if ( ! function_exists('force_download'))
 			$filename = implode('.', $x);
 		}
 
-		if ($data === NULL && ($fp = @fopen($filepath, 'rb')) === FALSE)
+		if ($data === null && ($fp = @fopen($filepath, 'rb')) === false)
 		{
 			return;
 		}
 
 		// Clean output buffer
-		if (ob_get_level() !== 0 && @ob_end_clean() === FALSE)
+		if (ob_get_level() !== 0 && @ob_end_clean() === false)
 		{
 			@ob_clean();
 		}
@@ -141,13 +141,13 @@ if ( ! function_exists('force_download'))
 		header('Cache-Control: private, no-transform, no-store, must-revalidate');
 
 		// If we have raw data - just dump it
-		if ($data !== NULL)
+		if ($data !== null)
 		{
 			exit($data);
 		}
 
 		// Flush 1MB chunks of data
-		while ( ! feof($fp) && ($data = fread($fp, 1048576)) !== FALSE)
+		while ( ! feof($fp) && ($data = fread($fp, 1048576)) !== false)
 		{
 			echo $data;
 		}

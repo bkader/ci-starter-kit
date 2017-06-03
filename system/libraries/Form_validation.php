@@ -109,7 +109,7 @@ class CI_Form_validation {
 	 *
 	 * @var bool
 	 */
-	protected $_safe_form_data	= FALSE;
+	protected $_safe_form_data	= false;
 
 	/**
 	 * Custom data to validate
@@ -221,7 +221,7 @@ class CI_Form_validation {
 
 		// Is the field name an array? If it is an array, we break it apart
 		// into its components so that we can fetch the corresponding POST data later
-		if (($is_array = (bool) preg_match_all('/\[(.*?)\]/', $field, $matches)) === TRUE)
+		if (($is_array = (bool) preg_match_all('/\[(.*?)\]/', $field, $matches)) === true)
 		{
 			sscanf($field, '%[^[][', $indexes[0]);
 
@@ -242,7 +242,7 @@ class CI_Form_validation {
 			'errors'	=> $errors,
 			'is_array'	=> $is_array,
 			'keys'		=> $indexes,
-			'postdata'	=> NULL,
+			'postdata'	=> null,
 			'error'		=> ''
 		);
 
@@ -426,7 +426,7 @@ class CI_Form_validation {
 			// No validation rules?  We're done...
 			if (count($this->_config_rules) === 0)
 			{
-				return FALSE;
+				return false;
 			}
 
 			if (empty($group))
@@ -442,7 +442,7 @@ class CI_Form_validation {
 			if (count($this->_field_data) === 0)
 			{
 				log_message('debug', 'Unable to find validation rules');
-				return FALSE;
+				return false;
 			}
 		}
 
@@ -454,7 +454,7 @@ class CI_Form_validation {
 		{
 			// Fetch the data from the validation_data array item and cache it in the _field_data array.
 			// Depending on whether the field name is an array or a string will determine where we get it from.
-			if ($row['is_array'] === TRUE)
+			if ($row['is_array'] === true)
 			{
 				$this->_field_data[$field]['postdata'] = $this->_reduce_array($validation_array, $row['keys']);
 			}
@@ -482,7 +482,7 @@ class CI_Form_validation {
 		$total_errors = count($this->_error_array);
 		if ($total_errors > 0)
 		{
-			$this->_safe_form_data = TRUE;
+			$this->_safe_form_data = true;
 		}
 
 		// Now we need to re-set the POST data with the new, processed data
@@ -562,11 +562,11 @@ class CI_Form_validation {
 	{
 		if (is_array($array) && isset($keys[$i]))
 		{
-			return isset($array[$keys[$i]]) ? $this->_reduce_array($array[$keys[$i]], $keys, ($i+1)) : NULL;
+			return isset($array[$keys[$i]]) ? $this->_reduce_array($array[$keys[$i]], $keys, ($i+1)) : null;
 		}
 
-		// NULL must be returned for empty fields
-		return ($array === '') ? NULL : $array;
+		// null must be returned for empty fields
+		return ($array === '') ? null : $array;
 	}
 
 	// --------------------------------------------------------------------
@@ -580,9 +580,9 @@ class CI_Form_validation {
 	{
 		foreach ($this->_field_data as $field => $row)
 		{
-			if ($row['postdata'] !== NULL)
+			if ($row['postdata'] !== null)
 			{
-				if ($row['is_array'] === FALSE)
+				if ($row['is_array'] === false)
 				{
 					isset($_POST[$field]) && $_POST[$field] = $row['postdata'];
 				}
@@ -621,7 +621,7 @@ class CI_Form_validation {
 	 * @param	int
 	 * @return	mixed
 	 */
-	protected function _execute($row, $rules, $postdata = NULL, $cycles = 0)
+	protected function _execute($row, $rules, $postdata = null, $cycles = 0)
 	{
 		// If the $_POST data is an array we will run a recursive call
 		//
@@ -640,11 +640,11 @@ class CI_Form_validation {
 		$rules = $this->_prepare_rules($rules);
 		foreach ($rules as $rule)
 		{
-			$_in_array = FALSE;
+			$_in_array = false;
 
 			// We set the $postdata variable with the current data in our master array so that
 			// each cycle of the loop is dealing with the processed data from the last cycle
-			if ($row['is_array'] === TRUE && is_array($this->_field_data[$row['field']]['postdata']))
+			if ($row['is_array'] === true && is_array($this->_field_data[$row['field']]['postdata']))
 			{
 				// We shouldn't need this safety, but just in case there isn't an array index
 				// associated with this cycle we'll bail out
@@ -654,7 +654,7 @@ class CI_Form_validation {
 				}
 
 				$postdata = $this->_field_data[$row['field']]['postdata'][$cycles];
-				$_in_array = TRUE;
+				$_in_array = true;
 			}
 			else
 			{
@@ -662,23 +662,23 @@ class CI_Form_validation {
 				// somebody messing with the form on the client side, so we'll just consider
 				// it an empty field
 				$postdata = is_array($this->_field_data[$row['field']]['postdata'])
-					? NULL
+					? null
 					: $this->_field_data[$row['field']]['postdata'];
 			}
 
 			// Is the rule a callback?
-			$callback = $callable = FALSE;
+			$callback = $callable = false;
 			if (is_string($rule))
 			{
 				if (strpos($rule, 'callback_') === 0)
 				{
 					$rule = substr($rule, 9);
-					$callback = TRUE;
+					$callback = true;
 				}
 			}
 			elseif (is_callable($rule))
 			{
-				$callable = TRUE;
+				$callable = true;
 			}
 			elseif (is_array($rule) && isset($rule[0], $rule[1]) && is_callable($rule[1]))
 			{
@@ -689,7 +689,7 @@ class CI_Form_validation {
 
 			// Strip the parameter (if exists) from the rule
 			// Rules can contain a parameter: max_length[5]
-			$param = FALSE;
+			$param = false;
 			if ( ! $callable && preg_match('/(.*?)\[(.*)\]/', $rule, $match))
 			{
 				$rule = $match[1];
@@ -698,24 +698,24 @@ class CI_Form_validation {
 
 			// Ignore empty, non-required inputs with a few exceptions ...
 			if (
-				($postdata === NULL OR $postdata === '')
-				&& $callback === FALSE
-				&& $callable === FALSE
-				&& ! in_array($rule, array('required', 'isset', 'matches'), TRUE)
+				($postdata === null OR $postdata === '')
+				&& $callback === false
+				&& $callable === false
+				&& ! in_array($rule, array('required', 'isset', 'matches'), true)
 			)
 			{
 				continue;
 			}
 
 			// Call the function that corresponds to the rule
-			if ($callback OR $callable !== FALSE)
+			if ($callback OR $callable !== false)
 			{
 				if ($callback)
 				{
 					if ( ! method_exists($this->CI, $rule))
 					{
 						log_message('debug', 'Unable to find callback validation rule: '.$rule);
-						$result = FALSE;
+						$result = false;
 					}
 					else
 					{
@@ -730,14 +730,14 @@ class CI_Form_validation {
 						: $rule($postdata);
 
 					// Is $callable set to a rule name?
-					if ($callable !== FALSE)
+					if ($callable !== false)
 					{
 						$rule = $callable;
 					}
 				}
 
 				// Re-assign the result to the master data array
-				if ($_in_array === TRUE)
+				if ($_in_array === true)
 				{
 					$this->_field_data[$row['field']]['postdata'][$cycles] = is_bool($result) ? $postdata : $result;
 				}
@@ -753,9 +753,9 @@ class CI_Form_validation {
 				if (function_exists($rule))
 				{
 					// Native PHP functions issue warnings if you pass them more parameters than they use
-					$result = ($param !== FALSE) ? $rule($postdata, $param) : $rule($postdata);
+					$result = ($param !== false) ? $rule($postdata, $param) : $rule($postdata);
 
-					if ($_in_array === TRUE)
+					if ($_in_array === true)
 					{
 						$this->_field_data[$row['field']]['postdata'][$cycles] = is_bool($result) ? $postdata : $result;
 					}
@@ -767,14 +767,14 @@ class CI_Form_validation {
 				else
 				{
 					log_message('debug', 'Unable to find validation rule: '.$rule);
-					$result = FALSE;
+					$result = false;
 				}
 			}
 			else
 			{
 				$result = $this->$rule($postdata, $param);
 
-				if ($_in_array === TRUE)
+				if ($_in_array === true)
 				{
 					$this->_field_data[$row['field']]['postdata'][$cycles] = is_bool($result) ? $postdata : $result;
 				}
@@ -785,7 +785,7 @@ class CI_Form_validation {
 			}
 
 			// Did the rule test negatively? If so, grab the error.
-			if ($result === FALSE)
+			if ($result === false)
 			{
 				// Callable rules might not have named error messages
 				if ( ! is_string($rule))
@@ -841,12 +841,12 @@ class CI_Form_validation {
 		{
 			return $this->_error_messages[$rule];
 		}
-		elseif (FALSE !== ($line = $this->CI->lang->line('form_validation_'.$rule)))
+		elseif (false !== ($line = $this->CI->lang->line('form_validation_'.$rule)))
 		{
 			return $line;
 		}
 		// DEPRECATED support for non-prefixed keys, lang file again
-		elseif (FALSE !== ($line = $this->CI->lang->line($rule, FALSE)))
+		elseif (false !== ($line = $this->CI->lang->line($rule, false)))
 		{
 			return $line;
 		}
@@ -866,7 +866,7 @@ class CI_Form_validation {
 	{
 		// Do we need to translate the field name? We look for the prefix 'lang:' to determine this
 		// If we find one, but there's no translation for the string - just return it
-		if (sscanf($fieldname, 'lang:%s', $line) === 1 && FALSE === ($fieldname = $this->CI->lang->line($line, FALSE)))
+		if (sscanf($fieldname, 'lang:%s', $line) === 1 && false === ($fieldname = $this->CI->lang->line($line, false)))
 		{
 			return $line;
 		}
@@ -887,7 +887,7 @@ class CI_Form_validation {
 	protected function _build_error_msg($line, $field = '', $param = '')
 	{
 		// Check for %s in the string for legacy support.
-		if (strpos($line, '%s') !== FALSE)
+		if (strpos($line, '%s') !== false)
 		{
 			return sprintf($line, $field, $param);
 		}
@@ -952,18 +952,18 @@ class CI_Form_validation {
 	 * @param	bool
 	 * @return	string
 	 */
-	public function set_select($field = '', $value = '', $default = FALSE)
+	public function set_select($field = '', $value = '', $default = false)
 	{
 		if ( ! isset($this->_field_data[$field], $this->_field_data[$field]['postdata']))
 		{
-			return ($default === TRUE && count($this->_field_data) === 0) ? ' selected="selected"' : '';
+			return ($default === true && count($this->_field_data) === 0) ? ' selected="selected"' : '';
 		}
 
 		$field = $this->_field_data[$field]['postdata'];
 		$value = (string) $value;
 		if (is_array($field))
 		{
-			// Note: in_array('', array(0)) returns TRUE, do not use it
+			// Note: in_array('', array(0)) returns true, do not use it
 			foreach ($field as &$v)
 			{
 				if ($value === $v)
@@ -995,18 +995,18 @@ class CI_Form_validation {
 	 * @param	bool
 	 * @return	string
 	 */
-	public function set_radio($field = '', $value = '', $default = FALSE)
+	public function set_radio($field = '', $value = '', $default = false)
 	{
 		if ( ! isset($this->_field_data[$field], $this->_field_data[$field]['postdata']))
 		{
-			return ($default === TRUE && count($this->_field_data) === 0) ? ' checked="checked"' : '';
+			return ($default === true && count($this->_field_data) === 0) ? ' checked="checked"' : '';
 		}
 
 		$field = $this->_field_data[$field]['postdata'];
 		$value = (string) $value;
 		if (is_array($field))
 		{
-			// Note: in_array('', array(0)) returns TRUE, do not use it
+			// Note: in_array('', array(0)) returns true, do not use it
 			foreach ($field as &$v)
 			{
 				if ($value === $v)
@@ -1038,7 +1038,7 @@ class CI_Form_validation {
 	 * @param	bool
 	 * @return	string
 	 */
-	public function set_checkbox($field = '', $value = '', $default = FALSE)
+	public function set_checkbox($field = '', $value = '', $default = false)
 	{
 		// Logic is exactly the same as for radio fields
 		return $this->set_radio($field, $value, $default);
@@ -1055,7 +1055,7 @@ class CI_Form_validation {
 	public function required($str)
 	{
 		return is_array($str)
-			? (empty($str) === FALSE)
+			? (empty($str) === false)
 			: (trim($str) !== '');
 	}
 
@@ -1086,7 +1086,7 @@ class CI_Form_validation {
 	{
 		return isset($this->_field_data[$field], $this->_field_data[$field]['postdata'])
 			? ($str === $this->_field_data[$field]['postdata'])
-			: FALSE;
+			: false;
 	}
 
 	// --------------------------------------------------------------------
@@ -1120,7 +1120,7 @@ class CI_Form_validation {
 		sscanf($field, '%[^.].%[^.]', $table, $field);
 		return isset($this->CI->db)
 			? ($this->CI->db->limit(1)->get_where($table, array($field => $str))->num_rows() === 0)
-			: FALSE;
+			: false;
 	}
 
 	// --------------------------------------------------------------------
@@ -1136,7 +1136,7 @@ class CI_Form_validation {
 	{
 		if ( ! is_numeric($val))
 		{
-			return FALSE;
+			return false;
 		}
 
 		return ($val <= mb_strlen($str));
@@ -1155,7 +1155,7 @@ class CI_Form_validation {
 	{
 		if ( ! is_numeric($val))
 		{
-			return FALSE;
+			return false;
 		}
 
 		return ($val >= mb_strlen($str));
@@ -1174,7 +1174,7 @@ class CI_Form_validation {
 	{
 		if ( ! is_numeric($val))
 		{
-			return FALSE;
+			return false;
 		}
 
 		return (mb_strlen($str) === (int) $val);
@@ -1192,17 +1192,17 @@ class CI_Form_validation {
 	{
 		if (empty($str))
 		{
-			return FALSE;
+			return false;
 		}
 		elseif (preg_match('/^(?:([^:]*)\:)?\/\/(.+)$/', $str, $matches))
 		{
 			if (empty($matches[2]))
 			{
-				return FALSE;
+				return false;
 			}
-			elseif ( ! in_array(strtolower($matches[1]), array('http', 'https'), TRUE))
+			elseif ( ! in_array(strtolower($matches[1]), array('http', 'https'), true))
 			{
-				return FALSE;
+				return false;
 			}
 
 			$str = $matches[2];
@@ -1211,12 +1211,12 @@ class CI_Form_validation {
 		// PHP 7 accepts IPv6 addresses within square brackets as hostnames,
 		// but it appears that the PR that came in with https://bugs.php.net/bug.php?id=68039
 		// was never merged into a PHP 5 branch ... https://3v4l.org/8PsSN
-		if (preg_match('/^\[([^\]]+)\]/', $str, $matches) && ! is_php('7') && filter_var($matches[1], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== FALSE)
+		if (preg_match('/^\[([^\]]+)\]/', $str, $matches) && ! is_php('7') && filter_var($matches[1], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false)
 		{
 			$str = 'ipv6.host'.substr($str, strlen($matches[1]) + 2);
 		}
 
-		return (filter_var('http://'.$str, FILTER_VALIDATE_URL) !== FALSE);
+		return (filter_var('http://'.$str, FILTER_VALIDATE_URL) !== false);
 	}
 
 	// --------------------------------------------------------------------
@@ -1247,20 +1247,20 @@ class CI_Form_validation {
 	 */
 	public function valid_emails($str)
 	{
-		if (strpos($str, ',') === FALSE)
+		if (strpos($str, ',') === false)
 		{
 			return $this->valid_email(trim($str));
 		}
 
 		foreach (explode(',', $str) as $email)
 		{
-			if (trim($email) !== '' && $this->valid_email(trim($email)) === FALSE)
+			if (trim($email) !== '' && $this->valid_email(trim($email)) === false)
 			{
-				return FALSE;
+				return false;
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -1380,7 +1380,7 @@ class CI_Form_validation {
 	 */
 	public function greater_than($str, $min)
 	{
-		return is_numeric($str) ? ($str > $min) : FALSE;
+		return is_numeric($str) ? ($str > $min) : false;
 	}
 
 	// --------------------------------------------------------------------
@@ -1394,7 +1394,7 @@ class CI_Form_validation {
 	 */
 	public function greater_than_equal_to($str, $min)
 	{
-		return is_numeric($str) ? ($str >= $min) : FALSE;
+		return is_numeric($str) ? ($str >= $min) : false;
 	}
 
 	// --------------------------------------------------------------------
@@ -1408,7 +1408,7 @@ class CI_Form_validation {
 	 */
 	public function less_than($str, $max)
 	{
-		return is_numeric($str) ? ($str < $max) : FALSE;
+		return is_numeric($str) ? ($str < $max) : false;
 	}
 
 	// --------------------------------------------------------------------
@@ -1422,7 +1422,7 @@ class CI_Form_validation {
 	 */
 	public function less_than_equal_to($str, $max)
 	{
-		return is_numeric($str) ? ($str <= $max) : FALSE;
+		return is_numeric($str) ? ($str <= $max) : false;
 	}
 
 	// --------------------------------------------------------------------
@@ -1436,7 +1436,7 @@ class CI_Form_validation {
 	 */
 	public function in_list($value, $list)
 	{
-		return in_array($value, explode(',', $list), TRUE);
+		return in_array($value, explode(',', $list), true);
 	}
 
 	// --------------------------------------------------------------------
@@ -1495,7 +1495,7 @@ class CI_Form_validation {
 	 */
 	public function prep_for_form($data)
 	{
-		if ($this->_safe_form_data === FALSE OR empty($data))
+		if ($this->_safe_form_data === false OR empty($data))
 		{
 			return $data;
 		}

@@ -133,7 +133,7 @@ class CI_Session_files_driver extends CI_Session_driver implements SessionHandle
 	{
 		if ( ! is_dir($save_path))
 		{
-			if ( ! mkdir($save_path, 0700, TRUE))
+			if ( ! mkdir($save_path, 0700, true))
 			{
 				throw new Exception("Session: Configured save path '".$this->_config['save_path']."' is not a directory, doesn't exist or cannot be created.");
 			}
@@ -165,21 +165,21 @@ class CI_Session_files_driver extends CI_Session_driver implements SessionHandle
 	{
 		// This might seem weird, but PHP 5.6 introduces session_reset(),
 		// which re-reads session data
-		if ($this->_file_handle === NULL)
+		if ($this->_file_handle === null)
 		{
 			$this->_file_new = ! file_exists($this->_file_path.$session_id);
 
-			if (($this->_file_handle = fopen($this->_file_path.$session_id, 'c+b')) === FALSE)
+			if (($this->_file_handle = fopen($this->_file_path.$session_id, 'c+b')) === false)
 			{
 				log_message('error', "Session: Unable to open file '".$this->_file_path.$session_id."'.");
 				return $this->_failure;
 			}
 
-			if (flock($this->_file_handle, LOCK_EX) === FALSE)
+			if (flock($this->_file_handle, LOCK_EX) === false)
 			{
 				log_message('error', "Session: Unable to obtain lock for file '".$this->_file_path.$session_id."'.");
 				fclose($this->_file_handle);
-				$this->_file_handle = NULL;
+				$this->_file_handle = null;
 				return $this->_failure;
 			}
 
@@ -195,7 +195,7 @@ class CI_Session_files_driver extends CI_Session_driver implements SessionHandle
 		}
 		// We shouldn't need this, but apparently we do ...
 		// See https://github.com/bcit-ci/CodeIgniter/issues/4039
-		elseif ($this->_file_handle === FALSE)
+		elseif ($this->_file_handle === false)
 		{
 			return $this->_failure;
 		}
@@ -207,7 +207,7 @@ class CI_Session_files_driver extends CI_Session_driver implements SessionHandle
 		$session_data = '';
 		for ($read = 0, $length = filesize($this->_file_path.$session_id); $read < $length; $read += self::strlen($buffer))
 		{
-			if (($buffer = fread($this->_file_handle, $length - $read)) === FALSE)
+			if (($buffer = fread($this->_file_handle, $length - $read)) === false)
 			{
 				break;
 			}
@@ -260,7 +260,7 @@ class CI_Session_files_driver extends CI_Session_driver implements SessionHandle
 		{
 			for ($written = 0; $written < $length; $written += $result)
 			{
-				if (($result = fwrite($this->_file_handle, substr($session_data, $written))) === FALSE)
+				if (($result = fwrite($this->_file_handle, substr($session_data, $written))) === false)
 				{
 					break;
 				}
@@ -294,7 +294,7 @@ class CI_Session_files_driver extends CI_Session_driver implements SessionHandle
 			flock($this->_file_handle, LOCK_UN);
 			fclose($this->_file_handle);
 
-			$this->_file_handle = $this->_file_new = $this->_session_id = NULL;
+			$this->_file_handle = $this->_file_new = $this->_session_id = null;
 		}
 
 		return $this->_success;
@@ -324,7 +324,7 @@ class CI_Session_files_driver extends CI_Session_driver implements SessionHandle
 
 			return $this->_success;
 		}
-		elseif ($this->_file_path !== NULL)
+		elseif ($this->_file_path !== null)
 		{
 			clearstatcache();
 			if (file_exists($this->_file_path.$session_id))
@@ -353,7 +353,7 @@ class CI_Session_files_driver extends CI_Session_driver implements SessionHandle
 	 */
 	public function gc($maxlifetime)
 	{
-		if ( ! is_dir($this->_config['save_path']) OR ($directory = opendir($this->_config['save_path'])) === FALSE)
+		if ( ! is_dir($this->_config['save_path']) OR ($directory = opendir($this->_config['save_path'])) === false)
 		{
 			log_message('debug', "Session: Garbage collector couldn't list files under directory '".$this->_config['save_path']."'.");
 			return $this->_failure;
@@ -361,7 +361,7 @@ class CI_Session_files_driver extends CI_Session_driver implements SessionHandle
 
 		$ts = time() - $maxlifetime;
 
-		$pattern = ($this->_config['match_ip'] === TRUE)
+		$pattern = ($this->_config['match_ip'] === true)
 			? '[0-9a-f]{32}'
 			: '';
 
@@ -370,12 +370,12 @@ class CI_Session_files_driver extends CI_Session_driver implements SessionHandle
 			preg_quote($this->_config['cookie_name'])
 		);
 
-		while (($file = readdir($directory)) !== FALSE)
+		while (($file = readdir($directory)) !== false)
 		{
 			// If the filename doesn't match this pattern, it's either not a session file or is not ours
 			if ( ! preg_match($pattern, $file)
 				OR ! is_file($this->_config['save_path'].DIRECTORY_SEPARATOR.$file)
-				OR ($mtime = filemtime($this->_config['save_path'].DIRECTORY_SEPARATOR.$file)) === FALSE
+				OR ($mtime = filemtime($this->_config['save_path'].DIRECTORY_SEPARATOR.$file)) === false
 				OR $mtime > $ts)
 			{
 				continue;

@@ -92,7 +92,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 		$this->curs_id = $driver_object->curs_id;
 		$this->limit_used = $driver_object->limit_used;
 		$this->commit_mode =& $driver_object->commit_mode;
-		$driver_object->stmt_id = FALSE;
+		$driver_object->stmt_id = false;
 	}
 
 	// --------------------------------------------------------------------
@@ -166,7 +166,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 		if (is_resource($this->result_id))
 		{
 			oci_free_statement($this->result_id);
-			$this->result_id = FALSE;
+			$this->result_id = false;
 		}
 
 		if (is_resource($this->stmt_id))
@@ -177,7 +177,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 		if (is_resource($this->curs_id))
 		{
 			oci_cancel($this->curs_id);
-			$this->curs_id = NULL;
+			$this->curs_id = null;
 		}
 	}
 

@@ -23,10 +23,10 @@ class Theme
 		'theme'            => 'default',
 		'layout'           => 'default',
 		'title_sep'        => '-',
-		'compress'         => FALSE,
+		'compress'         => false,
 		'cache_lifetime'   => 0,
-		'cdn_enabled'      => FALSE,
-		'cdn_server'       => NULL,
+		'cdn_enabled'      => false,
+		'cdn_server'       => null,
 		'site_title'       => 'CodeIgniter',
 		'site_description' => 'CodeIgniter Themes Library',
 		'site_keywords'    => 'codeigniter, themes, libraries, bkader'
@@ -38,9 +38,9 @@ class Theme
 	 * @var 	string 	$controller 	controller's name
 	 * @var 	string 	$method 		method's name
 	 */
-	protected $module     = NULL;
-	protected $controller = NULL;
-	protected $method     = NULL;
+	protected $module     = null;
+	protected $controller = null;
+	protected $method     = null;
 
 	/**
 	 * Additional partial views
@@ -95,8 +95,8 @@ class Theme
 		$this->method     = $this->CI->router->fetch_method();
 
 		// Set some useful variables
-		$this->set('site_title', $this->site_title, TRUE);
-		$this->set('uri_string', $this->CI->uri->uri_string(), TRUE);
+		$this->set('site_title', $this->site_title, true);
+		$this->set('uri_string', $this->CI->uri->uri_string(), true);
 	}
 
 	// ------------------------------------------------------------------------
@@ -151,7 +151,7 @@ class Theme
 	 * @param 	mixed 	$val 	property's value
 	 * @return 	void
 	 */
-	public function __set($var, $val = NULL)
+	public function __set($var, $val = null)
 	{
 		$this->$var = $val;
 	}
@@ -180,11 +180,11 @@ class Theme
 	 * Sets class properties
 	 * @access 	public
 	 * @param 	mixed 		$var 		property's name or associative array
-	 * @param 	mixed 		$val 		property's value or NULL if $var is array
+	 * @param 	mixed 		$val 		property's value or null if $var is array
 	 * @param 	boolean 	$global 	make property global or not
 	 * @return 	instance of class
 	 */
-	public function set($var, $val = NULL, $global = FALSE)
+	public function set($var, $val = null, $global = false)
 	{
 		if (is_array($var))
 		{
@@ -196,7 +196,7 @@ class Theme
 			return $this;
 		}
 
-		if ($global === TRUE)
+		if ($global === true)
 		{
 			$this->CI->load->vars($var, $val);
 		}
@@ -216,7 +216,7 @@ class Theme
 	 */
 	public function get($name)
 	{
-		return isset($this->config[$name]) ? $this->config[$name] : NULL;
+		return isset($this->config[$name]) ? $this->config[$name] : null;
 	}
 
 	// ------------------------------------------------------------------------
@@ -290,7 +290,7 @@ class Theme
 	 * @param 	mixed 	$content
 	 * @return 	object
 	 */
-    public function add_meta($name, $content = NULL)
+    public function add_meta($name, $content = null)
     {
     	// In case of multiple elements
     	if (is_array($name))
@@ -313,11 +313,11 @@ class Theme
      * @access 	public
      *
      * @param   mixed   $name   string or associative array
-     * @param   string  $value  value or NULL if $name is array
+     * @param   string  $value  value or null if $name is array
      * 
      * @return  string
      */
-    public function meta($name, $content = NULL, array $attrs = array(), $type = 'name')
+    public function meta($name, $content = null, array $attrs = array(), $type = 'name')
     {
         // Loop through multiple meta tags
         if (is_array($name)) 
@@ -333,7 +333,7 @@ class Theme
         }
 
         // In case of using Open Graph tags, we user 'property' instead of 'name'.
-		if (strpos($name, 'og:') !== FALSE)
+		if (strpos($name, 'og:') !== false)
 		{
 			$type = 'property';
 		}
@@ -342,7 +342,7 @@ class Theme
 		$attrs[$type] = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
 
 		// Add the content only if not empty.
-		if ($content !== NULL)
+		if ($content !== null)
 		{
 			$attrs['content'] = htmlspecialchars($content, ENT_QUOTES, 'UTF-8');
 		}
@@ -361,9 +361,9 @@ class Theme
 	 * @param 	string 	$folder 	in case of distinct folder
 	 * @return 	string
 	 */
-	public function assets_url($uri = '', $folder = NULL)
+	public function assets_url($uri = '', $folder = null)
 	{
-		if (filter_var($uri, FILTER_VALIDATE_URL) !== FALSE)
+		if (filter_var($uri, FILTER_VALIDATE_URL) !== false)
 		{
 			return $uri;
 		}
@@ -496,16 +496,16 @@ class Theme
      * @param   string  $file   filename with or without .css extension
      * @return  string
      */
-    public function css_url($file = NULL, $folder = NULL)
+    public function css_url($file = null, $folder = null)
     {
     	// If a valid URL is passed, we simply return it
-        if (filter_var($file, FILTER_VALIDATE_URL) !== FALSE) 
+        if (filter_var($file, FILTER_VALIDATE_URL) !== false) 
         {
         	return $file;
         }
 
         $ver = '';
-        if (strpos($file, '?') !== FALSE) 
+        if (strpos($file, '?') !== false) 
         {
             $args = explode('?', $file);
             $file = $args[0];
@@ -525,19 +525,19 @@ class Theme
      * 
      * @return  string
      */
-    public function css($file, $cdn = NULL, $attrs = '', $folder = NULL)
+    public function css($file, $cdn = null, $attrs = '', $folder = null)
     {
     	// Only if a $file a requested
         if ($file) 
         {
         	// Use the 2nd parameter if it's set & the CDN use is enabled.
-            $this->cdn_enabled && $cdn !== NULL && $file = $cdn;
+            $this->cdn_enabled && $cdn !== null && $file = $cdn;
 
             // Return the full link tag
             return '<link rel="stylesheet" type="text/css" href="'.$this->css_url($file, $folder).'"'._stringify_attributes($attrs).'>'."\n";
         }
 
-        return NULL;
+        return null;
     }
 
 	// ------------------------------------------------------------------------
@@ -615,17 +615,17 @@ class Theme
      * 
      * @return  string
      */
-    public function js_url($file = NULL, $folder = NULL)
+    public function js_url($file = null, $folder = null)
     {
     	// If a valid URL is passed, we simply return it
-        if (filter_var($file, FILTER_VALIDATE_URL) !== FALSE) 
+        if (filter_var($file, FILTER_VALIDATE_URL) !== false) 
         {
 
         	return $file;
         }
 
         $ver = '';
-        if (strpos($file, '?') !== FALSE) 
+        if (strpos($file, '?') !== false) 
         {
             $args = explode('?', $file);
             $file = $args[0];
@@ -645,16 +645,16 @@ class Theme
      * 
      * @return  string
      */
-    public function js($file, $cdn = NULL, $attrs = '', $folder = NULL)
+    public function js($file, $cdn = null, $attrs = '', $folder = null)
     {
     	// Only if a $file a requested
         if ($file)
         {
         	// Use the 2nd parameter if it's set & the CDN use is enabled.
-            $this->cdn_enabled && $cdn !== NULL && $file = $cdn;
+            $this->cdn_enabled && $cdn !== null && $file = $cdn;
             return '<script type="text/javascript" src="'.$this->js_url($file, $folder).'"'._stringify_attributes($attrs).'></script>'."\n";
         }
-        return NULL;
+        return null;
     }
 
     // ------------------------------------------------------------------------
@@ -802,10 +802,10 @@ class Theme
 	 * @param 	array 	$data 	array of data to pass
 	 * @param 	string 	$name 	name of the variable to use
 	 */
-	public function add_partial($view, $data = array(), $name = FALSE)
+	public function add_partial($view, $data = array(), $name = false)
 	{
 		$name OR $name = $view;
-		$this->partials[$name] = $this->_load_file('partial', $view, $data, TRUE);
+		$this->partials[$name] = $this->_load_file('partial', $view, $data, true);
 		return $this;
 	}
 
@@ -854,7 +854,7 @@ class Theme
 	 * @param 	bool 	$return whether to return or output
 	 * @return 	mixed
 	 */
-	public function partial($view, $data = array(), $return = FALSE)
+	public function partial($view, $data = array(), $return = false)
 	{
 		return $this->_load_file('partial', $view, $data, $return);
 	}
@@ -872,7 +872,7 @@ class Theme
 	 * @param 	bool 	$return whether to return or output
 	 * @return 	mixed
 	 */
-	public function view($view, $data = array(), $return = FALSE)
+	public function view($view, $data = array(), $return = false)
 	{
 		return $this->_load_file('view', $view, $data, $return);
 	}
@@ -886,7 +886,7 @@ class Theme
 	 * @param 	string 	$master 	in case you use a distinct master view
 	 * @return  void
 	 */
-	public function load($view, $data = array(), $return = FALSE, $master = 'template')
+	public function load($view, $data = array(), $return = false, $master = 'template')
 	{
 		// Start beckmark
 		$this->CI->benchmark->mark('theme_start');
@@ -961,21 +961,21 @@ class Theme
 		}
 
 		// Prepare view content
-		$layout['content'] = $this->_load_file('view', $view, $data, TRUE);
+		$layout['content'] = $this->_load_file('view', $view, $data, true);
 		
 		// These lines below are deprecated. You should load header and footer
 		// only if you want you using add_partial(). (uncomment if you want them)
-		// $layout['header']  = $this->_load_file('partial', 'header', array(), TRUE);
-		// $layout['footer']  = $this->_load_file('partial', 'footer', array(), TRUE);
+		// $layout['header']  = $this->_load_file('partial', 'header', array(), true);
+		// $layout['footer']  = $this->_load_file('partial', 'footer', array(), true);
 
 		// Prepare layout content
-		$this->set('layout', $this->_load_file('layout', $this->layout, $layout, TRUE));
+		$this->set('layout', $this->_load_file('layout', $this->layout, $layout, true));
 
 		// Prepare the output
-		$output = $this->_load_file('template', $this->master, $this->data, TRUE);
+		$output = $this->_load_file('template', $this->master, $this->data, true);
 
 		// Minify HTML output if set to TRE
-		if ($this->compress === TRUE)
+		if ($this->compress === true)
 		{
 			$output = $this->_compress_output($output);
 		}
@@ -996,7 +996,7 @@ class Theme
 	 * @param 	bool 	$return whether to output or simply return
 	 * @return 	mixed
 	 */
-	protected function _load_file($type = 'view', $view = '', $data = array(), $return = FALSE)
+	protected function _load_file($type = 'view', $view = '', $data = array(), $return = false)
 	{
 		switch ($type) {
 
@@ -1013,7 +1013,7 @@ class Theme
 					build_path(VIEWPATH),
 				);
 
-				// remove uneccessary paths if $this->module is NULL
+				// remove uneccessary paths if $this->module is null
 				if (empty($this->module))
 				{
 					unset($paths[0], $paths[2]);
@@ -1027,21 +1027,21 @@ class Theme
 
 				if ( ! empty($paths))
 				{
-					$found  = FALSE;
+					$found  = false;
 					$output = '';
 
 					foreach (array_unique($paths) as $path)
 					{
 						if (file_exists($path.$view.'.php'))
 						{
-							$found = TRUE;
+							$found = true;
 							$this->CI->load->vars($data);
 							$output = $this->CI->load->file($path.$view.'.php', $return);
 							break;
 						}
 					}
 
-					if ($found !== TRUE)
+					if ($found !== true)
 					{
 						show_error("The requested view file '{$view}' could not be found in any of these folders: <ul><li>".implode("</li><li>", array_unique($paths))."</li></ul>");
 					}
@@ -1063,7 +1063,7 @@ class Theme
 					build_path(VIEWPATH, 'partials'),
 				);
 
-				// remove uneccessary paths if $this->module is NULL
+				// remove uneccessary paths if $this->module is null
 				if (empty($this->module))
 				{
 					unset($paths[0], $paths[2]);
@@ -1077,21 +1077,21 @@ class Theme
 
 				if ( ! empty($paths))
 				{
-					$found  = FALSE;
+					$found  = false;
 					$output = '';
 
 					foreach (array_unique($paths) as $path)
 					{
 						if (file_exists($path.$view.'.php'))
 						{
-							$found = TRUE;
+							$found = true;
 							$this->CI->load->vars($data);
 							$output = $this->CI->load->file($path.$view.'.php', $return);
 							break;
 						}
 					}
 
-					if ($found !== TRUE)
+					if ($found !== true)
 					{
 						show_error("The requested partial file '{$view}' could not be found in any of these folders: <ul><li>".implode("</li><li>", array_unique($paths))."</li></ul>");
 					}
@@ -1114,7 +1114,7 @@ class Theme
 					build_path(VIEWPATH, 'layouts'),
 				);
 
-				// remove uneccessary paths if $this->module is NULL
+				// remove uneccessary paths if $this->module is null
 				if (empty($this->module))
 				{
 					unset($paths[0], $paths[2]);
@@ -1128,21 +1128,21 @@ class Theme
 
 				if ( ! empty($paths))
 				{
-					$found  = FALSE;
+					$found  = false;
 					$output = '';
 
 					foreach (array_unique($paths) as $path)
 					{
 						if (file_exists($path.$view.'.php'))
 						{
-							$found = TRUE;
+							$found = true;
 							$this->CI->load->vars($data);
 							$output = $this->CI->load->file($path.$view.'.php', $return);
 							break;
 						}
 					}
 
-					if ($found !== TRUE)
+					if ($found !== true)
 					{
 						show_error("The requested layout file '{$view}' could not be found in any of these folders: <ul><li>".implode("</li><li>", array_unique($paths))."</li></ul>");
 					}
@@ -1168,7 +1168,7 @@ class Theme
 					build_path(VIEWPATH),
 				);
 
-				// remove uneccessary paths if $this->module is NULL
+				// remove uneccessary paths if $this->module is null
 				if (empty($this->module))
 				{
 					unset($paths[0], $paths[2]);
@@ -1182,21 +1182,21 @@ class Theme
 
 				if ( ! empty($paths))
 				{
-					$found  = FALSE;
+					$found  = false;
 					$output = '';
 
 					foreach (array_unique($paths) as $path)
 					{
 						if (file_exists($path.$view.'.php'))
 						{
-							$found = TRUE;
+							$found = true;
 							$this->CI->load->vars($data);
 							$output = $this->CI->load->file($path.$view.'.php', $return);
 							break;
 						}
 					}
 
-					if ($found !== TRUE)
+					if ($found !== true)
 					{
 						show_error("The requested master view '{$view}' could not be found in any of these folders: <ul><li>".implode("</li><li>", array_unique($paths))."</li></ul>");
 					}

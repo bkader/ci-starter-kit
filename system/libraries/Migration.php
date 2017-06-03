@@ -56,7 +56,7 @@ class CI_Migration {
 	 *
 	 * @var bool
 	 */
-	protected $_migration_enabled = FALSE;
+	protected $_migration_enabled = false;
 
 	/**
 	 * Migration numbering type
@@ -70,7 +70,7 @@ class CI_Migration {
 	 *
 	 * @var string
 	 */
-	protected $_migration_path = NULL;
+	protected $_migration_path = null;
 
 	/**
 	 * Current migration version
@@ -91,7 +91,7 @@ class CI_Migration {
 	 *
 	 * @var	bool
 	 */
-	protected $_migration_auto_latest = FALSE;
+	protected $_migration_auto_latest = false;
 
 	/**
 	 * Migration basename regex
@@ -116,7 +116,7 @@ class CI_Migration {
 	public function __construct($config = array())
 	{
 		// Only run this constructor on main library load
-		if ( ! in_array(get_class($this), array('CI_Migration', config_item('subclass_prefix').'Migration'), TRUE))
+		if ( ! in_array(get_class($this), array('CI_Migration', config_item('subclass_prefix').'Migration'), true))
 		{
 			return;
 		}
@@ -129,7 +129,7 @@ class CI_Migration {
 		log_message('info', 'Migrations Class Initialized');
 
 		// Are they trying to use migrations while it is disabled?
-		if ($this->_migration_enabled !== TRUE)
+		if ($this->_migration_enabled !== true)
 		{
 			show_error('Migrations has been loaded but is disabled or set up incorrectly.');
 		}
@@ -170,13 +170,13 @@ class CI_Migration {
 				'version' => array('type' => 'BIGINT', 'constraint' => 20),
 			));
 
-			$this->dbforge->create_table($this->_migration_table, TRUE);
+			$this->dbforge->create_table($this->_migration_table, true);
 
 			$this->db->insert($this->_migration_table, array('version' => 0));
 		}
 
 		// Do we auto migrate to the latest migration?
-		if ($this->_migration_auto_latest === TRUE && ! $this->latest())
+		if ($this->_migration_auto_latest === true && ! $this->latest())
 		{
 			show_error($this->error_string());
 		}
@@ -191,7 +191,7 @@ class CI_Migration {
 	 * choice
 	 *
 	 * @param	string	$target_version	Target schema version
-	 * @return	mixed	TRUE if no migrations are found, current version string on success, FALSE on failure
+	 * @return	mixed	true if no migrations are found, current version string on success, false on failure
 	 */
 	public function version($target_version)
 	{
@@ -212,7 +212,7 @@ class CI_Migration {
 		if ($target_version > 0 && ! isset($migrations[$target_version]))
 		{
 			$this->_error_string = sprintf($this->lang->line('migration_not_found'), $target_version);
-			return FALSE;
+			return false;
 		}
 
 		if ($target_version > $current_version)
@@ -228,7 +228,7 @@ class CI_Migration {
 		else
 		{
 			// Well, there's nothing to migrate then ...
-			return TRUE;
+			return true;
 		}
 
 		// Validate all available migrations within our target range.
@@ -273,7 +273,7 @@ class CI_Migration {
 				if (isset($previous) && abs($number - $previous) > 1)
 				{
 					$this->_error_string = sprintf($this->lang->line('migration_sequence_gap'), $number);
-					return FALSE;
+					return false;
 				}
 
 				$previous = $number;
@@ -283,15 +283,15 @@ class CI_Migration {
 			$class = 'Migration_'.ucfirst(strtolower($this->_get_migration_name(basename($file, '.php'))));
 
 			// Validate the migration file structure
-			if ( ! class_exists($class, FALSE))
+			if ( ! class_exists($class, false))
 			{
 				$this->_error_string = sprintf($this->lang->line('migration_class_doesnt_exist'), $class);
-				return FALSE;
+				return false;
 			}
 			elseif ( ! is_callable(array($class, $method)))
 			{
 				$this->_error_string = sprintf($this->lang->line('migration_missing_'.$method.'_method'), $class);
-				return FALSE;
+				return false;
 			}
 
 			$pending[$number] = array($class, $method);
@@ -325,7 +325,7 @@ class CI_Migration {
 	/**
 	 * Sets the schema to the latest migration
 	 *
-	 * @return	mixed	Current version string on success, FALSE on failure
+	 * @return	mixed	Current version string on success, false on failure
 	 */
 	public function latest()
 	{
@@ -334,7 +334,7 @@ class CI_Migration {
 		if (empty($migrations))
 		{
 			$this->_error_string = $this->lang->line('migration_none_found');
-			return FALSE;
+			return false;
 		}
 
 		$last_migration = basename(end($migrations));
@@ -349,7 +349,7 @@ class CI_Migration {
 	/**
 	 * Sets the schema to the migration version set in config
 	 *
-	 * @return	mixed	TRUE if no migrations are found, current version string on success, FALSE on failure
+	 * @return	mixed	true if no migrations are found, current version string on success, false on failure
 	 */
 	public function current()
 	{

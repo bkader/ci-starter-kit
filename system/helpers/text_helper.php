@@ -203,7 +203,7 @@ if ( ! function_exists('entities_to_ascii'))
 	 * @param	bool
 	 * @return	string
 	 */
-	function entities_to_ascii($str, $all = TRUE)
+	function entities_to_ascii($str, $all = true)
 	{
 		if (preg_match_all('/\&#(\d+)\;/', $str, $matches))
 		{
@@ -336,7 +336,7 @@ if ( ! function_exists('highlight_code'))
 
 		// The highlight_string function requires that the text be surrounded
 		// by PHP tags, which we will remove later
-		$str = highlight_string('<?php '.$str.' ?>', TRUE);
+		$str = highlight_string('<?php '.$str.' ?>', true);
 
 		// Remove our artificially added PHP, and the syntax highlighting that came with it
 		$str = preg_replace(
@@ -451,7 +451,7 @@ if ( ! function_exists('word_wrap'))
 		$str = preg_replace('| +|', ' ', $str);
 
 		// Standardize newlines
-		if (strpos($str, "\r") !== FALSE)
+		if (strpos($str, "\r") !== false)
 		{
 			$str = str_replace(array("\r\n", "\r"), "\n", $str);
 		}
@@ -469,9 +469,9 @@ if ( ! function_exists('word_wrap'))
 		}
 
 		// Use PHP's native function to do the initial wordwrap.
-		// We set the cut flag to FALSE so that any individual words that are
+		// We set the cut flag to false so that any individual words that are
 		// too long get left alone. In the next step we'll deal with them.
-		$str = wordwrap($str, $charlim, "\n", FALSE);
+		$str = wordwrap($str, $charlim, "\n", false);
 
 		// Split the string into individual lines of text and cycle through them
 		$output = '';

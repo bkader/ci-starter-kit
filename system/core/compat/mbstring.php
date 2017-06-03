@@ -50,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
-if (MB_ENABLED === TRUE)
+if (MB_ENABLED === true)
 {
 	return;
 }
@@ -70,9 +70,9 @@ if ( ! function_exists('mb_strlen'))
 	 * @param	string	$encoding
 	 * @return	string
 	 */
-	function mb_strlen($str, $encoding = NULL)
+	function mb_strlen($str, $encoding = null)
 	{
-		if (ICONV_ENABLED === TRUE)
+		if (ICONV_ENABLED === true)
 		{
 			return iconv_strlen($str, isset($encoding) ? $encoding : config_item('charset'));
 		}
@@ -99,9 +99,9 @@ if ( ! function_exists('mb_strpos'))
 	 * @param	string	$encoding
 	 * @return	mixed
 	 */
-	function mb_strpos($haystack, $needle, $offset = 0, $encoding = NULL)
+	function mb_strpos($haystack, $needle, $offset = 0, $encoding = null)
 	{
-		if (ICONV_ENABLED === TRUE)
+		if (ICONV_ENABLED === true)
 		{
 			return iconv_strpos($haystack, $needle, $offset, isset($encoding) ? $encoding : config_item('charset'));
 		}
@@ -128,15 +128,15 @@ if ( ! function_exists('mb_substr'))
 	 * @param	string	$encoding
 	 * @return	string
 	 */
-	function mb_substr($str, $start, $length = NULL, $encoding = NULL)
+	function mb_substr($str, $start, $length = null, $encoding = null)
 	{
-		if (ICONV_ENABLED === TRUE)
+		if (ICONV_ENABLED === true)
 		{
 			isset($encoding) OR $encoding = config_item('charset');
 			return iconv_substr(
 				$str,
 				$start,
-				isset($length) ? $length : iconv_strlen($str, $encoding), // NULL doesn't work
+				isset($length) ? $length : iconv_strlen($str, $encoding), // null doesn't work
 				$encoding
 			);
 		}

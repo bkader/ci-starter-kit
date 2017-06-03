@@ -68,7 +68,7 @@ class CI_Image_lib {
 	 *
 	 * @var bool
 	 */
-	public $dynamic_output		= FALSE;
+	public $dynamic_output		= false;
 
 	/**
 	 * Path to original image
@@ -110,7 +110,7 @@ class CI_Image_lib {
 	 *
 	 * @var bool
 	 */
-	public $create_thumb		= FALSE;
+	public $create_thumb		= false;
 
 	/**
 	 * String to add to thumbnail version of image
@@ -124,7 +124,7 @@ class CI_Image_lib {
 	 *
 	 * @var bool
 	 */
-	public $maintain_ratio		= TRUE;
+	public $maintain_ratio		= true;
 
 	/**
 	 * auto, height, or width.  Determines what to use as the master dimension
@@ -370,14 +370,14 @@ class CI_Image_lib {
 	 *
 	 * @var bool
 	 */
-	protected $wm_use_drop_shadow	= FALSE;
+	protected $wm_use_drop_shadow	= false;
 
 	/**
 	 * Whether to use truetype fonts
 	 *
 	 * @var bool
 	 */
-	public $wm_use_truetype	= FALSE;
+	public $wm_use_truetype	= false;
 
 	/**
 	 * Initialize Image Library
@@ -424,11 +424,11 @@ class CI_Image_lib {
 		}
 
 		$this->image_library 		= 'gd2';
-		$this->dynamic_output 		= FALSE;
+		$this->dynamic_output 		= false;
 		$this->quality 				= 90;
-		$this->create_thumb 		= FALSE;
+		$this->create_thumb 		= false;
 		$this->thumb_marker 		= '_thumb';
-		$this->maintain_ratio 		= TRUE;
+		$this->maintain_ratio 		= true;
 		$this->master_dim 			= 'auto';
 		$this->wm_type 				= 'text';
 		$this->wm_x_transp 			= 4;
@@ -445,8 +445,8 @@ class CI_Image_lib {
 		$this->create_fnc 			= 'imagecreatetruecolor';
 		$this->copy_fnc 			= 'imagecopyresampled';
 		$this->error_msg 			= array();
-		$this->wm_use_drop_shadow 	= FALSE;
-		$this->wm_use_truetype 		= FALSE;
+		$this->wm_use_drop_shadow 	= false;
+		$this->wm_use_truetype 		= false;
 	}
 
 	// --------------------------------------------------------------------
@@ -466,7 +466,7 @@ class CI_Image_lib {
 			{
 				if (property_exists($this, $key))
 				{
-					if (in_array($key, array('wm_font_color', 'wm_shadow_color'), TRUE))
+					if (in_array($key, array('wm_font_color', 'wm_shadow_color'), true))
 					{
 						if (preg_match('/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i', $val, $matches))
 						{
@@ -488,7 +488,7 @@ class CI_Image_lib {
 							continue;
 						}
 					}
-					elseif (in_array($key, array('width', 'height'), TRUE) && ! ctype_digit((string) $val))
+					elseif (in_array($key, array('width', 'height'), true) && ! ctype_digit((string) $val))
 					{
 						continue;
 					}
@@ -502,7 +502,7 @@ class CI_Image_lib {
 		if ($this->source_image === '')
 		{
 			$this->set_error('imglib_source_image_required');
-			return FALSE;
+			return false;
 		}
 
 		/* Is getimagesize() available?
@@ -514,7 +514,7 @@ class CI_Image_lib {
 		if ( ! function_exists('getimagesize'))
 		{
 			$this->set_error('imglib_gd_required_for_props');
-			return FALSE;
+			return false;
 		}
 
 		$this->image_library = strtolower($this->image_library);
@@ -525,7 +525,7 @@ class CI_Image_lib {
 		 * Either way, we'll try use realpath to generate the
 		 * full server path in order to more reliably read it.
 		 */
-		if (($full_source_path = realpath($this->source_image)) !== FALSE)
+		if (($full_source_path = realpath($this->source_image)) !== false)
 		{
 			$full_source_path = str_replace('\\', '/', $full_source_path);
 		}
@@ -541,7 +541,7 @@ class CI_Image_lib {
 		// Set the Image Properties
 		if ( ! $this->get_image_properties($this->source_folder.$this->source_image))
 		{
-			return FALSE;
+			return false;
 		}
 
 		/*
@@ -557,7 +557,7 @@ class CI_Image_lib {
 			$this->dest_image  = $this->source_image;
 			$this->dest_folder = $this->source_folder;
 		}
-		elseif (strpos($this->new_image, '/') === FALSE && strpos($this->new_image, '\\') === FALSE)
+		elseif (strpos($this->new_image, '/') === false && strpos($this->new_image, '\\') === false)
 		{
 			$this->dest_image  = $this->new_image;
 			$this->dest_folder = $this->source_folder;
@@ -588,7 +588,7 @@ class CI_Image_lib {
 		 * We'll also split the destination image name
 		 * so we can insert the thumbnail marker if needed.
 		 */
-		if ($this->create_thumb === FALSE OR $this->thumb_marker === '')
+		if ($this->create_thumb === false OR $this->thumb_marker === '')
 		{
 			$this->thumb_marker = '';
 		}
@@ -607,7 +607,7 @@ class CI_Image_lib {
 		 * might not be in correct proportion with the source
 		 * image's width/height. We'll recalculate it here.
 		 */
-		if ($this->maintain_ratio === TRUE && ($this->width !== 0 OR $this->height !== 0))
+		if ($this->maintain_ratio === true && ($this->width !== 0 OR $this->height !== 0))
 		{
 			$this->image_reproportion();
 		}
@@ -647,19 +647,19 @@ class CI_Image_lib {
 
 		if ($this->wm_shadow_color !== '')
 		{
-			$this->wm_use_drop_shadow = TRUE;
+			$this->wm_use_drop_shadow = true;
 		}
-		elseif ($this->wm_use_drop_shadow === TRUE && $this->wm_shadow_color === '')
+		elseif ($this->wm_use_drop_shadow === true && $this->wm_shadow_color === '')
 		{
-			$this->wm_use_drop_shadow = FALSE;
+			$this->wm_use_drop_shadow = false;
 		}
 
 		if ($this->wm_font_path !== '')
 		{
-			$this->wm_use_truetype = TRUE;
+			$this->wm_use_truetype = true;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -712,7 +712,7 @@ class CI_Image_lib {
 		if ($this->rotation_angle === '' OR ! in_array($this->rotation_angle, $degs))
 		{
 			$this->set_error('imglib_rotation_angle_required');
-			return FALSE;
+			return false;
 		}
 
 		// Reassign the width and height
@@ -751,18 +751,18 @@ class CI_Image_lib {
 	 */
 	public function image_process_gd($action = 'resize')
 	{
-		$v2_override = FALSE;
+		$v2_override = false;
 
 		// If the target width/height match the source, AND if the new file name is not equal to the old file name
 		// we'll simply make a copy of the original with the new name... assuming dynamic rendering is off.
-		if ($this->dynamic_output === FALSE && $this->orig_width === $this->width && $this->orig_height === $this->height)
+		if ($this->dynamic_output === false && $this->orig_width === $this->width && $this->orig_height === $this->height)
 		{
 			if ($this->source_image !== $this->new_image && @copy($this->full_src_path, $this->full_dst_path))
 			{
 				chmod($this->full_dst_path, $this->file_permissions);
 			}
 
-			return TRUE;
+			return true;
 		}
 
 		// Let's set up our values based on the action
@@ -773,7 +773,7 @@ class CI_Image_lib {
 			$this->orig_height = $this->height;
 
 			// GD 2.0 has a cropping bug so we'll test for it
-			if ($this->gd_version() !== FALSE)
+			if ($this->gd_version() !== false)
 			{
 				$gd_version = str_replace('0', '', $this->gd_version());
 				$v2_override = ($gd_version == 2);
@@ -789,7 +789,7 @@ class CI_Image_lib {
 		// Create the image handle
 		if ( ! ($src_img = $this->image_create_gd()))
 		{
-			return FALSE;
+			return false;
 		}
 
 		/* Create the image
@@ -798,7 +798,7 @@ class CI_Image_lib {
 		 * it appears that this is no longer the issue that it was in 2004, so we've removed it, retaining it in the comment
 		 * below should that ever prove inaccurate.
 		 *
-		 * if ($this->image_library === 'gd2' && function_exists('imagecreatetruecolor') && $v2_override === FALSE)
+		 * if ($this->image_library === 'gd2' && function_exists('imagecreatetruecolor') && $v2_override === false)
 		 */
 		if ($this->image_library === 'gd2' && function_exists('imagecreatetruecolor'))
 		{
@@ -815,20 +815,20 @@ class CI_Image_lib {
 
 		if ($this->image_type === 3) // png we can actually preserve transparency
 		{
-			imagealphablending($dst_img, FALSE);
-			imagesavealpha($dst_img, TRUE);
+			imagealphablending($dst_img, false);
+			imagesavealpha($dst_img, true);
 		}
 
 		$copy($dst_img, $src_img, 0, 0, $this->x_axis, $this->y_axis, $this->width, $this->height, $this->orig_width, $this->orig_height);
 
 		// Show the image
-		if ($this->dynamic_output === TRUE)
+		if ($this->dynamic_output === true)
 		{
 			$this->image_display_gd($dst_img);
 		}
 		elseif ( ! $this->image_save_gd($dst_img)) // Or save it
 		{
-			return FALSE;
+			return false;
 		}
 
 		// Kill the file handles
@@ -837,7 +837,7 @@ class CI_Image_lib {
 
 		chmod($this->full_dst_path, $this->file_permissions);
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -856,7 +856,7 @@ class CI_Image_lib {
 		if ($this->library_path === '')
 		{
 			$this->set_error('imglib_libpath_invalid');
-			return FALSE;
+			return false;
 		}
 
 		if ( ! preg_match('/convert$/i', $this->library_path))
@@ -879,7 +879,7 @@ class CI_Image_lib {
 		}
 		else // Resize
 		{
-			if($this->maintain_ratio === TRUE)
+			if($this->maintain_ratio === true)
 			{
 				$cmd .= ' -resize '.$this->width.'x'.$this->height;
 			}
@@ -902,12 +902,12 @@ class CI_Image_lib {
 		if ($retval > 0)
 		{
 			$this->set_error('imglib_image_process_failed');
-			return FALSE;
+			return false;
 		}
 
 		chmod($this->full_dst_path, $this->file_permissions);
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -925,7 +925,7 @@ class CI_Image_lib {
 		if ($this->library_path === '')
 		{
 			$this->set_error('imglib_libpath_invalid');
-			return FALSE;
+			return false;
 		}
 
 		// Build the resizing command
@@ -985,7 +985,7 @@ class CI_Image_lib {
 		if ($retval > 0)
 		{
 			$this->set_error('imglib_image_process_failed');
-			return FALSE;
+			return false;
 		}
 
 		// With NetPBM we have to create a temporary image.
@@ -995,7 +995,7 @@ class CI_Image_lib {
 		unlink($this->dest_folder.'netpbm.tmp');
 		chmod($this->full_dst_path, $this->file_permissions);
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -1010,7 +1010,7 @@ class CI_Image_lib {
 		// Create the image handle
 		if ( ! ($src_img = $this->image_create_gd()))
 		{
-			return FALSE;
+			return false;
 		}
 
 		// Set the background color
@@ -1024,13 +1024,13 @@ class CI_Image_lib {
 		$dst_img = imagerotate($src_img, $this->rotation_angle, $white);
 
 		// Show the image
-		if ($this->dynamic_output === TRUE)
+		if ($this->dynamic_output === true)
 		{
 			$this->image_display_gd($dst_img);
 		}
 		elseif ( ! $this->image_save_gd($dst_img)) // ... or save it
 		{
-			return FALSE;
+			return false;
 		}
 
 		// Kill the file handles
@@ -1039,7 +1039,7 @@ class CI_Image_lib {
 
 		chmod($this->full_dst_path, $this->file_permissions);
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -1055,7 +1055,7 @@ class CI_Image_lib {
 	{
 		if ( ! $src_img = $this->image_create_gd())
 		{
-			return FALSE;
+			return false;
 		}
 
 		$width  = $this->orig_width;
@@ -1103,13 +1103,13 @@ class CI_Image_lib {
 		}
 
 		// Show the image
-		if ($this->dynamic_output === TRUE)
+		if ($this->dynamic_output === true)
 		{
 			$this->image_display_gd($src_img);
 		}
 		elseif ( ! $this->image_save_gd($src_img)) // ... or save it
 		{
-			return FALSE;
+			return false;
 		}
 
 		// Kill the file handles
@@ -1117,7 +1117,7 @@ class CI_Image_lib {
 
 		chmod($this->full_dst_path, $this->file_permissions);
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -1147,14 +1147,14 @@ class CI_Image_lib {
 		if ( ! function_exists('imagecolortransparent'))
 		{
 			$this->set_error('imglib_gd_required');
-			return FALSE;
+			return false;
 		}
 
 		// Fetch source image properties
 		$this->get_image_properties();
 
 		// Fetch watermark image properties
-		$props		= $this->get_image_properties($this->wm_overlay_path, TRUE);
+		$props		= $this->get_image_properties($this->wm_overlay_path, true);
 		$wm_img_type	= $props['image_type'];
 		$wm_width	= $props['width'];
 		$wm_height	= $props['height'];
@@ -1206,7 +1206,7 @@ class CI_Image_lib {
 		// Build the finalized image
 		if ($wm_img_type === 3 && function_exists('imagealphablending'))
 		{
-			@imagealphablending($src_img, TRUE);
+			@imagealphablending($src_img, true);
 		}
 
 		// Set RGB values for text and shadow
@@ -1229,24 +1229,24 @@ class CI_Image_lib {
 		// We can preserve transparency for PNG images
 		if ($this->image_type === 3)
 		{
-			imagealphablending($src_img, FALSE);
-			imagesavealpha($src_img, TRUE);
+			imagealphablending($src_img, false);
+			imagesavealpha($src_img, true);
 		}
 
 		// Output the image
-		if ($this->dynamic_output === TRUE)
+		if ($this->dynamic_output === true)
 		{
 			$this->image_display_gd($src_img);
 		}
 		elseif ( ! $this->image_save_gd($src_img)) // ... or save it
 		{
-			return FALSE;
+			return false;
 		}
 
 		imagedestroy($src_img);
 		imagedestroy($wm_img);
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -1260,13 +1260,13 @@ class CI_Image_lib {
 	{
 		if ( ! ($src_img = $this->image_create_gd()))
 		{
-			return FALSE;
+			return false;
 		}
 
-		if ($this->wm_use_truetype === TRUE && ! file_exists($this->wm_font_path))
+		if ($this->wm_use_truetype === true && ! file_exists($this->wm_font_path))
 		{
 			$this->set_error('imglib_missing_font');
-			return FALSE;
+			return false;
 		}
 
 		// Fetch source image properties
@@ -1292,7 +1292,7 @@ class CI_Image_lib {
 		// Set font width and height
 		// These are calculated differently depending on
 		// whether we are using the true type font or not
-		if ($this->wm_use_truetype === TRUE)
+		if ($this->wm_use_truetype === true)
 		{
 			if (empty($this->wm_font_size))
 			{
@@ -1324,7 +1324,7 @@ class CI_Image_lib {
 		$x_axis = $this->wm_hor_offset + $this->wm_padding;
 		$y_axis = $this->wm_vrt_offset + $this->wm_padding;
 
-		if ($this->wm_use_drop_shadow === FALSE)
+		if ($this->wm_use_drop_shadow === false)
 		{
 			$this->wm_shadow_distance = 0;
 		}
@@ -1400,12 +1400,12 @@ class CI_Image_lib {
 		// We can preserve transparency for PNG images
 		if ($this->image_type === 3)
 		{
-			imagealphablending($src_img, FALSE);
-			imagesavealpha($src_img, TRUE);
+			imagealphablending($src_img, false);
+			imagesavealpha($src_img, true);
 		}
 
 		// Output the final image
-		if ($this->dynamic_output === TRUE)
+		if ($this->dynamic_output === true)
 		{
 			$this->image_display_gd($src_img);
 		}
@@ -1416,7 +1416,7 @@ class CI_Image_lib {
 
 		imagedestroy($src_img);
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -1449,7 +1449,7 @@ class CI_Image_lib {
 				if ( ! function_exists('imagecreatefromgif'))
 				{
 					$this->set_error(array('imglib_unsupported_imagecreate', 'imglib_gif_not_supported'));
-					return FALSE;
+					return false;
 				}
 
 				return imagecreatefromgif($path);
@@ -1457,7 +1457,7 @@ class CI_Image_lib {
 				if ( ! function_exists('imagecreatefromjpeg'))
 				{
 					$this->set_error(array('imglib_unsupported_imagecreate', 'imglib_jpg_not_supported'));
-					return FALSE;
+					return false;
 				}
 
 				return imagecreatefromjpeg($path);
@@ -1465,13 +1465,13 @@ class CI_Image_lib {
 				if ( ! function_exists('imagecreatefrompng'))
 				{
 					$this->set_error(array('imglib_unsupported_imagecreate', 'imglib_png_not_supported'));
-					return FALSE;
+					return false;
 				}
 
 				return imagecreatefrompng($path);
 			default:
 				$this->set_error(array('imglib_unsupported_imagecreate'));
-				return FALSE;
+				return false;
 		}
 	}
 
@@ -1494,48 +1494,48 @@ class CI_Image_lib {
 				if ( ! function_exists('imagegif'))
 				{
 					$this->set_error(array('imglib_unsupported_imagecreate', 'imglib_gif_not_supported'));
-					return FALSE;
+					return false;
 				}
 
 				if ( ! @imagegif($resource, $this->full_dst_path))
 				{
 					$this->set_error('imglib_save_failed');
-					return FALSE;
+					return false;
 				}
 			break;
 			case 2:
 				if ( ! function_exists('imagejpeg'))
 				{
 					$this->set_error(array('imglib_unsupported_imagecreate', 'imglib_jpg_not_supported'));
-					return FALSE;
+					return false;
 				}
 
 				if ( ! @imagejpeg($resource, $this->full_dst_path, $this->quality))
 				{
 					$this->set_error('imglib_save_failed');
-					return FALSE;
+					return false;
 				}
 			break;
 			case 3:
 				if ( ! function_exists('imagepng'))
 				{
 					$this->set_error(array('imglib_unsupported_imagecreate', 'imglib_png_not_supported'));
-					return FALSE;
+					return false;
 				}
 
 				if ( ! @imagepng($resource, $this->full_dst_path))
 				{
 					$this->set_error('imglib_save_failed');
-					return FALSE;
+					return false;
 				}
 			break;
 			default:
 				$this->set_error(array('imglib_unsupported_imagecreate'));
-				return FALSE;
+				return false;
 			break;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -1557,7 +1557,7 @@ class CI_Image_lib {
 		{
 			case 1	:	imagegif($resource);
 				break;
-			case 2	:	imagejpeg($resource, NULL, $this->quality);
+			case 2	:	imagejpeg($resource, null, $this->quality);
 				break;
 			case 3	:	imagepng($resource);
 				break;
@@ -1632,7 +1632,7 @@ class CI_Image_lib {
 	 * @param	bool
 	 * @return	mixed
 	 */
-	public function get_image_properties($path = '', $return = FALSE)
+	public function get_image_properties($path = '', $return = false)
 	{
 		// For now we require GD but we should
 		// find a way to determine this using IM or NetPBM
@@ -1645,20 +1645,20 @@ class CI_Image_lib {
 		if ( ! file_exists($path))
 		{
 			$this->set_error('imglib_invalid_path');
-			return FALSE;
+			return false;
 		}
 
 		$vals = getimagesize($path);
-		if ($vals === FALSE)
+		if ($vals === false)
 		{
 			$this->set_error('imglib_invalid_image');
-			return FALSE;
+			return false;
 		}
 
 		$types = array(1 => 'gif', 2 => 'jpeg', 3 => 'png');
 		$mime = isset($types[$vals[2]]) ? 'image/'.$types[$vals[2]] : 'image/jpg';
 
-		if ($return === TRUE)
+		if ($return === true)
 		{
 			return array(
 				'width'      => $vals[0],
@@ -1675,7 +1675,7 @@ class CI_Image_lib {
 		$this->size_str    = $vals[3];
 		$this->mime_type   = $mime;
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -1749,7 +1749,7 @@ class CI_Image_lib {
 	public function explode_name($source_image)
 	{
 		$ext = strrchr($source_image, '.');
-		$name = ($ext === FALSE) ? $source_image : substr($source_image, 0, -strlen($ext));
+		$name = ($ext === false) ? $source_image : substr($source_image, 0, -strlen($ext));
 
 		return array('ext' => $ext, 'name' => $name);
 	}
@@ -1771,7 +1771,7 @@ class CI_Image_lib {
 			return (function_exists('dl') && @dl('gd.so'));
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -1789,7 +1789,7 @@ class CI_Image_lib {
 			return preg_replace('/\D/', '', $gd_version['GD Version']);
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// --------------------------------------------------------------------
@@ -1809,14 +1809,14 @@ class CI_Image_lib {
 		{
 			foreach ($msg as $val)
 			{
-				$msg = ($CI->lang->line($val) === FALSE) ? $val : $CI->lang->line($val);
+				$msg = ($CI->lang->line($val) === false) ? $val : $CI->lang->line($val);
 				$this->error_msg[] = $msg;
 				log_message('error', $msg);
 			}
 		}
 		else
 		{
-			$msg = ($CI->lang->line($msg) === FALSE) ? $msg : $CI->lang->line($msg);
+			$msg = ($CI->lang->line($msg) === false) ? $msg : $CI->lang->line($msg);
 			$this->error_msg[] = $msg;
 			log_message('error', $msg);
 		}

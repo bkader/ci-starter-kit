@@ -42,7 +42,7 @@ if ( ! function_exists('xml_parser_create'))
 	show_error('Your PHP installation does not support XML');
 }
 
-if ( ! class_exists('CI_Xmlrpc', FALSE))
+if ( ! class_exists('CI_Xmlrpc', false))
 {
 	show_error('You must load the Xmlrpc class before loading the Xmlrpcs class in order to create a server.');
 }
@@ -86,7 +86,7 @@ class CI_Xmlrpcs extends CI_Xmlrpc {
 	 *
 	 * @var object
 	 */
-	public $object = FALSE;
+	public $object = false;
 
 	/**
 	 * Initialize XMLRPC class
@@ -245,7 +245,7 @@ class CI_Xmlrpcs extends CI_Xmlrpc {
 		);
 
 		xml_set_object($parser, $parser_object);
-		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, TRUE);
+		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, true);
 		xml_set_element_handler($parser, 'open_tag', 'closing_tag');
 		xml_set_character_data_handler($parser, 'character_data');
 		//xml_set_default_handler($parser, 'default_handler');
@@ -277,15 +277,15 @@ class CI_Xmlrpcs extends CI_Xmlrpc {
 
 			for ($i = 0, $c = count($parser_object->xh[$pname]['params']); $i < $c; $i++)
 			{
-				if ($this->debug === TRUE)
+				if ($this->debug === true)
 				{
-					$plist .= $i.' - '.print_r(get_object_vars($parser_object->xh[$pname]['params'][$i]), TRUE).";\n";
+					$plist .= $i.' - '.print_r(get_object_vars($parser_object->xh[$pname]['params'][$i]), true).";\n";
 				}
 
 				$m->addParam($parser_object->xh[$pname]['params'][$i]);
 			}
 
-			if ($this->debug === TRUE)
+			if ($this->debug === true)
 			{
 				echo "<pre>---PLIST---\n".$plist."\n---PLIST END---\n\n</pre>";
 			}
@@ -297,7 +297,7 @@ class CI_Xmlrpcs extends CI_Xmlrpc {
 		// SET DEBUGGING MESSAGE
 		//-------------------------------------
 
-		if ($this->debug === TRUE)
+		if ($this->debug === true)
 		{
 			$this->debug_msg = "<!-- DEBUG INFO:\n\n".$plist."\n END DEBUG-->\n";
 		}
@@ -320,9 +320,9 @@ class CI_Xmlrpcs extends CI_Xmlrpc {
 		// Check to see if it is a system call
 		$system_call = (strpos($methName, 'system') === 0);
 
-		if ($this->xss_clean === FALSE)
+		if ($this->xss_clean === false)
 		{
-			$m->xss_clean = FALSE;
+			$m->xss_clean = false;
 		}
 
 		//-------------------------------------
@@ -341,7 +341,7 @@ class CI_Xmlrpcs extends CI_Xmlrpc {
 		$method_parts = explode('.', $this->methods[$methName]['function']);
 		$objectCall   = ! empty($method_parts[1]);
 
-		if ($system_call === TRUE)
+		if ($system_call === true)
 		{
 			if ( ! is_callable(array($this, $method_parts[1])))
 			{
@@ -392,13 +392,13 @@ class CI_Xmlrpcs extends CI_Xmlrpc {
 		// Calls the Function
 		//-------------------------------------
 
-		if ($objectCall === TRUE)
+		if ($objectCall === true)
 		{
-			if ($method_parts[0] === 'this' && $system_call === TRUE)
+			if ($method_parts[0] === 'this' && $system_call === true)
 			{
 				return call_user_func(array($this, $method_parts[1]), $m);
 			}
-			elseif ($this->object === FALSE)
+			elseif ($this->object === false)
 			{
 				return get_instance()->{$method_parts[1]}($m);
 			}

@@ -116,7 +116,7 @@ class CI_Exceptions {
 	 * @param 	bool	$log_error	Whether to log the error
 	 * @return	void
 	 */
-	public function show_404($page = '', $log_error = TRUE)
+	public function show_404($page = '', $log_error = true)
 	{
 		if (is_cli())
 		{
@@ -247,7 +247,7 @@ class CI_Exceptions {
 		if ( ! is_cli())
 		{
 			$filepath = str_replace('\\', '/', $filepath);
-			if (FALSE !== strpos($filepath, '/'))
+			if (false !== strpos($filepath, '/'))
 			{
 				$x = explode('/', $filepath);
 				$filepath = $x[count($x)-2].'/'.end($x);

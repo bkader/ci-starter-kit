@@ -51,7 +51,7 @@ class CI_DB_pdo_odbc_forge extends CI_DB_pdo_forge {
 	 *
 	 * @var	bool|array
 	 */
-	protected $_unsigned		= FALSE;
+	protected $_unsigned		= false;
 
 	// --------------------------------------------------------------------
 

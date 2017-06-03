@@ -12,7 +12,7 @@ class MY_URI extends CI_URI {
 	
 	// Now the URI->segment Method also searchs for 
 	// named URIS in case we have declared them	
-	public function segment($n, $no_result = NULL)
+	public function segment($n, $no_result = null)
 	{
 		if ( ! is_numeric($n))
 		{
@@ -29,7 +29,7 @@ class MY_URI extends CI_URI {
 		return parent::segment($n, $no_result);
 	}
 	
-	public function rsegment($n, $no_result = NULL)
+	public function rsegment($n, $no_result = null)
 	{
 		if ( ! is_numeric($n))
 		{

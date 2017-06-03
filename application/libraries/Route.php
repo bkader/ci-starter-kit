@@ -14,7 +14,7 @@ class Route
 	 */
 	protected static $routes = array();
 
-	protected static $prefix = NULL;
+	protected static $prefix = null;
 
 	protected static $named_routes = array();
 
@@ -59,11 +59,11 @@ class Route
 		self::$pre_route_objects = array();
 
 		foreach (self::$route_objects as $key => $route_object) {
-			$add_route = TRUE;
+			$add_route = true;
 			//if there is a subdomain, we will check if it's ok with the route.
 			//all the previously checked subdomain routes should be ignored because
 			//we already have checked them
-			if ($route_object->get_options('subdomain') != FALSE) {
+			if ($route_object->get_options('subdomain') != false) {
 				$add_route = self::_CheckSubdomain($route_object->get_options('subdomain'));
 			}
 
@@ -110,7 +110,7 @@ class Route
 	 * @param string $to
 	 * @return void
 	 */
-	public static function any($from, $to, $options = array(), $nested = FALSE)
+	public static function any($from, $to, $options = array(), $nested = false)
 	{
 		return self::createRoute($from, $to, $options, $nested);
 	}
@@ -128,7 +128,7 @@ class Route
 	 * @param string $from
 	 * @param string $to
 	 */
-	public static function get($from, $to, $options = array(), $nested = FALSE)
+	public static function get($from, $to, $options = array(), $nested = false)
 	{
 		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
 			return self::createRoute($from, $to, $options, $nested);
@@ -141,7 +141,7 @@ class Route
 	 * @param string $from
 	 * @param string $to
 	 */
-	public static function post($from, $to, $options = array(), $nested = FALSE)
+	public static function post($from, $to, $options = array(), $nested = false)
 	{
 		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 			return self::createRoute($from, $to, $options, $nested);
@@ -154,7 +154,7 @@ class Route
 	 * @param string $from
 	 * @param string $to
 	 */
-	public static function put($from, $to, $options = array(), $nested = FALSE)
+	public static function put($from, $to, $options = array(), $nested = false)
 	{
 		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT') {
 			return self::createRoute($from, $to, $options, $nested);
@@ -167,7 +167,7 @@ class Route
 	 * @param string $from
 	 * @param string $to
 	 */
-	public static function delete($from, $to, $options = array(), $nested = FALSE)
+	public static function delete($from, $to, $options = array(), $nested = false)
 	{
 		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'DELETE') {
 			return self::createRoute($from, $to, $options, $nested);
@@ -176,7 +176,7 @@ class Route
 
 	//--------------------------------------------------------------------
 
-	public static function head($from, $to, $options = array(), $nested = FALSE)
+	public static function head($from, $to, $options = array(), $nested = false)
 	{
 		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'HEAD') {
 			return self::createRoute($from, $to, $options, $nested);
@@ -185,7 +185,7 @@ class Route
 
 	//--------------------------------------------------------------------
 
-	public static function patch($from, $to, $options = array(), $nested = FALSE)
+	public static function patch($from, $to, $options = array(), $nested = false)
 	{
 		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PATCH') {
 			return self::createRoute($from, $to, $options, $nested);
@@ -194,7 +194,7 @@ class Route
 
 	//--------------------------------------------------------------------
 
-	public static function options($from, $to, $options = array(), $nested = FALSE)
+	public static function options($from, $to, $options = array(), $nested = false)
 	{
 		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 			return self::createRoute($from, $to, $options, $nested);
@@ -203,9 +203,9 @@ class Route
 
 	//--------------------------------------------------------------------
 
-	public static function match(array $requests, $from, $to, $options = array(), $nested = FALSE)
+	public static function match(array $requests, $from, $to, $options = array(), $nested = false)
 	{
-		$return = NULL;
+		$return = null;
 
 		foreach ($requests as $request) {
 			if (method_exists('Route', $request)) {
@@ -241,7 +241,7 @@ class Route
 	 * @param  string $name The name of the controller to route to.
 	 * @param  array $options An list of possible ways to customize the routing.
 	 */
-	public static function resources($name, $options = array(), $nested = FALSE)
+	public static function resources($name, $options = array(), $nested = false)
 	{
 		if (empty($name)) {
 			return;
@@ -322,7 +322,7 @@ class Route
 
 	//--------------------------------------------------------------------
 	/**
-	 * Return the pattern in the list if exists. If not, returns NULL
+	 * Return the pattern in the list if exists. If not, returns null
 	 *
 	 * @param  string $pattern The pattern to search
 	 */
@@ -331,7 +331,7 @@ class Route
 		if (array_key_exists($pattern, self::$pattern_list)) {
 			return self::$pattern_list[$pattern];
 		} else {
-			return NULL;
+			return null;
 		}
 	}
 
@@ -427,7 +427,7 @@ class Route
 		if (isset(self::$named_routes[$name])) {
 			$return_url = self::$named_routes[$name];
 		} else {
-			return NULL;
+			return null;
 		}
 
 		if (!empty($parameters)) {
@@ -474,13 +474,13 @@ class Route
 	 *
 	 * @return void
 	 */
-	public static function context($name, $controller = NULL, $options = array())
+	public static function context($name, $controller = null, $options = array())
 	{
 		// If $controller is an array, then it's actually the options array,
 		// so we'll reorganize parameters.
 		if (is_array($controller)) {
 			$options = $controller;
-			$controller = NULL;
+			$controller = null;
 		}
 
 		// If $controller is empty, then we need to rename it to match
@@ -557,7 +557,7 @@ class Route
 		self::$route_objects = array();
 		self::$named_routes = array();
 		self::$routes = array();
-		self::$prefix = NULL;
+		self::$prefix = null;
 		self::$pre_route_objects = array();
 		self::$pattern_list = array();
 		self::$filter_list = array();
@@ -581,7 +581,7 @@ class Route
 	 *
 	 * @return array          The built route.
 	 */
-	static function createRoute($from, $to, $options = array(), $nested = FALSE)
+	static function createRoute($from, $to, $options = array(), $nested = false)
 	{
 		// Added by Kader Bouyakoub
 		if ($options instanceof Closure)
@@ -594,8 +594,8 @@ class Route
 			$options['subdomain'] = self::$active_subdomain;
 		}
 
-		if (array_key_exists('subdomain', $options) && self::_CheckSubdomain($options['subdomain']) === FALSE) {
-			return FALSE;
+		if (array_key_exists('subdomain', $options) && self::_CheckSubdomain($options['subdomain']) === false) {
+			return false;
 		}
 
 		$new_route = new Route_object($from, $to, $options, $nested);
@@ -620,7 +620,7 @@ class Route
 	{
 
 		if (is_null(self::$subdomain)) {
-			if (defined('ROUTE_DOMAIN_NAME') === FALSE) {
+			if (defined('ROUTE_DOMAIN_NAME') === false) {
 				define('ROUTE_DOMAIN_NAME', $_SERVER['HTTP_HOST']);
 			}
 
@@ -632,30 +632,30 @@ class Route
 
 	static function subdomain($subdomain_rules, closure $callback)
 	{
-		if (self::_CheckSubdomain($subdomain_rules) === TRUE) {
+		if (self::_CheckSubdomain($subdomain_rules) === true) {
 			self::$active_subdomain = $subdomain_rules;
 			call_user_func($callback);
 		}
 
-		self::$active_subdomain = NULL;
+		self::$active_subdomain = null;
 	}
 
 
-	static private function _CheckSubdomain($subdomain_rules = NULL)
+	static private function _CheckSubdomain($subdomain_rules = null)
 	{
 		$subdomain = self::get_subdomain();
 
-		//if the subdomain rules are "FALSE" then if we have a subdomain we won't make the route, because
+		//if the subdomain rules are "false" then if we have a subdomain we won't make the route, because
 		//that's the indication of not allowing subdomains in that route
-		if ($subdomain != '' and $subdomain_rules == FALSE) {
-			return FALSE;
-		} elseif ($subdomain == '' and $subdomain_rules == FALSE) {
-			return TRUE;
+		if ($subdomain != '' and $subdomain_rules == false) {
+			return false;
+		} elseif ($subdomain == '' and $subdomain_rules == false) {
+			return true;
 		}
 
 		//if subdomain it's empty, then we will return false, because there is no subdomain in the url
 		if ($subdomain == '') {
-			return FALSE;
+			return false;
 		}
 
 		$i = preg_match('/^\{(.+)\}$/', $subdomain_rules);
@@ -663,13 +663,13 @@ class Route
 		//if the subdomain rules have a named parameter, we will wait till the end of the 
 		//route generation for it's rule
 		if ($i > 0) {
-			return TRUE;
+			return true;
 		}
 
 		$i = preg_match('/^\(\:any\)/', $subdomain_rules);
 
 		if ($i > 0) {
-			return TRUE;
+			return true;
 		}
 
 		$i = preg_match('/^\(\:num\)/', $subdomain_rules);
@@ -682,10 +682,10 @@ class Route
 		$i = preg_match($subdomain_rules, $subdomain);
 
 		if ($i > 0) {
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 
@@ -720,10 +720,10 @@ class Route
 			foreach ($filter_list as $filter) {
 				if (is_callable($filter)) {
 					$callback_list[] = array('filter' => $filter,
-						'parameters' => NULL
+						'parameters' => null
 					);
 				} else {
-					$param = NULL;
+					$param = null;
 
 					// check if callback has parameters
 					if (preg_match('/(.*?)\[(.*)\]/', $filter, $match)) {
@@ -758,7 +758,7 @@ class Route_facade
 		$this->loaded_object = &$object;
 	}
 
-	public function where($parameter, $pattern = NULL)
+	public function where($parameter, $pattern = null)
 	{
 		$this->loaded_object->where($parameter, $pattern);
 
@@ -867,7 +867,7 @@ class Route_object
 					$parameter = $new_key;
 				}
 
-				$this->parameters[$parameter] = array('value' => NULL);
+				$this->parameters[$parameter] = array('value' => null);
 			}
 
 			if (!empty($uris)) {
@@ -1003,7 +1003,7 @@ class Route_object
 		return $this->to;
 	}
 
-	public function where($parameter, $pattern = NULL)
+	public function where($parameter, $pattern = null)
 	{
 		if (is_array($parameter)) {
 			foreach ($parameter as $key => $value)
@@ -1055,9 +1055,9 @@ class Route_object
 		return array();
 	}
 
-	public function get_options($option = NULL)
+	public function get_options($option = null)
 	{
-		if ($option == NULL) {
+		if ($option == null) {
 			return $this->options;
 		} else {
 			if (array_key_exists($option, $this->options)) {
@@ -1065,7 +1065,7 @@ class Route_object
 			}
 		}
 
-		return FALSE;
+		return false;
 
 	}
 

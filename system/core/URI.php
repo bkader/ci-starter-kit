@@ -102,7 +102,7 @@ class CI_URI {
 
 		// If query strings are enabled, we don't need to parse any segments.
 		// However, they don't make sense under CLI.
-		if (is_cli() OR $this->config->item('enable_query_strings') !== TRUE)
+		if (is_cli() OR $this->config->item('enable_query_strings') !== true)
 		{
 			$this->_permitted_uri_chars = $this->config->item('permitted_uri_chars');
 
@@ -151,7 +151,7 @@ class CI_URI {
 	protected function _set_uri_string($str)
 	{
 		// Filter out control characters and trim slashes
-		$this->uri_string = trim(remove_invisible_characters($str, FALSE), '/');
+		$this->uri_string = trim(remove_invisible_characters($str, false), '/');
 
 		if ($this->uri_string !== '')
 		{
@@ -166,7 +166,7 @@ class CI_URI {
 				}
 			}
 
-			$this->segments[0] = NULL;
+			$this->segments[0] = null;
 			// Populate the segments array
 			foreach (explode('/', trim($this->uri_string, '/')) as $val)
 			{
@@ -301,7 +301,7 @@ class CI_URI {
 	{
 		$uris = array();
 		$tok = strtok($uri, '/');
-		while ($tok !== FALSE)
+		while ($tok !== false)
 		{
 			if (( ! empty($tok) OR $tok === '0') && $tok !== '..')
 			{
@@ -341,7 +341,7 @@ class CI_URI {
 	 * @param	mixed		$no_result	What to return if the segment index is not found
 	 * @return	mixed
 	 */
-	public function segment($n, $no_result = NULL)
+	public function segment($n, $no_result = null)
 	{
 		return isset($this->segments[$n]) ? $this->segments[$n] : $no_result;
 	}
@@ -361,7 +361,7 @@ class CI_URI {
 	 * @param	mixed		$no_result	What to return if the segment index is not found
 	 * @return	mixed
 	 */
-	public function rsegment($n, $no_result = NULL)
+	public function rsegment($n, $no_result = null)
 	{
 		return isset($this->rsegments[$n]) ? $this->rsegments[$n] : $no_result;
 	}
@@ -444,7 +444,7 @@ class CI_URI {
 		{
 			return (count($default) === 0)
 				? array()
-				: array_fill_keys($default, NULL);
+				: array_fill_keys($default, null);
 		}
 
 		$segments = array_slice($this->$segment_array(), ($n - 1));
@@ -459,7 +459,7 @@ class CI_URI {
 			}
 			else
 			{
-				$retval[$seg] = NULL;
+				$retval[$seg] = null;
 				$lastval = $seg;
 			}
 
@@ -472,7 +472,7 @@ class CI_URI {
 			{
 				if ( ! array_key_exists($val, $retval))
 				{
-					$retval[$val] = NULL;
+					$retval[$val] = null;
 				}
 			}
 		}

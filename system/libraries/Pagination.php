@@ -109,7 +109,7 @@ class CI_Pagination {
 	 *
 	 * @var	bool
 	 */
-	protected $use_page_numbers = FALSE;
+	protected $use_page_numbers = false;
 
 	/**
 	 * First link
@@ -258,7 +258,7 @@ class CI_Pagination {
 	 *
 	 * @var	bool
 	 */
-	protected $page_query_string = FALSE;
+	protected $page_query_string = false;
 
 	/**
 	 * Query string segment
@@ -272,7 +272,7 @@ class CI_Pagination {
 	 *
 	 * @var	bool
 	 */
-	protected $display_pages = TRUE;
+	protected $display_pages = true;
 
 	/**
 	 * Attributes
@@ -296,14 +296,14 @@ class CI_Pagination {
 	 *
 	 * @var	bool
 	 */
-	protected $reuse_query_string = FALSE;
+	protected $reuse_query_string = false;
 
 	/**
 	 * Use global URL suffix flag
 	 *
 	 * @var	bool
 	 */
-	protected $use_global_url_suffix = FALSE;
+	protected $use_global_url_suffix = false;
 
 	/**
 	 * Data page attribute
@@ -333,7 +333,7 @@ class CI_Pagination {
 		$this->CI->load->language('pagination');
 		foreach (array('first_link', 'next_link', 'prev_link', 'last_link') as $key)
 		{
-			if (($val = $this->CI->lang->line('pagination_'.$key)) !== FALSE)
+			if (($val = $this->CI->lang->line('pagination_'.$key)) !== false)
 			{
 				$this->$key = $val;
 			}
@@ -376,12 +376,12 @@ class CI_Pagination {
 			}
 		}
 
-		if ($this->CI->config->item('enable_query_strings') === TRUE)
+		if ($this->CI->config->item('enable_query_strings') === true)
 		{
-			$this->page_query_string = TRUE;
+			$this->page_query_string = true;
 		}
 
-		if ($this->use_global_url_suffix === TRUE)
+		if ($this->use_global_url_suffix === true)
 		{
 			$this->suffix = $this->CI->config->item('url_suffix');
 		}
@@ -424,7 +424,7 @@ class CI_Pagination {
 
 		// Keep any existing query string items.
 		// Note: Has nothing to do with any other query string option.
-		if ($this->reuse_query_string === TRUE)
+		if ($this->reuse_query_string === true)
 		{
 			$get = $this->CI->input->get();
 
@@ -442,10 +442,10 @@ class CI_Pagination {
 		$first_url = $this->first_url;
 
 		$query_string = '';
-		$query_string_sep = (strpos($base_url, '?') === FALSE) ? '?' : '&amp;';
+		$query_string_sep = (strpos($base_url, '?') === false) ? '?' : '&amp;';
 
 		// Are we using query strings?
-		if ($this->page_query_string === TRUE)
+		if ($this->page_query_string === true)
 		{
 			// If a custom first_url hasn't been specified, we'll create one from
 			// the base_url, but without the page item.
@@ -476,7 +476,7 @@ class CI_Pagination {
 
 			// Does the base_url have the query string in it?
 			// If we're supposed to save it, remove it so we can append it later.
-			if ($this->reuse_query_string === TRUE && ($base_query_pos = strpos($base_url, '?')) !== FALSE)
+			if ($this->reuse_query_string === true && ($base_query_pos = strpos($base_url, '?')) !== false)
 			{
 				$base_url = substr($base_url, 0, $base_query_pos);
 			}
@@ -493,7 +493,7 @@ class CI_Pagination {
 		$base_page = ($this->use_page_numbers) ? 1 : 0;
 
 		// Are we using query strings?
-		if ($this->page_query_string === TRUE)
+		if ($this->page_query_string === true)
 		{
 			$this->cur_page = $this->CI->input->get($this->query_string_segment);
 		}
@@ -561,7 +561,7 @@ class CI_Pagination {
 		$output = '';
 
 		// Render the "First" link.
-		if ($this->first_link !== FALSE && $this->cur_page > ($this->num_links + 1 + ! $this->num_links))
+		if ($this->first_link !== false && $this->cur_page > ($this->num_links + 1 + ! $this->num_links))
 		{
 			// Take the general parameters, and squeeze this pagination-page attr in for JS frameworks.
 			$attributes = sprintf('%s %s="%d"', $this->_attributes, $this->data_page_attr, 1);
@@ -571,7 +571,7 @@ class CI_Pagination {
 		}
 
 		// Render the "Previous" link.
-		if ($this->prev_link !== FALSE && $this->cur_page !== 1)
+		if ($this->prev_link !== false && $this->cur_page !== 1)
 		{
 			$i = ($this->use_page_numbers) ? $uri_page_number - 1 : $uri_page_number - $this->per_page;
 
@@ -593,7 +593,7 @@ class CI_Pagination {
 		}
 
 		// Render the pages
-		if ($this->display_pages !== FALSE)
+		if ($this->display_pages !== false)
 		{
 			// Write the digit links
 			for ($loop = $start - 1; $loop <= $end; $loop++)
@@ -626,7 +626,7 @@ class CI_Pagination {
 		}
 
 		// Render the "next" link
-		if ($this->next_link !== FALSE && $this->cur_page < $num_pages)
+		if ($this->next_link !== false && $this->cur_page < $num_pages)
 		{
 			$i = ($this->use_page_numbers) ? $this->cur_page + 1 : $this->cur_page * $this->per_page;
 
@@ -637,7 +637,7 @@ class CI_Pagination {
 		}
 
 		// Render the "Last" link
-		if ($this->last_link !== FALSE && ($this->cur_page + $this->num_links + ! $this->num_links) < $num_pages)
+		if ($this->last_link !== false && ($this->cur_page + $this->num_links + ! $this->num_links) < $num_pages)
 		{
 			$i = ($this->use_page_numbers) ? $num_pages : ($num_pages * $this->per_page) - $this->per_page;
 
@@ -665,7 +665,7 @@ class CI_Pagination {
 	 */
 	protected function _parse_attributes($attributes)
 	{
-		isset($attributes['rel']) OR $attributes['rel'] = TRUE;
+		isset($attributes['rel']) OR $attributes['rel'] = true;
 		$this->_link_types = ($attributes['rel'])
 			? array('start' => 'start', 'prev' => 'prev', 'next' => 'next')
 			: array();

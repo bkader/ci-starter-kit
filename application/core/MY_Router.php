@@ -103,7 +103,7 @@ class MY_Router extends MX_Router {
 					$val = call_user_func_array($val, $matches);
 				}
 				// Are we using the default routing method for back-references?
-				elseif (strpos($val, '$') !== FALSE && strpos($key, '(') !== FALSE)
+				elseif (strpos($val, '$') !== false && strpos($key, '(') !== false)
 				{
 					$val = preg_replace('#^'.$key.'$#', $val, $uri);
 				}

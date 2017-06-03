@@ -83,9 +83,9 @@ class CI_DB_ibase_driver extends CI_DB {
 	 * @param	bool	$persistent
 	 * @return	resource
 	 */
-	public function db_connect($persistent = FALSE)
+	public function db_connect($persistent = false)
 	{
-		return ($persistent === TRUE)
+		return ($persistent === true)
 			? ibase_pconnect($this->hostname.':'.$this->database, $this->username, $this->password, $this->char_set)
 			: ibase_connect($this->hostname.':'.$this->database, $this->username, $this->password, $this->char_set);
 	}
@@ -113,7 +113,7 @@ class CI_DB_ibase_driver extends CI_DB {
 			return $this->data_cache['version'];
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// --------------------------------------------------------------------
@@ -138,13 +138,13 @@ class CI_DB_ibase_driver extends CI_DB {
 	 */
 	protected function _trans_begin()
 	{
-		if (($trans_handle = ibase_trans($this->conn_id)) === FALSE)
+		if (($trans_handle = ibase_trans($this->conn_id)) === false)
 		{
-			return FALSE;
+			return false;
 		}
 
 		$this->_ibase_trans = $trans_handle;
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -158,11 +158,11 @@ class CI_DB_ibase_driver extends CI_DB {
 	{
 		if (ibase_commit($this->_ibase_trans))
 		{
-			$this->_ibase_trans = NULL;
-			return TRUE;
+			$this->_ibase_trans = null;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// --------------------------------------------------------------------
@@ -176,11 +176,11 @@ class CI_DB_ibase_driver extends CI_DB {
 	{
 		if (ibase_rollback($this->_ibase_trans))
 		{
-			$this->_ibase_trans = NULL;
-			return TRUE;
+			$this->_ibase_trans = null;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// --------------------------------------------------------------------
@@ -220,11 +220,11 @@ class CI_DB_ibase_driver extends CI_DB {
 	 * @param	bool	$prefix_limit
 	 * @return	string
 	 */
-	protected function _list_tables($prefix_limit = FALSE)
+	protected function _list_tables($prefix_limit = false)
 	{
 		$sql = 'SELECT TRIM("RDB$RELATION_NAME") AS TABLE_NAME FROM "RDB$RELATIONS" WHERE "RDB$RELATION_NAME" NOT LIKE \'RDB$%\' AND "RDB$RELATION_NAME" NOT LIKE \'MON$%\'';
 
-		if ($prefix_limit !== FALSE && $this->dbprefix !== '')
+		if ($prefix_limit !== false && $this->dbprefix !== '')
 		{
 			return $sql.' AND TRIM("RDB$RELATION_NAME") AS TABLE_NAME LIKE \''.$this->escape_like_str($this->dbprefix)."%' "
 				.sprintf($this->_like_escape_str, $this->_like_escape_chr);
@@ -274,7 +274,7 @@ class CI_DB_ibase_driver extends CI_DB {
 					WHEN 37 THEN \'VARCHAR\'
 					WHEN 40 THEN \'CSTRING\'
 					WHEN 261 THEN \'BLOB\'
-					ELSE NULL
+					ELSE null
 				END AS "type",
 				"fields"."RDB$FIELD_LENGTH" AS "max_length",
 				"rfields"."RDB$DEFAULT_VALUE" AS "default"
@@ -283,9 +283,9 @@ class CI_DB_ibase_driver extends CI_DB {
 			WHERE "rfields"."RDB$RELATION_NAME" = '.$this->escape($table).'
 			ORDER BY "rfields"."RDB$FIELD_POSITION"';
 
-		return (($query = $this->query($sql)) !== FALSE)
+		return (($query = $this->query($sql)) !== false)
 			? $query->result_object()
-			: FALSE;
+			: false;
 	}
 
 	// --------------------------------------------------------------------
@@ -316,7 +316,7 @@ class CI_DB_ibase_driver extends CI_DB {
 	 */
 	protected function _update($table, $values)
 	{
-		$this->qb_limit = FALSE;
+		$this->qb_limit = false;
 		return parent::_update($table, $values);
 	}
 
@@ -350,7 +350,7 @@ class CI_DB_ibase_driver extends CI_DB {
 	 */
 	protected function _delete($table)
 	{
-		$this->qb_limit = FALSE;
+		$this->qb_limit = false;
 		return parent::_delete($table);
 	}
 
@@ -367,7 +367,7 @@ class CI_DB_ibase_driver extends CI_DB {
 	protected function _limit($sql)
 	{
 		// Limit clause depends on if Interbase or Firebird
-		if (stripos($this->version(), 'firebird') !== FALSE)
+		if (stripos($this->version(), 'firebird') !== false)
 		{
 			$select = 'FIRST '.$this->qb_limit
 				.($this->qb_offset ? ' SKIP '.$this->qb_offset : '');
@@ -395,7 +395,7 @@ class CI_DB_ibase_driver extends CI_DB {
 	 */
 	protected function _insert_batch($table, $keys, $values)
 	{
-		return ($this->db_debug) ? $this->display_error('db_unsupported_feature') : FALSE;
+		return ($this->db_debug) ? $this->display_error('db_unsupported_feature') : false;
 	}
 
 	// --------------------------------------------------------------------

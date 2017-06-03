@@ -86,7 +86,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements SessionHa
 			log_message('error', 'Session: No Memcached save path configured.');
 		}
 
-		if ($this->_config['match_ip'] === TRUE)
+		if ($this->_config['match_ip'] === true)
 		{
 			$this->_key_prefix .= $_SERVER['REMOTE_ADDR'].':';
 		}
@@ -106,7 +106,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements SessionHa
 	public function open($save_path, $name)
 	{
 		$this->_memcached = new Memcached();
-		$this->_memcached->setOption(Memcached::OPT_BINARY_PROTOCOL, TRUE); // required for touch() usage
+		$this->_memcached->setOption(Memcached::OPT_BINARY_PROTOCOL, true); // required for touch() usage
 		$server_list = array();
 		foreach ($this->_memcached->getServerList() as $server)
 		{
@@ -115,7 +115,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements SessionHa
 
 		if ( ! preg_match_all('#,?([^,:]+)\:(\d{1,5})(?:\:(\d+))?#', $this->_config['save_path'], $matches, PREG_SET_ORDER))
 		{
-			$this->_memcached = NULL;
+			$this->_memcached = null;
 			log_message('error', 'Session: Invalid Memcached save path format: '.$this->_config['save_path']);
 			return $this->_fail();
 		}
@@ -123,7 +123,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements SessionHa
 		foreach ($matches as $match)
 		{
 			// If Memcached already has this server (or if the port is invalid), skip it
-			if (in_array($match[1].':'.$match[2], $server_list, TRUE))
+			if (in_array($match[1].':'.$match[2], $server_list, true))
 			{
 				log_message('debug', 'Session: Memcached server pool already has '.$match[1].':'.$match[2]);
 				continue;
@@ -245,7 +245,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements SessionHa
 				return $this->_fail();
 			}
 
-			$this->_memcached = NULL;
+			$this->_memcached = null;
 			return $this->_success;
 		}
 
@@ -311,7 +311,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements SessionHa
 			{
 				return ($this->_memcached->getResultCode() === Memcached::RES_NOTFOUND)
 					? $this->_memcached->set($this->_lock_key, time(), 300)
-					: FALSE;
+					: false;
 			}
 		}
 
@@ -329,7 +329,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements SessionHa
 			if ( ! $this->_memcached->set($lock_key, time(), 300))
 			{
 				log_message('error', 'Session: Error while trying to obtain lock for '.$this->_key_prefix.$session_id);
-				return FALSE;
+				return false;
 			}
 
 			$this->_lock_key = $lock_key;
@@ -340,11 +340,11 @@ class CI_Session_memcached_driver extends CI_Session_driver implements SessionHa
 		if ($attempt === 30)
 		{
 			log_message('error', 'Session: Unable to obtain lock for '.$this->_key_prefix.$session_id.' after 30 attempts, aborting.');
-			return FALSE;
+			return false;
 		}
 
-		$this->_lock = TRUE;
-		return TRUE;
+		$this->_lock = true;
+		return true;
 	}
 
 	// ------------------------------------------------------------------------
@@ -363,13 +363,13 @@ class CI_Session_memcached_driver extends CI_Session_driver implements SessionHa
 			if ( ! $this->_memcached->delete($this->_lock_key) && $this->_memcached->getResultCode() !== Memcached::RES_NOTFOUND)
 			{
 				log_message('error', 'Session: Error while trying to free lock for '.$this->_lock_key);
-				return FALSE;
+				return false;
 			}
 
-			$this->_lock_key = NULL;
-			$this->_lock = FALSE;
+			$this->_lock_key = null;
+			$this->_lock = false;
 		}
 
-		return TRUE;
+		return true;
 	}
 }

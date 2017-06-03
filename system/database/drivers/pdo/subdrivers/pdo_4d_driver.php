@@ -88,7 +88,7 @@ class CI_DB_pdo_4d_driver extends CI_DB_pdo_driver {
 			empty($this->database) OR $this->dsn .= ';dbname='.$this->database;
 			empty($this->char_set) OR $this->dsn .= ';charset='.$this->char_set;
 		}
-		elseif ( ! empty($this->char_set) && strpos($this->dsn, 'charset=', 3) === FALSE)
+		elseif ( ! empty($this->char_set) && strpos($this->dsn, 'charset=', 3) === false)
 		{
 			$this->dsn .= ';charset='.$this->char_set;
 		}
@@ -104,11 +104,11 @@ class CI_DB_pdo_4d_driver extends CI_DB_pdo_driver {
 	 * @param	bool	$prefix_limit
 	 * @return	string
 	 */
-	protected function _list_tables($prefix_limit = FALSE)
+	protected function _list_tables($prefix_limit = false)
 	{
 		$sql = 'SELECT '.$this->escape_identifiers('TABLE_NAME').' FROM '.$this->escape_identifiers('_USER_TABLES');
 
-		if ($prefix_limit === TRUE && $this->dbprefix !== '')
+		if ($prefix_limit === true && $this->dbprefix !== '')
 		{
 			$sql .= ' WHERE '.$this->escape_identifiers('TABLE_NAME')." LIKE '".$this->escape_like_str($this->dbprefix)."%' "
 				.sprintf($this->_like_escape_str, $this->_like_escape_chr);
@@ -145,7 +145,7 @@ class CI_DB_pdo_4d_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _field_data($table)
 	{
-		return 'SELECT * FROM '.$this->protect_identifiers($table, TRUE, NULL, FALSE).' LIMIT 1';
+		return 'SELECT * FROM '.$this->protect_identifiers($table, true, null, false).' LIMIT 1';
 	}
 
 	// --------------------------------------------------------------------
@@ -161,7 +161,7 @@ class CI_DB_pdo_4d_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _update($table, $values)
 	{
-		$this->qb_limit = FALSE;
+		$this->qb_limit = false;
 		$this->qb_orderby = array();
 		return parent::_update($table, $values);
 	}
@@ -178,7 +178,7 @@ class CI_DB_pdo_4d_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _delete($table)
 	{
-		$this->qb_limit = FALSE;
+		$this->qb_limit = false;
 		return parent::_delete($table);
 	}
 

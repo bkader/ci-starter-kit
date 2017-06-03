@@ -66,11 +66,11 @@ class CI_DB_postgre_forge extends CI_DB_forge {
 	);
 
 	/**
-	 * NULL value representation in CREATE/ALTER TABLE statements
+	 * null value representation in CREATE/ALTER TABLE statements
 	 *
 	 * @var	string
 	 */
-	protected $_null = 'NULL';
+	protected $_null = 'null';
 
 	// --------------------------------------------------------------------
 
@@ -102,7 +102,7 @@ class CI_DB_postgre_forge extends CI_DB_forge {
 	 */
 	protected function _alter_table($alter_type, $table, $field)
  	{
-		if (in_array($alter_type, array('DROP', 'ADD'), TRUE))
+		if (in_array($alter_type, array('DROP', 'ADD'), true))
 		{
 			return parent::_alter_table($alter_type, $table, $field);
 		}
@@ -111,9 +111,9 @@ class CI_DB_postgre_forge extends CI_DB_forge {
 		$sqls = array();
 		for ($i = 0, $c = count($field); $i < $c; $i++)
 		{
-			if ($field[$i]['_literal'] !== FALSE)
+			if ($field[$i]['_literal'] !== false)
 			{
-				return FALSE;
+				return false;
 			}
 
 			if (version_compare($this->db->version(), '8', '>=') && isset($field[$i]['type']))
@@ -131,7 +131,7 @@ class CI_DB_postgre_forge extends CI_DB_forge {
 			if (isset($field[$i]['null']))
 			{
 				$sqls[] = $sql.' ALTER COLUMN '.$this->db->escape_identifiers($field[$i]['name'])
-					.($field[$i]['null'] === TRUE ? ' DROP NOT NULL' : ' SET NOT NULL');
+					.($field[$i]['null'] === true ? ' DROP NOT null' : ' SET NOT null');
 			}
 
 			if ( ! empty($field[$i]['new_name']))
@@ -164,20 +164,20 @@ class CI_DB_postgre_forge extends CI_DB_forge {
 	protected function _attr_type(&$attributes)
 	{
 		// Reset field lengths for data types that don't support it
-		if (isset($attributes['CONSTRAINT']) && stripos($attributes['TYPE'], 'int') !== FALSE)
+		if (isset($attributes['CONSTRAINT']) && stripos($attributes['TYPE'], 'int') !== false)
 		{
-			$attributes['CONSTRAINT'] = NULL;
+			$attributes['CONSTRAINT'] = null;
 		}
 
 		switch (strtoupper($attributes['TYPE']))
 		{
 			case 'TINYINT':
 				$attributes['TYPE'] = 'SMALLINT';
-				$attributes['UNSIGNED'] = FALSE;
+				$attributes['UNSIGNED'] = false;
 				return;
 			case 'MEDIUMINT':
 				$attributes['TYPE'] = 'INTEGER';
-				$attributes['UNSIGNED'] = FALSE;
+				$attributes['UNSIGNED'] = false;
 				return;
 			default: return;
 		}
@@ -194,7 +194,7 @@ class CI_DB_postgre_forge extends CI_DB_forge {
 	 */
 	protected function _attr_auto_increment(&$attributes, &$field)
 	{
-		if ( ! empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE)
+		if ( ! empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === true)
 		{
 			$field['type'] = ($field['type'] === 'NUMERIC')
 				? 'BIGSERIAL'

@@ -76,7 +76,7 @@ class CI_DB_mssql_driver extends CI_DB {
 	 *
 	 * @var	bool
 	 */
-	protected $_quoted_identifier = TRUE;
+	protected $_quoted_identifier = true;
 
 	// --------------------------------------------------------------------
 
@@ -106,7 +106,7 @@ class CI_DB_mssql_driver extends CI_DB {
 	 * @param	bool	$persistent
 	 * @return	resource
 	 */
-	public function db_connect($persistent = FALSE)
+	public function db_connect($persistent = false)
 	{
 		$this->conn_id = ($persistent)
 				? mssql_pconnect($this->hostname, $this->username, $this->password)
@@ -114,7 +114,7 @@ class CI_DB_mssql_driver extends CI_DB {
 
 		if ( ! $this->conn_id)
 		{
-			return FALSE;
+			return false;
 		}
 
 		// ----------------------------------------------------------------
@@ -124,15 +124,15 @@ class CI_DB_mssql_driver extends CI_DB {
 		{
 			log_message('error', 'Unable to select database: '.$this->database);
 
-			return ($this->db_debug === TRUE)
+			return ($this->db_debug === true)
 				? $this->display_error('db_unable_to_select', $this->database)
-				: FALSE;
+				: false;
 		}
 
 		// Determine how identifiers are escaped
 		$query = $this->query('SELECT CASE WHEN (@@OPTIONS | 256) = @@OPTIONS THEN 1 ELSE 0 END AS qi');
 		$query = $query->row_array();
-		$this->_quoted_identifier = empty($query) ? FALSE : (bool) $query['qi'];
+		$this->_quoted_identifier = empty($query) ? false : (bool) $query['qi'];
 		$this->_escape_char = ($this->_quoted_identifier) ? '"' : array('[', ']');
 
 		return $this->conn_id;
@@ -159,10 +159,10 @@ class CI_DB_mssql_driver extends CI_DB {
 		{
 			$this->database = $database;
 			$this->data_cache = array();
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// --------------------------------------------------------------------
@@ -256,7 +256,7 @@ class CI_DB_mssql_driver extends CI_DB {
 	 */
 	protected function _db_set_charset($charset)
 	{
-		return (ini_set('mssql.charset', $charset) !== FALSE);
+		return (ini_set('mssql.charset', $charset) !== false);
 	}
 
 	// --------------------------------------------------------------------
@@ -281,13 +281,13 @@ class CI_DB_mssql_driver extends CI_DB {
 	 * @param	bool	$prefix_limit
 	 * @return	string
 	 */
-	protected function _list_tables($prefix_limit = FALSE)
+	protected function _list_tables($prefix_limit = false)
 	{
 		$sql = 'SELECT '.$this->escape_identifiers('name')
 			.' FROM '.$this->escape_identifiers('sysobjects')
 			.' WHERE '.$this->escape_identifiers('type')." = 'U'";
 
-		if ($prefix_limit !== FALSE && $this->dbprefix !== '')
+		if ($prefix_limit !== false && $this->dbprefix !== '')
 		{
 			$sql .= ' AND '.$this->escape_identifiers('name')." LIKE '".$this->escape_like_str($this->dbprefix)."%' "
 				.sprintf($this->_like_escape_str, $this->_like_escape_chr);
@@ -327,9 +327,9 @@ class CI_DB_mssql_driver extends CI_DB {
 			FROM INFORMATION_SCHEMA.Columns
 			WHERE UPPER(TABLE_NAME) = '.$this->escape(strtoupper($table));
 
-		if (($query = $this->query($sql)) === FALSE)
+		if (($query = $this->query($sql)) === false)
 		{
-			return FALSE;
+			return false;
 		}
 		$query = $query->result_object();
 
@@ -361,7 +361,7 @@ class CI_DB_mssql_driver extends CI_DB {
 		// We need this because the error info is discarded by the
 		// server the first time you request it, and query() already
 		// calls error() once for logging purposes when a query fails.
-		static $error = array('code' => 0, 'message' => NULL);
+		static $error = array('code' => 0, 'message' => null);
 
 		$message = mssql_get_last_message();
 		if ( ! empty($message))
@@ -386,7 +386,7 @@ class CI_DB_mssql_driver extends CI_DB {
 	 */
 	protected function _update($table, $values)
 	{
-		$this->qb_limit = FALSE;
+		$this->qb_limit = false;
 		$this->qb_orderby = array();
 		return parent::_update($table, $values);
 	}
@@ -500,7 +500,7 @@ class CI_DB_mssql_driver extends CI_DB {
 			return parent::_insert_batch($table, $keys, $values);
 		}
 
-		return ($this->db_debug) ? $this->display_error('db_unsupported_feature') : FALSE;
+		return ($this->db_debug) ? $this->display_error('db_unsupported_feature') : false;
 	}
 
 	// --------------------------------------------------------------------

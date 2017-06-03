@@ -57,7 +57,7 @@ class Modules
 	{	
 		$method = 'index';
 		
-		if(($pos = strrpos($module, '/')) != FALSE) 
+		if(($pos = strrpos($module, '/')) != false) 
 		{
 			$method = substr($module, $pos + 1);		
 			$module = substr($module, 0, $pos);
@@ -70,7 +70,7 @@ class Modules
 				$args = func_get_args();
 				$output = call_user_func_array(array($class, $method), array_slice($args, 1));
 				$buffer = ob_get_clean();
-				return ($output !== NULL) ? $output : $buffer;
+				return ($output !== null) ? $output : $buffer;
 			}
 		}
 		
@@ -80,7 +80,7 @@ class Modules
 	/** Load a module controller **/
 	public static function load($module) 
 	{
-		(is_array($module)) ? list($module, $params) = each($module) : $params = NULL;	
+		(is_array($module)) ? list($module, $params) = each($module) : $params = null;	
 		
 		/* get the requested controller class name */
 		$alias = strtolower(basename($module));
@@ -142,14 +142,14 @@ class Modules
 	}
 
 	/** Load a module file **/
-	public static function load_file($file, $path, $type = 'other', $result = TRUE)	
+	public static function load_file($file, $path, $type = 'other', $result = true)	
 	{
 		$file = str_replace(EXT, '', $file);		
 		$location = $path.$file.EXT;
 		
 		if ($type === 'other') 
 		{			
-			if (class_exists($file, FALSE))	
+			if (class_exists($file, false))	
 			{
 				log_message('debug', "File already loaded: {$location}");				
 				return $result;
@@ -207,7 +207,7 @@ class Modules
 			}
 		}
 		
-		return array(FALSE, $file);	
+		return array(false, $file);	
 	}
 	
 	/** Parse module routes **/
@@ -231,7 +231,7 @@ class Modules
 			
 			if (preg_match('#^'.$key.'$#', $uri)) 
 			{							
-				if (strpos($val, '$') !== FALSE AND strpos($key, '(') !== FALSE) 
+				if (strpos($val, '$') !== false AND strpos($key, '(') !== false) 
 				{
 					$val = preg_replace('#^'.$key.'$#', $val, $uri);
 				}

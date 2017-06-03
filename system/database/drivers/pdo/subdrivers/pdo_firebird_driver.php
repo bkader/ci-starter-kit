@@ -98,7 +98,7 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 			empty($this->char_set) OR $this->dsn .= ';charset='.$this->char_set;
 			empty($this->role) OR $this->dsn .= ';role='.$this->role;
 		}
-		elseif ( ! empty($this->char_set) && strpos($this->dsn, 'charset=', 9) === FALSE)
+		elseif ( ! empty($this->char_set) && strpos($this->dsn, 'charset=', 9) === false)
 		{
 			$this->dsn .= ';charset='.$this->char_set;
 		}
@@ -114,11 +114,11 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 	 * @param	bool	$prefix_limit
 	 * @return	string
 	 */
-	protected function _list_tables($prefix_limit = FALSE)
+	protected function _list_tables($prefix_limit = false)
 	{
 		$sql = 'SELECT "RDB$RELATION_NAME" FROM "RDB$RELATIONS" WHERE "RDB$RELATION_NAME" NOT LIKE \'RDB$%\' AND "RDB$RELATION_NAME" NOT LIKE \'MON$%\'';
 
-		if ($prefix_limit === TRUE && $this->dbprefix !== '')
+		if ($prefix_limit === true && $this->dbprefix !== '')
 		{
 			return $sql.' AND "RDB$RELATION_NAME" LIKE \''.$this->escape_like_str($this->dbprefix)."%' "
 				.sprintf($this->_like_escape_str, $this->_like_escape_chr);
@@ -168,7 +168,7 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 					WHEN 37 THEN \'VARCHAR\'
 					WHEN 40 THEN \'CSTRING\'
 					WHEN 261 THEN \'BLOB\'
-					ELSE NULL
+					ELSE null
 				END AS "type",
 				"fields"."RDB$FIELD_LENGTH" AS "max_length",
 				"rfields"."RDB$DEFAULT_VALUE" AS "default"
@@ -177,9 +177,9 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 			WHERE "rfields"."RDB$RELATION_NAME" = '.$this->escape($table).'
 			ORDER BY "rfields"."RDB$FIELD_POSITION"';
 
-		return (($query = $this->query($sql)) !== FALSE)
+		return (($query = $this->query($sql)) !== false)
 			? $query->result_object()
-			: FALSE;
+			: false;
 	}
 
 	// --------------------------------------------------------------------
@@ -195,7 +195,7 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _update($table, $values)
 	{
-		$this->qb_limit = FALSE;
+		$this->qb_limit = false;
 		return parent::_update($table, $values);
 	}
 
@@ -229,7 +229,7 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _delete($table)
 	{
-		$this->qb_limit = FALSE;
+		$this->qb_limit = false;
 		return parent::_delete($table);
 	}
 
@@ -246,7 +246,7 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 	protected function _limit($sql)
 	{
 		// Limit clause depends on if Interbase or Firebird
-		if (stripos($this->version(), 'firebird') !== FALSE)
+		if (stripos($this->version(), 'firebird') !== false)
 		{
 			$select = 'FIRST '.$this->qb_limit
 				.($this->qb_offset > 0 ? ' SKIP '.$this->qb_offset : '');
@@ -274,6 +274,6 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _insert_batch($table, $keys, $values)
 	{
-		return ($this->db_debug) ? $this->display_error('db_unsupported_feature') : FALSE;
+		return ($this->db_debug) ? $this->display_error('db_unsupported_feature') : false;
 	}
 }

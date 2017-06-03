@@ -112,7 +112,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 				$this->dsn .= ';ConnectionPooling='.$this->ConnectionPooling;
 			}
 
-			if ($this->encrypt === TRUE)
+			if ($this->encrypt === true)
 			{
 				$this->dsn .= ';Encrypt=1';
 			}
@@ -148,7 +148,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	 * @param	bool	$persistent
 	 * @return	object
 	 */
-	public function db_connect($persistent = FALSE)
+	public function db_connect($persistent = false)
 	{
 		if ( ! empty($this->char_set) && preg_match('/utf[^8]*8/i', $this->char_set))
 		{
@@ -165,7 +165,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 		// Determine how identifiers are escaped
 		$query = $this->query('SELECT CASE WHEN (@@OPTIONS | 256) = @@OPTIONS THEN 1 ELSE 0 END AS qi');
 		$query = $query->row_array();
-		$this->_quoted_identifier = empty($query) ? FALSE : (bool) $query['qi'];
+		$this->_quoted_identifier = empty($query) ? false : (bool) $query['qi'];
 		$this->_escape_char = ($this->_quoted_identifier) ? '"' : array('[', ']');
 
 		return $this->conn_id;
@@ -181,13 +181,13 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	 * @param	bool	$prefix_limit
 	 * @return	string
 	 */
-	protected function _list_tables($prefix_limit = FALSE)
+	protected function _list_tables($prefix_limit = false)
 	{
 		$sql = 'SELECT '.$this->escape_identifiers('name')
 			.' FROM '.$this->escape_identifiers('sysobjects')
 			.' WHERE '.$this->escape_identifiers('type')." = 'U'";
 
-		if ($prefix_limit === TRUE && $this->dbprefix !== '')
+		if ($prefix_limit === true && $this->dbprefix !== '')
 		{
 			$sql .= ' AND '.$this->escape_identifiers('name')." LIKE '".$this->escape_like_str($this->dbprefix)."%' "
 				.sprintf($this->_like_escape_str, $this->_like_escape_chr);
@@ -227,9 +227,9 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 			FROM INFORMATION_SCHEMA.Columns
 			WHERE UPPER(TABLE_NAME) = '.$this->escape(strtoupper($table));
 
-		if (($query = $this->query($sql)) === FALSE)
+		if (($query = $this->query($sql)) === false)
 		{
-			return FALSE;
+			return false;
 		}
 		$query = $query->result_object();
 
@@ -259,7 +259,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _update($table, $values)
 	{
-		$this->qb_limit = FALSE;
+		$this->qb_limit = false;
 		$this->qb_orderby = array();
 		return parent::_update($table, $values);
 	}
@@ -363,7 +363,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 			return parent::_insert_batch($table, $keys, $values);
 		}
 
-		return ($this->db_debug) ? $this->display_error('db_unsupported_feature') : FALSE;
+		return ($this->db_debug) ? $this->display_error('db_unsupported_feature') : false;
 	}
 
 }

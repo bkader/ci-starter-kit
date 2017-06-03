@@ -60,7 +60,7 @@ if ( ! function_exists('now'))
 	 * @param	string
 	 * @return	int
 	 */
-	function now($timezone = NULL)
+	function now($timezone = null)
 	{
 		if (empty($timezone))
 		{
@@ -140,10 +140,10 @@ if ( ! function_exists('standard_date'))
 	 * @example	date(DATE_W3C, $time); // a different format and time
 	 *
 	 * @param	string	$fmt = 'DATE_RFC822'	the chosen format
-	 * @param	int	$time = NULL		Unix timestamp
+	 * @param	int	$time = null		Unix timestamp
 	 * @return	string
 	 */
-	function standard_date($fmt = 'DATE_RFC822', $time = NULL)
+	function standard_date($fmt = 'DATE_RFC822', $time = null)
 	{
 		if (empty($time))
 		{
@@ -151,9 +151,9 @@ if ( ! function_exists('standard_date'))
 		}
 
 		// Procedural style pre-defined constants from the DateTime extension
-		if (strpos($fmt, 'DATE_') !== 0 OR defined($fmt) === FALSE)
+		if (strpos($fmt, 'DATE_') !== 0 OR defined($fmt) === false)
 		{
-			return FALSE;
+			return false;
 		}
 
 		return date(constant($fmt), $time);
@@ -356,7 +356,7 @@ if ( ! function_exists('gmt_to_local'))
 	 * @param	bool	whether DST is active
 	 * @return	int
 	 */
-	function gmt_to_local($time = '', $timezone = 'UTC', $dst = FALSE)
+	function gmt_to_local($time = '', $timezone = 'UTC', $dst = false)
 	{
 		if ($time === '')
 		{
@@ -365,7 +365,7 @@ if ( ! function_exists('gmt_to_local'))
 
 		$time += timezones($timezone) * 3600;
 
-		return ($dst === TRUE) ? $time + 3600 : $time;
+		return ($dst === true) ? $time + 3600 : $time;
 	}
 }
 
@@ -413,7 +413,7 @@ if ( ! function_exists('unix_to_human'))
 	 * @param	string	format: us or euro
 	 * @return	string
 	 */
-	function unix_to_human($time = '', $seconds = FALSE, $fmt = 'us')
+	function unix_to_human($time = '', $seconds = false, $fmt = 'us')
 	{
 		$r = date('Y', $time).'-'.date('m', $time).'-'.date('d', $time).' ';
 
@@ -456,14 +456,14 @@ if ( ! function_exists('human_to_unix'))
 	{
 		if ($datestr === '')
 		{
-			return FALSE;
+			return false;
 		}
 
 		$datestr = preg_replace('/\040+/', ' ', trim($datestr));
 
 		if ( ! preg_match('/^(\d{2}|\d{4})\-[0-9]{1,2}\-[0-9]{1,2}\s[0-9]{1,2}:[0-9]{1,2}(?::[0-9]{1,2})?(?:\s[AP]M)?$/i', $datestr))
 		{
-			return FALSE;
+			return false;
 		}
 
 		sscanf($datestr, '%d-%d-%d %s %s', $year, $month, $day, $time, $ampm);
@@ -501,7 +501,7 @@ if ( ! function_exists('nice_date'))
 	 * @param	string	Date format to return (same as php date function)
 	 * @return	string
 	 */
-	function nice_date($bad_date = '', $format = FALSE)
+	function nice_date($bad_date = '', $format = false)
 	{
 		if (empty($bad_date))
 		{
@@ -679,26 +679,26 @@ if ( ! function_exists('date_range'))
 	 *					or interval in days.
 	 * @param	mixed	is_unix		Specifies whether the second parameter
 	 *					is a UNIX timestamp or a day interval
-	 *					 - TRUE or 'unix' for a timestamp
-	 *					 - FALSE or 'days' for an interval
+	 *					 - true or 'unix' for a timestamp
+	 *					 - false or 'days' for an interval
 	 * @param	string  date_format	Output date format, same as in date()
 	 * @return	array
 	 */
-	function date_range($unix_start = '', $mixed = '', $is_unix = TRUE, $format = 'Y-m-d')
+	function date_range($unix_start = '', $mixed = '', $is_unix = true, $format = 'Y-m-d')
 	{
 		if ($unix_start == '' OR $mixed == '' OR $format == '')
 		{
-			return FALSE;
+			return false;
 		}
 
 		$is_unix = ! ( ! $is_unix OR $is_unix === 'days');
 
 		// Validate input and try strtotime() on invalid timestamps/intervals, just in case
-		if ( ( ! ctype_digit((string) $unix_start) && ($unix_start = @strtotime($unix_start)) === FALSE)
-			OR ( ! ctype_digit((string) $mixed) && ($is_unix === FALSE OR ($mixed = @strtotime($mixed)) === FALSE))
-			OR ($is_unix === TRUE && $mixed < $unix_start))
+		if ( ( ! ctype_digit((string) $unix_start) && ($unix_start = @strtotime($unix_start)) === false)
+			OR ( ! ctype_digit((string) $mixed) && ($is_unix === false OR ($mixed = @strtotime($mixed)) === false))
+			OR ($is_unix === true && $mixed < $unix_start))
 		{
-			return FALSE;
+			return false;
 		}
 
 		if ($is_unix && ($unix_start == $mixed OR date($format, $unix_start) === date($format, $mixed)))

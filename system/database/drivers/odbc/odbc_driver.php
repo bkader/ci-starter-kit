@@ -134,9 +134,9 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 * @param	bool	$persistent
 	 * @return	resource
 	 */
-	public function db_connect($persistent = FALSE)
+	public function db_connect($persistent = false)
 	{
-		return ($persistent === TRUE)
+		return ($persistent === true)
 			? odbc_pconnect($this->dsn, $this->username, $this->password)
 			: odbc_connect($this->dsn, $this->username, $this->password);
 	}
@@ -152,7 +152,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 */
 	public function compile_binds($sql, $binds)
 	{
-		if (empty($binds) OR empty($this->bind_marker) OR strpos($sql, $this->bind_marker) === FALSE)
+		if (empty($binds) OR empty($this->bind_marker) OR strpos($sql, $this->bind_marker) === false)
 		{
 			return $sql;
 		}
@@ -201,7 +201,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 			while ($c !== 0);
 		}
 
-		if (FALSE !== ($this->odbc_result = odbc_prepare($this->conn_id, $sql)))
+		if (false !== ($this->odbc_result = odbc_prepare($this->conn_id, $sql)))
 		{
 			$this->binds = array_values($binds);
 		}
@@ -223,18 +223,18 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 		{
 			return odbc_exec($this->conn_id, $sql);
 		}
-		elseif ($this->odbc_result === FALSE)
+		elseif ($this->odbc_result === false)
 		{
-			return FALSE;
+			return false;
 		}
 
-		if (TRUE === ($success = odbc_execute($this->odbc_result, $this->binds)))
+		if (true === ($success = odbc_execute($this->odbc_result, $this->binds)))
 		{
 			// For queries that return result sets, return the result_id resource on success
 			$this->is_write_type($sql) OR $success = $this->odbc_result;
 		}
 
-		$this->odbc_result = NULL;
+		$this->odbc_result = null;
 		$this->binds       = array();
 
 		return $success;
@@ -249,7 +249,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 */
 	protected function _trans_begin()
 	{
-		return odbc_autocommit($this->conn_id, FALSE);
+		return odbc_autocommit($this->conn_id, false);
 	}
 
 	// --------------------------------------------------------------------
@@ -263,11 +263,11 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	{
 		if (odbc_commit($this->conn_id))
 		{
-			odbc_autocommit($this->conn_id, TRUE);
-			return TRUE;
+			odbc_autocommit($this->conn_id, true);
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// --------------------------------------------------------------------
@@ -281,11 +281,11 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	{
 		if (odbc_rollback($this->conn_id))
 		{
-			odbc_autocommit($this->conn_id, TRUE);
-			return TRUE;
+			odbc_autocommit($this->conn_id, true);
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	// --------------------------------------------------------------------
@@ -300,7 +300,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	{
 		if (preg_match('#^(INSERT|UPDATE).*RETURNING\s.+(\,\s?.+)*$#is', $sql))
 		{
-			return FALSE;
+			return false;
 		}
 
 		return parent::is_write_type($sql);
@@ -340,7 +340,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 */
 	public function insert_id()
 	{
-		return ($this->db_debug) ? $this->display_error('db_unsupported_feature') : FALSE;
+		return ($this->db_debug) ? $this->display_error('db_unsupported_feature') : false;
 	}
 
 	// --------------------------------------------------------------------
@@ -353,11 +353,11 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 * @param	bool	$prefix_limit
 	 * @return	string
 	 */
-	protected function _list_tables($prefix_limit = FALSE)
+	protected function _list_tables($prefix_limit = false)
 	{
 		$sql = "SELECT table_name FROM information_schema.tables WHERE table_schema = '".$this->schema."'";
 
-		if ($prefix_limit !== FALSE && $this->dbprefix !== '')
+		if ($prefix_limit !== false && $this->dbprefix !== '')
 		{
 			return $sql." AND table_name LIKE '".$this->escape_like_str($this->dbprefix)."%' "
 				.sprintf($this->_like_escape_str, $this->_like_escape_chr);

@@ -98,14 +98,14 @@ if ( ! function_exists('create_captcha'))
 			OR ! is_dir($img_path) OR ! is_really_writable($img_path)
 			OR ! extension_loaded('gd'))
 		{
-			return FALSE;
+			return false;
 		}
 
 		// -----------------------------------
 		// Remove old images
 		// -----------------------------------
 
-		$now = microtime(TRUE);
+		$now = microtime(true);
 
 		$current_dir = @opendir($img_path);
 		while ($filename = @readdir($current_dir))
@@ -158,7 +158,7 @@ if ( ! function_exists('create_captcha'))
 			// trying to break it. -- Narf
 			if ($pool_length > 256)
 			{
-				return FALSE;
+				return false;
 			}
 
 			// We'll try using the operating system's PRNG first,
@@ -167,7 +167,7 @@ if ( ! function_exists('create_captcha'))
 
 			// To avoid numerous get_random_bytes() calls, we'll
 			// just try fetching as much bytes as we need at once.
-			if (($bytes = $security->get_random_bytes($pool_length)) !== FALSE)
+			if (($bytes = $security->get_random_bytes($pool_length)) !== false)
 			{
 				$byte_index = $word_index = 0;
 				while ($word_index < $word_length)
@@ -179,10 +179,10 @@ if ( ! function_exists('create_captcha'))
 					{
 						// No failures should be possible if the
 						// first get_random_bytes() call didn't
-						// return FALSE, but still ...
+						// return false, but still ...
 						for ($i = 0; $i < 5; $i++)
 						{
-							if (($bytes = $security->get_random_bytes($pool_length)) === FALSE)
+							if (($bytes = $security->get_random_bytes($pool_length)) === false)
 							{
 								continue;
 							}
@@ -191,7 +191,7 @@ if ( ! function_exists('create_captcha'))
 							break;
 						}
 
-						if ($bytes === FALSE)
+						if ($bytes === false)
 						{
 							// Sadly, this means fallback to mt_rand()
 							$word = '';
@@ -281,7 +281,7 @@ if ( ! function_exists('create_captcha'))
 		// -----------------------------------
 
 		$use_font = ($font_path !== '' && file_exists($font_path) && function_exists('imagettftext'));
-		if ($use_font === FALSE)
+		if ($use_font === false)
 		{
 			($font_size > 5) && $font_size = 5;
 			$x = mt_rand(0, $img_width / ($length / 3));
@@ -296,7 +296,7 @@ if ( ! function_exists('create_captcha'))
 
 		for ($i = 0; $i < $length; $i++)
 		{
-			if ($use_font === FALSE)
+			if ($use_font === false)
 			{
 				$y = mt_rand(0 , $img_height / 2);
 				imagestring($im, $font_size, $x, $y, $word[$i], $colors['text']);
@@ -330,7 +330,7 @@ if ( ! function_exists('create_captcha'))
 		}
 		else
 		{
-			return FALSE;
+			return false;
 		}
 
 		$img = '<img '.($img_id === '' ? '' : 'id="'.$img_id.'"').' src="'.$img_url.$img_filename.'" style="width: '.$img_width.'; height: '.$img_height .'; border: 0;" alt=" " />';

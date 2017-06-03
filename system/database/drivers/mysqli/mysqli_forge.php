@@ -63,7 +63,7 @@ class CI_DB_mysqli_forge extends CI_DB_forge {
 	 *
 	 * @var	bool
 	 */
-	protected $_create_table_keys	= TRUE;
+	protected $_create_table_keys	= true;
 
 	/**
 	 * UNSIGNED support
@@ -86,11 +86,11 @@ class CI_DB_mysqli_forge extends CI_DB_forge {
 	);
 
 	/**
-	 * NULL value representation in CREATE/ALTER TABLE statements
+	 * null value representation in CREATE/ALTER TABLE statements
 	 *
 	 * @var	string
 	 */
-	protected $_null = 'NULL';
+	protected $_null = 'null';
 
 	// --------------------------------------------------------------------
 
@@ -145,7 +145,7 @@ class CI_DB_mysqli_forge extends CI_DB_forge {
 		$sql = 'ALTER TABLE '.$this->db->escape_identifiers($table);
 		for ($i = 0, $c = count($field); $i < $c; $i++)
 		{
-			if ($field[$i]['_literal'] !== FALSE)
+			if ($field[$i]['_literal'] !== false)
 			{
 				$field[$i] = ($alter_type === 'ADD')
 						? "\n\tADD ".$field[$i]['_literal']
@@ -182,7 +182,7 @@ class CI_DB_mysqli_forge extends CI_DB_forge {
 		$extra_clause = isset($field['after'])
 			? ' AFTER '.$this->db->escape_identifiers($field['after']) : '';
 
-		if (empty($extra_clause) && isset($field['first']) && $field['first'] === TRUE)
+		if (empty($extra_clause) && isset($field['first']) && $field['first'] === true)
 		{
 			$extra_clause = ' FIRST';
 		}

@@ -20,10 +20,8 @@ class Welcome extends MY_Controller {
 	 */
 	public function index()
 	{
-		$this->theme
-			->title('Welcome')
-			->add_css('style')
-			->load('welcome');
+		$this->theme->title('Welcome')
+					->load('welcome', $this->data);
 	}
 
 	/**
@@ -33,10 +31,9 @@ class Welcome extends MY_Controller {
 	 */
 	public function semantic()
 	{
-		$this->theme
-				->theme('semantic')
-				->add_css('style')
-				->add_js('scripts')
-				->load('welcome');
+		$this->theme->theme('semantic')
+					->add_css('style')
+					->add_js('scripts')
+					->load('welcome');
 	}
 }

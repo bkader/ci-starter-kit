@@ -51,7 +51,7 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	 *
 	 * @var	string
 	 */
-	protected $_rename_table	= FALSE;
+	protected $_rename_table	= false;
 
 	/**
 	 * UNSIGNED support
@@ -65,11 +65,11 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	);
 
 	/**
-	 * NULL value representation in CREATE/ALTER TABLE statements
+	 * null value representation in CREATE/ALTER TABLE statements
 	 *
 	 * @var	string
 	 */
-	protected $_null		= 'NULL';
+	protected $_null		= 'null';
 
 	// --------------------------------------------------------------------
 
@@ -101,18 +101,18 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	{
 		if ( ! ibase_drop_db($this->conn_id))
 		{
-			return ($this->db->db_debug) ? $this->db->display_error('db_unable_to_drop') : FALSE;
+			return ($this->db->db_debug) ? $this->db->display_error('db_unable_to_drop') : false;
 		}
 		elseif ( ! empty($this->db->data_cache['db_names']))
 		{
-			$key = array_search(strtolower($this->db->database), array_map('strtolower', $this->db->data_cache['db_names']), TRUE);
-			if ($key !== FALSE)
+			$key = array_search(strtolower($this->db->database), array_map('strtolower', $this->db->data_cache['db_names']), true);
+			if ($key !== false)
 			{
 				unset($this->db->data_cache['db_names'][$key]);
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// --------------------------------------------------------------------
@@ -127,7 +127,7 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _alter_table($alter_type, $table, $field)
  	{
-		if (in_array($alter_type, array('DROP', 'ADD'), TRUE))
+		if (in_array($alter_type, array('DROP', 'ADD'), true))
 		{
 			return parent::_alter_table($alter_type, $table, $field);
 		}
@@ -136,9 +136,9 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 		$sqls = array();
 		for ($i = 0, $c = count($field); $i < $c; $i++)
 		{
-			if ($field[$i]['_literal'] !== FALSE)
+			if ($field[$i]['_literal'] !== false)
 			{
-				return FALSE;
+				return false;
 			}
 
 			if (isset($field[$i]['type']))
@@ -155,8 +155,8 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 
 			if (isset($field[$i]['null']))
 			{
-				$sqls[] = 'UPDATE "RDB$RELATION_FIELDS" SET "RDB$NULL_FLAG" = '
-					.($field[$i]['null'] === TRUE ? 'NULL' : '1')
+				$sqls[] = 'UPDATE "RDB$RELATION_FIELDS" SET "RDB$null_FLAG" = '
+					.($field[$i]['null'] === true ? 'null' : '1')
 					.' WHERE "RDB$FIELD_NAME" = '.$this->db->escape($field[$i]['name'])
 					.' AND "RDB$RELATION_NAME" = '.$this->db->escape($table);
 			}
@@ -204,11 +204,11 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 		{
 			case 'TINYINT':
 				$attributes['TYPE'] = 'SMALLINT';
-				$attributes['UNSIGNED'] = FALSE;
+				$attributes['UNSIGNED'] = false;
 				return;
 			case 'MEDIUMINT':
 				$attributes['TYPE'] = 'INTEGER';
-				$attributes['UNSIGNED'] = FALSE;
+				$attributes['UNSIGNED'] = false;
 				return;
 			case 'INT':
 				$attributes['TYPE'] = 'INTEGER';

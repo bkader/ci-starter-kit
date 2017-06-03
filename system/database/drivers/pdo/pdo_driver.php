@@ -91,11 +91,11 @@ class CI_DB_pdo_driver extends CI_DB {
 		elseif (preg_match('/([^:]+):/', $this->hostname, $match) && count($match) === 2)
 		{
 			$this->dsn = $this->hostname;
-			$this->hostname = NULL;
+			$this->hostname = null;
 			$this->subdriver = $match[1];
 			return;
 		}
-		elseif (in_array($this->subdriver, array('mssql', 'sybase'), TRUE))
+		elseif (in_array($this->subdriver, array('mssql', 'sybase'), true))
 		{
 			$this->subdriver = 'dblib';
 		}
@@ -103,7 +103,7 @@ class CI_DB_pdo_driver extends CI_DB {
 		{
 			$this->subdriver = '4d';
 		}
-		elseif ( ! in_array($this->subdriver, array('4d', 'cubrid', 'dblib', 'firebird', 'ibm', 'informix', 'mysql', 'oci', 'odbc', 'pgsql', 'sqlite', 'sqlsrv'), TRUE))
+		elseif ( ! in_array($this->subdriver, array('4d', 'cubrid', 'dblib', 'firebird', 'ibm', 'informix', 'mysql', 'oci', 'odbc', 'pgsql', 'sqlite', 'sqlsrv'), true))
 		{
 			log_message('error', 'PDO: Invalid or non-existent subdriver');
 
@@ -113,7 +113,7 @@ class CI_DB_pdo_driver extends CI_DB {
 			}
 		}
 
-		$this->dsn = NULL;
+		$this->dsn = null;
 	}
 
 	// --------------------------------------------------------------------
@@ -124,11 +124,11 @@ class CI_DB_pdo_driver extends CI_DB {
 	 * @param	bool	$persistent
 	 * @return	object
 	 */
-	public function db_connect($persistent = FALSE)
+	public function db_connect($persistent = false)
 	{
-		if ($persistent === TRUE)
+		if ($persistent === true)
 		{
-			$this->options[PDO::ATTR_PERSISTENT] = TRUE;
+			$this->options[PDO::ATTR_PERSISTENT] = true;
 		}
 
 		try
@@ -139,10 +139,10 @@ class CI_DB_pdo_driver extends CI_DB {
 		{
 			if ($this->db_debug && empty($this->failover))
 			{
-				$this->display_error($e->getMessage(), '', TRUE);
+				$this->display_error($e->getMessage(), '', true);
 			}
 
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -259,7 +259,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	 * @param	string	$name
 	 * @return	int
 	 */
-	public function insert_id($name = NULL)
+	public function insert_id($name = null)
 	{
 		return $this->conn_id->lastInsertId($name);
 	}
