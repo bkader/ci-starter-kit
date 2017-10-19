@@ -1,3 +1,6 @@
+# remove encryption_key.php
+application/config/encryption_key.php
+
 # application log files.
 application/logs/*
 !application/logs/index.html
