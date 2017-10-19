@@ -29,7 +29,7 @@ $root .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME'
 $config['base_url'] = $root;
 
 // You can this line if you don't want me to guess it :D
-// $config['base_url'] = '';
+// $config['base_url'] = ''; // See ENVIRONMENNT config file.
 
 /*
 |--------------------------------------------------------------------------
@@ -345,7 +345,15 @@ else
 		die('The '.APPPATH.'config/ folder is not writable.');
 	}
 
-	$file = fopen(APPPATH.'config/encryption_key.php', 'w');
+	// Write file to ENVIRONMENT folder if it exists and is writable.
+	$key_path = APPPATH.'config/'.ENVIRONMENT;
+	if ( ! is_dir($key_path) OR ! is_writable($key_path))
+	{
+		$key_path = APPPATH.'config';
+	}
+	$key_path .= '/encryption_key.php';
+
+	$file = fopen($key_path, 'w');
 	$encryption_key = uniqid().uniqid().uniqid().uniqid();
 	fwrite($file, '<?php'.PHP_EOL.'defined(\'BASEPATH\') OR exit(\'No direct script access allowed\');'.PHP_EOL.'$encryption_key = "'.$encryption_key.'";'.PHP_EOL);
 	fclose($file);
@@ -548,6 +556,23 @@ $config['rewrite_short_tags'] = false;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+/*
+| -------------------------------------------------------------------
+| Native Auto-load
+| -------------------------------------------------------------------
+|
+| This allows PHP autoload to work for base controllers and some
+| third-party libraries.
+|
+*/
+function __autoload($class)
+{
+    if (strpos($class, 'CI_') !== 0)
+    {
+        @include_once(APPPATH.'core/'.$class.'.php');
+    }
+}
 
 /*
 |--------------------------------------------------------------------------

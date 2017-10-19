@@ -1,5 +1,13 @@
 # remove encryption_key.php
 application/config/encryption_key.php
+application/config/development/*
+!application/config/development/config.php
+!application/config/development/database.php
+!application/config/development/index.html
+application/config/production/*
+!application/config/production/config.php
+!application/config/production/database.php
+!application/config/production/index.html
 
 # application log files.
 application/logs/*
@@ -10,8 +18,9 @@ application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
 
-# all .htaccess should be kept.
+# all .htaccess and index.html should be kept.
 !application/*/.htaccess
+!application/*/index.html
 
 # Sublime Text cache files
 *.tmlanguage.cache

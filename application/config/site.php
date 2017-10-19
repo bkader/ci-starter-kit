@@ -14,7 +14,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 $config['site_title']       = 'CodeIgniter';
 $config['site_description'] = 'An amazing PHP Framework.';
-$config['site_keywords']    = 'these, are, dummy, keywords, use, yours';
+$config['site_keywords']    = 'these, are, dummy, keywords, use, yours, bkader, bouyakoub';
+$config['site_version']     = '1.0.0';
+
+/**
+ * Site public and admin arias themes.
+ */
+$config['theme'] = 'default';
+$config['theme_admin'] = 'default';
 
 /**
  * Google Analytics Settings.

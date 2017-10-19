@@ -44,7 +44,7 @@ class MX_Lang extends CI_Lang
 		}
 			
 		$deft_lang = CI::$APP->config->item('language');
-		$idiom = ($lang == '') ? $deft_lang : $lang;
+		$idiom = empty($lang) ? ($deft_lang ? $deft_lang : 'english') : $lang;
 	
 		if (in_array($langfile.'_lang'.EXT, $this->is_loaded, true))
 			return $this->language;
