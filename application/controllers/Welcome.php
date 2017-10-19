@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Welcome extends MY_Controller {
+class Welcome extends MY_Controller
+{
 
 	/**
 	 * Index Page for this controller.
@@ -21,6 +22,9 @@ class Welcome extends MY_Controller {
 	public function index()
 	{
 		$this->theme->title('Welcome')
+					->add_partial('header')
+					->add_partial('footer')
+					->add_partial('sidebar')
 					->load('welcome', $this->data);
 	}
 
@@ -32,8 +36,12 @@ class Welcome extends MY_Controller {
 	public function semantic()
 	{
 		$this->theme->theme('semantic')
+					->title('Welcome')
+					->add_partial('header')
+					->add_partial('footer')
+					->add_partial('sidebar')
 					->add_css('style')
 					->add_js('scripts')
-					->load('welcome');
+					->load('welcome', $this->data);
 	}
 }

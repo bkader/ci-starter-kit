@@ -370,7 +370,7 @@ class Theme
 
 		if (empty($folder))
 		{
-			$folder = "themes/{$this->theme}";
+			$folder = "themes/{$this->config['theme']}";
 		}
 
 		/**
@@ -400,7 +400,7 @@ class Theme
 			 * 	<link ... src=".../content/_FOLDER_/css/file.css"
 			 * (without 'assets' being appended)
 			 */
-			if (strpos($folder, $this->theme) !== false)
+			if (strpos($folder, $this->config['theme']) !== false)
 			{
 				$folder .= "/assets";
 			}
@@ -469,11 +469,15 @@ class Theme
 	 */
 	public function replace_css($old, $new)
 	{
-		foreach ($this->css_files as $index => $file)
+		// Always remove extension:
+		$old = $this->_remove_extension($old);
+		$new = $this->_remove_extension($new);
+
+		foreach ($this->css_files as $i => $css)
 		{
-			if (strcmp($file, $old) === 0)
+			if ($old == $css)
 			{
-				$this->css_files[$index] = $new;
+				$this->css_files[$i] = $new;
 			}
 		}
 
@@ -501,7 +505,7 @@ class Theme
     	// If a valid URL is passed, we simply return it
         if (filter_var($file, FILTER_VALIDATE_URL) !== false) 
         {
-        	return $file;
+        	return $this->_remove_extension($file, '.css').'.css';
         }
 
         $ver = '';
@@ -587,11 +591,15 @@ class Theme
 	 */
 	public function replace_js($old, $new)
 	{
-		foreach ($this->js_files as $index => $file)
+		// Always remove extension:
+		$old = $this->_remove_extension($old);
+		$new = $this->_remove_extension($new);
+
+		foreach ($this->js_files as $i => $js)
 		{
-			if (strcmp($file, $old) === 0)
+			if ($old == $js)
 			{
-				$this->js_files[$index] = $new;
+				$this->js_files[$i] = $new;
 			}
 		}
 
@@ -621,7 +629,7 @@ class Theme
         if (filter_var($file, FILTER_VALIDATE_URL) !== false) 
         {
 
-        	return $file;
+        	return $this->_remove_extension($file, '.js').'.js';
         }
 
         $ver = '';
@@ -631,7 +639,6 @@ class Theme
             $file = $args[0];
             $ver  = '?'.$args[1];
         }
-
         $file = $this->_remove_extension($file, '.js').'.js';
         return $this->assets_url('js/'.$file.$ver, $folder);
     }
@@ -763,7 +770,7 @@ class Theme
 	 */
 	public function theme($theme = 'default')
 	{
-		$this->theme = $theme;
+		$this->config['theme'] = $theme;
 		return $this;
 	}
 
@@ -802,7 +809,7 @@ class Theme
 	 * @param 	array 	$data 	array of data to pass
 	 * @param 	string 	$name 	name of the variable to use
 	 */
-	public function add_partial($view, $data = array(), $name = false)
+	public function add_partial($view, $data = array(), $name = null)
 	{
 		$name OR $name = $view;
 		$this->partials[$name] = $this->_load_file('partial', $view, $data, true);
@@ -820,30 +827,27 @@ class Theme
 		if ( ! empty($args = func_get_args()))
 		{
 			is_array($args[0]) && $args = $args[0];
-			$this->partials = array_diff($this->partials, $args);
+			foreach ($args as $partial)
+			{
+				unset($this->partials[$partial]);
+			}
 		}
 
 		return $this;
 	}
 
 	/**
-	 * In case you want to replace an already-loaded partial
+	 * In case you want to replace an already-loaded partial.
+	 * If the partial does not exist, it will simply add it.
 	 * @access 	public
 	 * @param 	string 	$old 	old partial name
 	 * @param 	string 	$new 	new partial name
+	 * @param 	array 	$data 	data to pass to the new view
 	 * @return 	object
 	 */
-	public function replace_partial($old, $new)
+	public function replace_partial($old, $new, $data = array())
 	{
-		foreach ($this->partials as $index => $file)
-		{
-			if (strcmp($file, $old) === 0)
-			{
-				$this->partials[$index] = $new;
-			}
-		}
-
-		return $this;
+		return $this->add_partial($new, $data, $old);
 	}
 
 	/**
@@ -891,9 +895,9 @@ class Theme
 		// Start beckmark
 		$this->CI->benchmark->mark('theme_start');
 
-		if (file_exists(FCPATH."content/themes/{$this->theme}/functions.php"))
+		if (file_exists(FCPATH."content/themes/{$this->config['theme']}/functions.php"))
 		{
-			include FCPATH."content/themes/{$this->theme}/functions.php";
+			include FCPATH."content/themes/{$this->config['theme']}/functions.php";
 		}
 
 		// Build the whole outout
@@ -962,11 +966,6 @@ class Theme
 
 		// Prepare view content
 		$layout['content'] = $this->_load_file('view', $view, $data, true);
-		
-		// These lines below are deprecated. You should load header and footer
-		// only if you want you using add_partial(). (uncomment if you want them)
-		// $layout['header']  = $this->_load_file('partial', 'header', array(), true);
-		// $layout['footer']  = $this->_load_file('partial', 'footer', array(), true);
 
 		// Prepare layout content
 		$this->set('layout', $this->_load_file('layout', $this->layout, $layout, true));
@@ -1006,8 +1005,8 @@ class Theme
 
 				// prepare all path
 				$paths = array(
-					build_path(FCPATH, 'content', 'themes', $this->theme, 'modules', $this->module),
-					build_path(FCPATH, 'content', 'themes', $this->theme, 'views'),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'modules', $this->module),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'views'),
 					build_path(APPPATH, 'modules', $this->module, 'views'),
 					build_path(APPPATH, 'views'),
 					build_path(VIEWPATH),
@@ -1019,8 +1018,8 @@ class Theme
 					unset($paths[0], $paths[2]);
 				}
 
-				// Remove unecessary paths if $this->theme is not set
-				if ( ! isset($this->theme) OR empty($this->theme))
+				// Remove unecessary paths if $this->config['theme'] is not set
+				if ( ! isset($this->config['theme']) OR empty($this->config['theme']))
 				{
 					unset($paths[0], $paths[1]);
 				}
@@ -1056,8 +1055,8 @@ class Theme
 			case 'partials':
 				// prepare all path
 				$paths = array(
-					build_path(FCPATH, 'content', 'themes', $this->theme, 'modules', $this->module, 'partials'),
-					build_path(FCPATH, 'content', 'themes', $this->theme, 'partials'),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'modules', $this->module, 'partials'),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'partials'),
 					build_path(APPPATH, 'modules', $this->module, 'views', 'partials'),
 					build_path(APPPATH, 'views', 'partials'),
 					build_path(VIEWPATH, 'partials'),
@@ -1069,8 +1068,8 @@ class Theme
 					unset($paths[0], $paths[2]);
 				}
 
-				// Remove unecessary paths if $this->theme is not set
-				if ( ! isset($this->theme) OR empty($this->theme))
+				// Remove unecessary paths if $this->config['theme'] is not set
+				if ( ! isset($this->config['theme']) OR empty($this->config['theme']))
 				{
 					unset($paths[0], $paths[1]);
 				}
@@ -1107,8 +1106,8 @@ class Theme
 
 				// prepare all path
 				$paths = array(
-					build_path(FCPATH, 'content', 'themes', $this->theme, 'modules', $this->module, 'layouts'),
-					build_path(FCPATH, 'content', 'themes', $this->theme, 'layouts'),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'modules', $this->module, 'layouts'),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'layouts'),
 					build_path(APPPATH, 'modules', $this->module, 'views', 'layouts'),
 					build_path(APPPATH, 'views', 'layouts'),
 					build_path(VIEWPATH, 'layouts'),
@@ -1120,8 +1119,8 @@ class Theme
 					unset($paths[0], $paths[2]);
 				}
 
-				// Remove unecessary paths if $this->theme is not set
-				if ( ! isset($this->theme) OR empty($this->theme))
+				// Remove unecessary paths if $this->config['theme'] is not set
+				if ( ! isset($this->config['theme']) OR empty($this->config['theme']))
 				{
 					unset($paths[0], $paths[1]);
 				}
@@ -1161,8 +1160,8 @@ class Theme
 
 				// prepare all path
 				$paths = array(
-					build_path(FCPATH, 'content', 'themes', $this->theme, 'modules', $this->module),
-					build_path(FCPATH, 'content', 'themes', $this->theme),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'modules', $this->module),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme']),
 					build_path(APPPATH, 'modules', $this->module, 'views'),
 					build_path(APPPATH, 'views'),
 					build_path(VIEWPATH),
@@ -1174,8 +1173,8 @@ class Theme
 					unset($paths[0], $paths[2]);
 				}
 
-				// Remove unecessary paths if $this->theme is not set
-				if ( ! isset($this->theme) OR empty($this->theme))
+				// Remove unecessary paths if $this->config['theme'] is not set
+				if ( ! isset($this->config['theme']) OR empty($this->config['theme']))
 				{
 					unset($paths[0], $paths[1]);
 				}

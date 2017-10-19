@@ -36,9 +36,15 @@
 				</div><!--/.form-group-->
 			</form><!--/.navbar-form-->
 
-			<div class="navbar-right">
-				<?php echo anchor('admin', 'Admin Panel', 'class="btn btn-primary navbar-btn"'); ?>
-			</div><!--/.navbar-right-->
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Panel <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><?php echo anchor('admin', 'Bootstrap'); ?></li>
+						<li><?php echo anchor('admin/semantic', 'Semantic UI'); ?></li>
+					</ul>
+				</li><!--/.dropdown-->
+			</ul><!--/.nav.navbar-right-->
 
 		</div><!-- /.navbar-collapse -->
 	</div><!--/.container-->

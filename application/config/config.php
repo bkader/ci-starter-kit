@@ -229,7 +229,7 @@ $config['allow_get_array'] = true;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = (ENVIRONMENT == 'development') ? array(1, 2) : 0;
 
 /*
 |--------------------------------------------------------------------------
@@ -240,7 +240,7 @@ $config['log_threshold'] = 0;
 | application/logs/ directory. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = '';
+$config['log_path'] = APPPATH.'logs/'.date('Y/m/');
 
 /*
 |--------------------------------------------------------------------------
@@ -554,6 +554,9 @@ $config['proxy_ips'] = '';
 | Modules Locations.
 |--------------------------------------------------------------------------
 */
-$config['modules_locatioins'] = array(
-	APPPATH.'modules/' => '../module/'
+$config['modules_locations'] = array(
+	APPPATH.'modules/' => '../modules/'
 );
+
+/* End of file config.php */
+/* Location: ./application/config/config.php */

@@ -1,13 +1,13 @@
 # Multiple Environment config, set this to development, staging or production
-# SetEnv FUEL_ENV production
+# SetEnv CI_ENV production
 
 <IfModule mod_rewrite.c>
 
-	RewriteEngine on
+	RewriteEngine On
 
 	# NOTICE: If you get a 404 play with combinations of the following commented out lines
 	#AllowOverride All
-	#RewriteBase /wherever/fuel/is
+	#RewriteBase /wherever/CodeIgniter/is
 
     # Make sure directory listing is disabled
 	Options +FollowSymLinks -Indexes
@@ -27,9 +27,9 @@
 	#RewriteRule ^(.*)$ http://www.%1/$1 [R=301,L]
 
 	# Remove index.php from URL
-	#RewriteCond %{HTTP:X-Requested-With}	!^XMLHttpRequest$
-	#RewriteCond %{THE_REQUEST}				^[^/]*/index\.php [NC]
-	#RewriteRule ^index\.php(.*)$			$1 [R=301,NS,L]
+	RewriteCond %{HTTP:X-Requested-With}	!^XMLHttpRequest$
+	RewriteCond %{THE_REQUEST}				^[^/]*/index\.php [NC]
+	RewriteRule ^index\.php(.*)$			$1 [R=301,NS,L]
 
     # make HTTP Basic Authentication work on php-fcgi installs
     <IfModule mod_fcgid.c>

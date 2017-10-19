@@ -23,8 +23,12 @@
 		</div><!--/.navbar-div-->
 
 		<div class="right menu">
-			<div class="item">
-				<?php echo anchor('admin', 'Admin Panel', 'class="ui primary button"'); ?>
+			<div class="ui simple dropdown item">
+				Admin Panel <i class="dropdown icon"></i>
+				<div class="menu">
+					<?php echo anchor('admin', 'Bootstrap', 'class="item"'); ?>
+					<?php echo anchor('admin/semantic', 'Semantic UI', 'class="item"'); ?>
+				</div><!--/.menu-->
 			</div><!--/.item-->
 		</div><!--/.navbar-right-->
 

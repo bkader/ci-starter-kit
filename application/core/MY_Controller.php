@@ -36,6 +36,15 @@ class MY_Controller extends MX_Controller {
 		parent::__construct();
 		$this->__filter_params = array($this->uri->uri_string());
 		$this->call_filters('before');
+
+		// Github buttons (Remove this please)
+		$this->theme->add_js('https://buttons.github.io/buttons.js');
+
+		// Uncomment these lines once you set your theme.
+		// $this->theme->add_partial('header')
+		// 			->add_partial('footer');
+
+		log_message('debug', 'MY_Controller Class Initialized');
 	}
 
 	// ------------------------------------------------------------------------
@@ -45,7 +54,14 @@ class MY_Controller extends MX_Controller {
 	 */
 	public function _remap($method, $params = array())
 	{
-		call_user_func_array(array($this, $method), $params);
+		if (method_exists($this, $method))
+		{
+			return call_user_func_array(array($this, $method), $params);
+		}
+		else
+		{
+			show_404();
+		}
 		($method != 'call_filters') && $this->call_filters('after');
 	}
 
@@ -93,6 +109,31 @@ class MY_Controller extends MX_Controller {
 			
 			call_user_func_array($callback, $param_list);
 		}
+
+		log_message('debug', "\"{$type}\" Filter Called");
+	}
+
+	// ------------------------------------------------------------------------
+
+	/**
+	 * Prepares form validation library and form helper.
+	 *
+	 * @param 	array 	$rules 	rules to be used for validation form.
+	 */
+	protected function prepare_form($rules = array())
+	{
+		// Load validation form if not already loaded.
+		if ( ! class_exists('CI_Form_validation', false))
+			$this->load->library('form_validation');
+
+		// Hack to make form validation HMVC work.
+		$this->form_validation->CI =& $this;
+
+		// Load form helper if not already loaded.
+		(function_exists('form_open')) or $this->load->helper('form');
+
+		// Area they any rules to use?
+		empty($rules) or $this->form_validation->set_rules($rules);
 	}
 
 }

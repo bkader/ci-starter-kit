@@ -80,14 +80,7 @@ class CI_Cache_apc extends CI_Driver {
 		$success = false;
 		$data = apc_fetch($id, $success);
 
-		if ($success === true)
-		{
-			return is_array($data)
-				? unserialize($data[0])
-				: $data;
-		}
-
-		return false;
+		return ($success === true) ? $data : false;
 	}
 
 	// ------------------------------------------------------------------------
@@ -98,18 +91,12 @@ class CI_Cache_apc extends CI_Driver {
 	 * @param	string	$id	Cache ID
 	 * @param	mixed	$data	Data to store
 	 * @param	int	$ttl	Length of time (in seconds) to cache the data
-	 * @param	bool	$raw	Whether to store the raw value
+	 * @param	bool	$raw	Whether to store the raw value (unused)
 	 * @return	bool	true on success, false on failure
 	 */
 	public function save($id, $data, $ttl = 60, $raw = false)
 	{
-		$ttl = (int) $ttl;
-
-		return apc_store(
-			$id,
-			($raw === true ? $data : array(serialize($data), time(), $ttl)),
-			$ttl
-		);
+		return apc_store($id, $data, (int) $ttl);
 	}
 
 	// ------------------------------------------------------------------------
@@ -188,21 +175,30 @@ class CI_Cache_apc extends CI_Driver {
 	 */
 	public function get_metadata($id)
 	{
-		$success = false;
-		$stored = apc_fetch($id, $success);
-
-		if ($success === false OR count($stored) !== 3)
+		$cache_info = apc_cache_info('user', false);
+		if (empty($cache_info) OR empty($cache_info['cache_list']))
 		{
 			return false;
 		}
 
-		list($data, $time, $ttl) = $stored;
+		foreach ($cache_info['cache_list'] as &$entry)
+		{
+			if ($entry['info'] !== $id)
+			{
+				continue;
+			}
 
-		return array(
-			'expire'	=> $time + $ttl,
-			'mtime'		=> $time,
-			'data'		=> unserialize($data)
-		);
+			$success  = false;
+			$metadata = array(
+				'expire' => ($entry['ttl'] ? $entry['mtime'] + $entry['ttl'] : 0),
+				'mtime'  => $entry['ttl'],
+				'data'   => apc_fetch($id, $success)
+			);
+
+			return ($success === true) ? $metadata : false;
+		}
+
+		return false;
 	}
 
 	// ------------------------------------------------------------------------

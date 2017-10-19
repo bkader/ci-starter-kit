@@ -53,6 +53,12 @@ $route['default_controller']   = 'welcome';
 $route['404_override']         = '';
 $route['translate_uri_dashes'] = false;
 
+// Routes patterns.
+Route::pattern('id', '[0-9]+');
+Route::pattern('key', '[A-Za-z0-9\_\-]+');
+Route::pattern('method', '[A-Za-z0-9\_]+');
+Route::pattern('username', '[A-Za-z0-9]+');
+
 // ------------------------------------------------------------------------
 // Start of Routes.
 // ------------------------------------------------------------------------
@@ -71,6 +77,9 @@ $route['translate_uri_dashes'] = false;
  * Admin_Controller.
  */
 Route::context('admin', 'admin', array('home' => 'admin/index'));
+
+// Remove this line because it's for demonstration only.
+Route::get('admin/semantic', 'admin/admin/semantic');
 
 // This line should always be kept at the end.
 $route = Route::map($route);

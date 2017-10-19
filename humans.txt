@@ -1,0 +1,17 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Kader Bouyakoub -- CEO -- @KaderBouyakou
+
+# THANKS
+
+    CodeIgniter Team
+    Twitter Bootstrap Team
+    Semantic UI Team
+
+# TECHNOLOGY COLOPHON
+
+    PHP, CSS3, HTML5
+    Apache Server Configs, jQuery, Modernizr, Normalize.css

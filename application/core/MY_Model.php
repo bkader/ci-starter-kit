@@ -89,6 +89,12 @@ class MY_Model extends CI_Model
     protected $return_type = 'object';
     protected $_temporary_return_type = null;
 
+    /**
+     * Added by Kader Bouyakoub.
+     * Whether to use unix_timestamp or datatime.
+     */
+    protected $unix_timestamp = false;
+
     /* --------------------------------------------------------------
      * GENERIC METHODS
      * ------------------------------------------------------------ */
@@ -109,6 +115,11 @@ class MY_Model extends CI_Model
 
         array_unshift($this->before_create, 'protect_attributes');
         array_unshift($this->before_update, 'protect_attributes');
+
+        if ($this->unix_timestamp === true)
+        {
+            array_unshift($this->before_delete, 'deleted_at');
+        }
 
         $this->_temporary_return_type = $this->return_type;
     }
@@ -660,13 +671,15 @@ class MY_Model extends CI_Model
      */
     public function created_at($row)
     {
+        $datetime = $this->unix_timestamp ? time() : date('Y-m-d H:i:s');
+
         if (is_object($row))
         {
-            $row->created_at = date('Y-m-d H:i:s');
+            $row->created_at = $datetime;
         }
         else
         {
-            $row['created_at'] = date('Y-m-d H:i:s');
+            $row['created_at'] = $datetime;
         }
 
         return $row;
@@ -674,13 +687,31 @@ class MY_Model extends CI_Model
 
     public function updated_at($row)
     {
+        $datetime = $this->unix_timestamp ? time() : date('Y-m-d H:i:s');
+
         if (is_object($row))
         {
-            $row->updated_at = date('Y-m-d H:i:s');
+            $row->updated_at = $datetime;
         }
         else
         {
-            $row['updated_at'] = date('Y-m-d H:i:s');
+            $row['updated_at'] = $datetime;
+        }
+
+        return $row;
+    }
+
+    public function deleted_at($row)
+    {
+        $datetime = $this->unix_timestamp ? time() : date('Y-m-d H:i:s');
+
+        if (is_object($row))
+        {
+            $row->deleted_at = $datetime;
+        }
+        else
+        {
+            $row['deleted_at'] = $datetime;
         }
 
         return $row;
