@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 /**
  * Theme Library
  * @package 	CodeIgniter\Designith
@@ -27,8 +27,8 @@ class Theme
 		'cache_lifetime'   => 0,
 		'cdn_enabled'      => false,
 		'cdn_server'       => null,
-		'site_title'       => 'CodeIgniter',
-		'site_description' => 'CodeIgniter Themes Library',
+		'site_name'       => 'CI-Theme',
+		'site_description' => 'Simply makes your CI-based applications themable. Easy and fun to use.',
 		'site_keywords'    => 'codeigniter, themes, libraries, bkader'
 	);
 
@@ -63,7 +63,7 @@ class Theme
 	protected $metadata  = array();
 
 	protected $theme  = 'default';
-	protected $master = 'template';
+	protected $master = 'default';
 	protected $layout = 'default';
 
 	/**
@@ -83,7 +83,7 @@ class Theme
 		$this->initialize($config);
 
 		// Make sure URL helper is load then we load our helper
-		function_exists('base_url') OR $this->CI->load->helper('url');
+		function_exists('base_url') or $this->CI->load->helper('url');
 		$this->CI->load->helper('theme');
 
 		// Prepare current module's details.
@@ -95,8 +95,13 @@ class Theme
 		$this->method     = $this->CI->router->fetch_method();
 
 		// Set some useful variables
-		$this->set('site_title', $this->site_title, true);
-		$this->set('uri_string', $this->CI->uri->uri_string(), true);
+		$this->set(array(
+			'site_name'  => $this->site_name,
+			'uri_string' => $this->CI->uri->uri_string(),
+			'module'     => $this->module,
+			'controller' => $this->controller,
+			'method'     => $this->method,
+		), null, true);
 	}
 
 	// ------------------------------------------------------------------------
@@ -116,8 +121,8 @@ class Theme
 			$config['theme.theme'] = $this->CI->config->item('theme');
 		}
 
-		// Are site_title, site_description and site_keywords overriden?
-		foreach (array('site_title', 'site_description', 'site_keywords') as $meta)
+		// Are site_name, site_description and site_keywords overriden?
+		foreach (array('site_name', 'site_description', 'site_keywords') as $meta)
 		{
 			if ($_meta = $this->CI->config->item($meta))
 			{
@@ -177,7 +182,7 @@ class Theme
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Sets class properties
+	 * Sets variables to pass to view files.
 	 * @access 	public
 	 * @param 	mixed 		$var 		property's name or associative array
 	 * @param 	mixed 		$val 		property's value or null if $var is array
@@ -212,16 +217,58 @@ class Theme
 	 * Returns a data store in class Config property
 	 * @access 	public
 	 * @param 	string 	$name
+	 * @param 	string 	$index
 	 * @return 	mixed
 	 */
-	public function get($name)
+	public function get($name, $index = null)
 	{
-		return isset($this->config[$name]) ? $this->config[$name] : null;
+		if ($index === null)
+		{
+			return isset($this->config[$name]) ? $this->config[$name] : null;
+		}
+
+		return isset($this->config[$index][$name]) ? $this->config[$index][$name] : null;
 	}
 
 	// ------------------------------------------------------------------------
 	// General Setters
 	// ------------------------------------------------------------------------
+
+	/**
+	 * Sets page theme
+	 * @access 	public
+	 * @param 	string 	$theme 	theme's name
+	 * @return 	object
+	 */
+	public function theme($theme = 'default')
+	{
+		$this->config['theme'] = $theme;
+		return $this;
+	}
+
+	/**
+	 * Changes master view file.
+	 * @access 	public
+	 * @param 	string 	$master
+	 * @return 	object
+	 */
+	public function master($master = 'default')
+	{
+		$this->master = $master;
+		return $this;
+	}
+
+	/**
+	 * Sets page layout
+	 * @access 	public
+	 * @param 	string 	$layout 	layout's name
+	 * @return 	object
+	 */
+	public function layout($layout = 'default')
+	{
+		$this->layout = $layout;
+		return $this;
+	}
 
 	/**
 	 * Changes page's title
@@ -235,7 +282,7 @@ class Theme
 			return $this;
 		}
 
-		$this->title = $this->site_title;
+		$this->title = $this->site_name;
 		if ( ! empty($args = func_get_args()))
 		{
 			is_array($args[0]) && $args = $args[0];
@@ -258,7 +305,7 @@ class Theme
 		}
 
 		$this->description = $this->site_description;
-		empty($description) OR $this->description = $description;
+		empty($description) or $this->description = $description;
 		return $this;
 	}
 
@@ -275,7 +322,7 @@ class Theme
 		}
 
 		$this->keywords = $this->site_keywords;
-		empty($keywords) OR $this->keywords = $keywords;
+		empty($keywords) or $this->keywords = $keywords;
 		return $this;
 	}
 
@@ -664,6 +711,72 @@ class Theme
         return null;
     }
 
+	// ------------------------------------------------------------------------
+	// !Partials Management
+	// ------------------------------------------------------------------------
+
+	/**
+	 * Adds partial view
+	 * @access 	public
+	 * @param 	string 	$view 	view file to load
+	 * @param 	array 	$data 	array of data to pass
+	 * @param 	string 	$name 	name of the variable to use
+	 */
+	public function add_partial($view, $data = array(), $name = null)
+	{
+		// If $name is not set, we take the last string.
+		empty($name) && $name = basename($view);
+		$this->partials[$name] = $this->_load_file('partial', rtrim($view, '/'), $data, true);
+		return $this;
+	}
+
+	/**
+	 * Removes given partial views
+	 * @access 	public
+	 * @param 	mixed
+	 * @return 	object
+	 */
+	public function remove_partial()
+	{
+		if ( ! empty($args = func_get_args()))
+		{
+			is_array($args[0]) && $args = $args[0];
+			foreach ($args as $partial)
+			{
+				unset($this->partials[$partial]);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * In case you want to replace an already-loaded partial.
+	 * If the partial does not exist, it will simply add it.
+	 * @access 	public
+	 * @param 	string 	$old 	old partial name
+	 * @param 	string 	$new 	new partial name
+	 * @param 	array 	$data 	data to pass to the new view
+	 * @return 	object
+	 */
+	public function replace_partial($old, $new, $data = array())
+	{
+		return $this->add_partial($new, $data, $old);
+	}
+
+	/**
+	 * Displays a partial view alone.
+	 * @access 	public
+	 * @param 	string 	$view 	the partial view name
+	 * @param 	array 	$data 	array of data to pass
+	 * @param 	bool 	$return whether to return or output
+	 * @return 	mixed
+	 */
+	public function partial($view, $data = array(), $return = false)
+	{
+		return $this->_load_file('partial', $view, $data, $return);
+	}
+
     // ------------------------------------------------------------------------
 
     /**
@@ -761,109 +874,6 @@ class Theme
 	}
 
 	// ------------------------------------------------------------------------
-
-	/**
-	 * Sets page theme
-	 * @access 	public
-	 * @param 	string 	$theme 	theme's name
-	 * @return 	object
-	 */
-	public function theme($theme = 'default')
-	{
-		$this->config['theme'] = $theme;
-		return $this;
-	}
-
-	/**
-	 * Changes master view file.
-	 * @access 	public
-	 * @param 	string 	$master
-	 * @return 	object
-	 */
-	public function master($master = 'template')
-	{
-		$this->master = $master;
-		return $this;
-	}
-
-	/**
-	 * Sets page layout
-	 * @access 	public
-	 * @param 	string 	$layout 	layout's name
-	 * @return 	object
-	 */
-	public function layout($layout = 'default')
-	{
-		$this->layout = $layout;
-		return $this;
-	}
-
-	// ------------------------------------------------------------------------
-	// !Partials Management
-	// ------------------------------------------------------------------------
-
-	/**
-	 * Adds partial view
-	 * @access 	public
-	 * @param 	string 	$view 	view file to load
-	 * @param 	array 	$data 	array of data to pass
-	 * @param 	string 	$name 	name of the variable to use
-	 */
-	public function add_partial($view, $data = array(), $name = null)
-	{
-		$name OR $name = $view;
-		$this->partials[$name] = $this->_load_file('partial', $view, $data, true);
-		return $this;
-	}
-
-	/**
-	 * Removes given partial views
-	 * @access 	public
-	 * @param 	mixed
-	 * @return 	object
-	 */
-	public function remove_partial()
-	{
-		if ( ! empty($args = func_get_args()))
-		{
-			is_array($args[0]) && $args = $args[0];
-			foreach ($args as $partial)
-			{
-				unset($this->partials[$partial]);
-			}
-		}
-
-		return $this;
-	}
-
-	/**
-	 * In case you want to replace an already-loaded partial.
-	 * If the partial does not exist, it will simply add it.
-	 * @access 	public
-	 * @param 	string 	$old 	old partial name
-	 * @param 	string 	$new 	new partial name
-	 * @param 	array 	$data 	data to pass to the new view
-	 * @return 	object
-	 */
-	public function replace_partial($old, $new, $data = array())
-	{
-		return $this->add_partial($new, $data, $old);
-	}
-
-	/**
-	 * Displays a partial view alone.
-	 * @access 	public
-	 * @param 	string 	$view 	the partial view name
-	 * @param 	array 	$data 	array of data to pass
-	 * @param 	bool 	$return whether to return or output
-	 * @return 	mixed
-	 */
-	public function partial($view, $data = array(), $return = false)
-	{
-		return $this->_load_file('partial', $view, $data, $return);
-	}
-
-	// ------------------------------------------------------------------------
 	// !Load a single view
 	// ------------------------------------------------------------------------
 
@@ -890,14 +900,40 @@ class Theme
 	 * @param 	string 	$master 	in case you use a distinct master view
 	 * @return  void
 	 */
-	public function load($view, $data = array(), $return = false, $master = 'template')
+	public function load($view, $data = array(), $return = false, $master = 'default')
 	{
 		// Start beckmark
 		$this->CI->benchmark->mark('theme_start');
 
-		if (file_exists(FCPATH."content/themes/{$this->config['theme']}/functions.php"))
+		$theme_path = FCPATH."content/themes/{$this->config['theme']}";
+		// Is the manifest present?
+		if ( ! file_exists("{$theme_path}/manifest.json"))
 		{
-			include FCPATH."content/themes/{$this->config['theme']}/functions.php";
+			show_error(
+				'The theme you are currently using is missing the "manifest.json" file.',
+				500,
+				'Missing Manifest File'
+			);
+		}
+
+		$manifest = file_get_contents("{$theme_path}/manifest.json");
+		$manifest = json_decode($manifest, true);
+		if ( ! is_array($manifest))
+		{
+			show_error(
+				'The "manifest.json" provided with your theme is not valid..',
+				500,
+				'Error Manifest.json'
+			);
+		}
+
+		$this->config['manifest'] = $manifest;
+		unset($manifest);
+
+		// Does the theme have functions.php file?
+		if (file_exists("{$theme_path}functions.php"))
+		{
+			include_once("{$theme_path}functions.php");
 		}
 
 		// Build the whole outout
@@ -909,12 +945,90 @@ class Theme
 		// Stop benchmark
 		$this->CI->benchmark->mark('theme_end');
 
+		// Pass elapsed time to views.
+		if ($this->CI->output->parse_exec_vars === true)
+		{
+			$output = str_replace(
+				'{theme_time}',
+				$this->CI->benchmark->elapsed_time('theme_start', 'theme_end'),
+				$output
+			);
+		}
+
 		if ($return)
 		{
 			return $output;
 		}
 
 		$this->CI->output->set_output($output);
+	}
+
+	/**
+	 * Instead of chaining this class methods or calling them one by one,
+	 * this method is a shortcut to do anything you want in a single call.
+	 * @access 	public
+	 * @param 	string 	$view 		the view file to load
+	 * @param 	array 	$data 		array of data to pass to view
+	 * @param 	string 	$title 		page's title
+	 * @param 	string 	$options 	associative array of options to apply first
+	 * @param 	bool 	$return 	whether to output or simply build
+	 * NOTE: you can pass $options instead of $title like so:
+	 * 		$this->theme->render('view', $data, $options, $return);
+	 */
+	public function render($view, $data = array(), $title = null, $options = array(), $return = false)
+	{
+		// In case $title is an array, it will be used as $options.
+		// If then $options is a boolean, it will be used for $return.
+		if (is_array($title))
+		{
+			$return  = (bool) $options;
+			$options = $title;
+			$title   = null;
+		}
+
+		// If $title is not empty we add it to $options.
+		empty($title) or $options['title'] = $title;
+
+		// Loop through all options now.
+		foreach ($options as $key => $val)
+		{
+			// add_css and add_js are the only distinct methods.
+			if (in_array($key, array('css', 'js')))
+			{
+				$this->{'add_'.$key}($val);
+			}
+
+			// We call the method only if it exists.
+			elseif (method_exists($this, $key))
+			{
+				$this->{$key}($val);
+			}
+
+			// Otherwise we set variables to views.
+			else
+			{
+				$this->set($key, $val, true);
+			}
+		}
+
+		// Now we render the final output.
+		return $this->load($view, $data, $return);
+	}
+
+	/**
+	 * Unlike the method above it, this one builts the output and does not
+	 * display it. You would have to echo it.
+	 * @access 	public
+	 * @param 	string 	$view 		the view file to load
+	 * @param 	array 	$data 		array of data to pass to view
+	 * @param 	string 	$title 		page's title
+	 * @param 	string 	$options 	associative array of options to apply first
+	 * NOTE: you can pass $options instead of $title like so:
+	 * 		$this->theme->render('view', $data, $options);
+	 */
+	public function build($view, $data = array(), $title = null, $options = array())
+	{
+		return $this->render($view, $data, $title, $options, true);
 	}
 
 	/**
@@ -971,7 +1085,7 @@ class Theme
 		$this->set('layout', $this->_load_file('layout', $this->layout, $layout, true));
 
 		// Prepare the output
-		$output = $this->_load_file('template', $this->master, $this->data, true);
+		$output = $this->_load_file('default', $this->master, $this->data, true);
 
 		// Minify HTML output if set to TRE
 		if ($this->compress === true)
@@ -1005,7 +1119,7 @@ class Theme
 
 				// prepare all path
 				$paths = array(
-					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'modules', $this->module),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'views', '_modules', $this->module),
 					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'views'),
 					build_path(APPPATH, 'modules', $this->module, 'views'),
 					build_path(APPPATH, 'views'),
@@ -1019,7 +1133,7 @@ class Theme
 				}
 
 				// Remove unecessary paths if $this->config['theme'] is not set
-				if ( ! isset($this->config['theme']) OR empty($this->config['theme']))
+				if ( ! isset($this->config['theme']) or empty($this->config['theme']))
 				{
 					unset($paths[0], $paths[1]);
 				}
@@ -1055,11 +1169,11 @@ class Theme
 			case 'partials':
 				// prepare all path
 				$paths = array(
-					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'modules', $this->module, 'partials'),
-					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'partials'),
-					build_path(APPPATH, 'modules', $this->module, 'views', 'partials'),
-					build_path(APPPATH, 'views', 'partials'),
-					build_path(VIEWPATH, 'partials'),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'views', '_modules', $this->module, '_partials'),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'views', '_partials'),
+					build_path(APPPATH, 'modules', $this->module, 'views', '_partials'),
+					build_path(APPPATH, 'views', '_partials'),
+					build_path(VIEWPATH, '_partials'),
 				);
 
 				// remove uneccessary paths if $this->module is null
@@ -1069,7 +1183,7 @@ class Theme
 				}
 
 				// Remove unecessary paths if $this->config['theme'] is not set
-				if ( ! isset($this->config['theme']) OR empty($this->config['theme']))
+				if ( ! isset($this->config['theme']) or empty($this->config['theme']))
 				{
 					unset($paths[0], $paths[1]);
 				}
@@ -1106,11 +1220,11 @@ class Theme
 
 				// prepare all path
 				$paths = array(
-					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'modules', $this->module, 'layouts'),
-					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'layouts'),
-					build_path(APPPATH, 'modules', $this->module, 'views', 'layouts'),
-					build_path(APPPATH, 'views', 'layouts'),
-					build_path(VIEWPATH, 'layouts'),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'views', '_modules', $this->module, '_layouts'),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'views', '_layouts'),
+					build_path(APPPATH, 'modules', $this->module, 'views', '_layouts'),
+					build_path(APPPATH, 'views', '_layouts'),
+					build_path(VIEWPATH, '_layouts'),
 				);
 
 				// remove uneccessary paths if $this->module is null
@@ -1120,7 +1234,7 @@ class Theme
 				}
 
 				// Remove unecessary paths if $this->config['theme'] is not set
-				if ( ! isset($this->config['theme']) OR empty($this->config['theme']))
+				if ( ! isset($this->config['theme']) or empty($this->config['theme']))
 				{
 					unset($paths[0], $paths[1]);
 				}
@@ -1160,11 +1274,11 @@ class Theme
 
 				// prepare all path
 				$paths = array(
-					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'modules', $this->module),
-					build_path(FCPATH, 'content', 'themes', $this->config['theme']),
-					build_path(APPPATH, 'modules', $this->module, 'views'),
-					build_path(APPPATH, 'views'),
-					build_path(VIEWPATH),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'views', '_modules', $this->module, '_master'),
+					build_path(FCPATH, 'content', 'themes', $this->config['theme'], 'views', '_master'),
+					build_path(APPPATH, 'modules', $this->module, 'views', '_master'),
+					build_path(APPPATH, 'views', '_master'),
+					build_path(VIEWPATH, '_master'),
 				);
 
 				// remove uneccessary paths if $this->module is null
@@ -1174,7 +1288,7 @@ class Theme
 				}
 
 				// Remove unecessary paths if $this->config['theme'] is not set
-				if ( ! isset($this->config['theme']) OR empty($this->config['theme']))
+				if ( ! isset($this->config['theme']) or empty($this->config['theme']))
 				{
 					unset($paths[0], $paths[1]);
 				}
@@ -1216,7 +1330,7 @@ class Theme
 	protected function _compress_output($output)
 	{
 		// Make sure $output is always a string
-		is_string($output) OR $output = (string) $output;
+		is_string($output) or $output = (string) $output;
 
 		// In orders, we are searching for
 		// 1. White-spaces after tags, except space.

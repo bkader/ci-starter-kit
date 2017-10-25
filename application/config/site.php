@@ -19,15 +19,15 @@ $config['site_version']     = '1.0.0';
 
 /**
  * Site public and admin arias themes.
- */
-$config['theme'] = 'default';
-$config['theme_admin'] = 'default';
+*/
+$config['theme']            = 'default';
+$config['theme_admin']      = 'default';
 
 /**
  * Google Analytics Settings.
- */
-$config['ga_enabled'] = true;
-$config['ga_siteid'] = 'UA-XXXXX-Y';
+*/
+$config['ga_enabled']       = true;
+$config['ga_siteid']        = 'UA-XXXXX-Y';
 
 /* End of file site.php */
 /* Location: ./application/config/site.php */

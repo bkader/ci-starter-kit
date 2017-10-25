@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // Load the MX_Router class
 require APPPATH.'third_party/MX/Router.php';
-require APPPATH.'libraries/Route.php';
+require APPPATH.'third_party/routes/Route.php';
 
 class MY_Router extends MX_Router {
 	private $active_route;
