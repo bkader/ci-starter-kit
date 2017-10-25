@@ -12,7 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Site main Settings.
  */
-$config['site_title']       = 'CodeIgniter';
+$config['site_name']        = 'CodeIgniter';
 $config['site_description'] = 'An amazing PHP Framework.';
 $config['site_keywords']    = 'these, are, dummy, keywords, use, yours, bkader, bouyakoub';
 $config['site_version']     = '1.0.0';
