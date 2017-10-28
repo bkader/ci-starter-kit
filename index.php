@@ -305,6 +305,10 @@ switch (ENVIRONMENT)
 
 	define('VIEWPATH', $view_folder.DIRECTORY_SEPARATOR);
 
+	// Added by Kader Bouyakoub.
+	require_once APPPATH.'third_party/bkader/common.php';
+	require_once APPPATH.'third_party/bkader/print_d.php';
+
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE
