@@ -11,8 +11,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author 	Kader Bouyakoub <bkader_at_mail_dot_com>
  * @link 	https://github.com/bkader
  */
-
-class MY_Controller extends MX_Controller {
+class MY_Controller extends MX_Controller
+{
 	/**
 	 * To use Laravel static routes.
 	 */
@@ -139,6 +139,39 @@ class MY_Controller extends MX_Controller {
 }
 
 // ------------------------------------------------------------------------
+
+/**
+ * Ajax_Controller
+ *
+ * @package 	CodeIgniter
+ * @category 	Core Extension
+ * @author 	Kader Bouyakoub <bkader@mail.com>
+ * @link 	https://github.com/bkader
+ */
+class Ajax_Controller extends MY_Controller
+{
+	/**
+	 * Class constructor
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		// Make sure it's always an ajax request.
+		if ( ! $this->input->is_ajax_request())
+		{
+			// Do anyting you want!
+			show_404();
+		}
+
+		// Below here are what you need to load.
+	}
+
+}
+
+
+// ------------------------------------------------------------------------
+
 /**
  * User_Controller
  *
@@ -150,7 +183,8 @@ class MY_Controller extends MX_Controller {
  * @link 	https://github.com/bkader
  */
 
-class User_Controller extends MY_Controller {
+class User_Controller extends MY_Controller
+{
 	/**
 	 * Class constructor
 	 */
@@ -165,9 +199,11 @@ class User_Controller extends MY_Controller {
 		// 	exit;
 		// }
 	}
+
 }
 
 // ------------------------------------------------------------------------
+
 /**
  * Admin_Controller
  *
@@ -179,7 +215,8 @@ class User_Controller extends MY_Controller {
  * @link 	https://github.com/bkader
  */
 
-class Admin_Controller extends User_Controller {
+class Admin_Controller extends User_Controller
+{
 	/**
 	 * Class constructor
 	 */
@@ -194,6 +231,7 @@ class Admin_Controller extends User_Controller {
 		// 	exit;
 		// }
 	}
+
 }
 
 /* End of file MY_Controller.php */
