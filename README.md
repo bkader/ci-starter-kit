@@ -1,4 +1,4 @@
-# CodeIgniter Starter Kit
+# CodeIgniter Starter Kit ([Demo](https://demo.ianhub.com/CodeIgniter))
 
 ### What is this?
 Because I am a huge fan of [CodeIgniter](https://www.codeigniter.com/), I made a small collection of needed resources and put them all together into a single brute project that I simply copy then edit to start developing a __CI-based__ web application.

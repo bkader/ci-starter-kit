@@ -23,13 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$root = is_https() ? 'https://' : 'http://';
-$root .= $_SERVER['HTTP_HOST'];
-$root .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
-$config['base_url'] = $root;
-
-// You can this line if you don't want me to guess it :D
-// $config['base_url'] = ''; // See ENVIRONMENNT config file.
+$config['base_url'] = ''; // See ENVIRONMENNT config file.
 
 /*
 |--------------------------------------------------------------------------
