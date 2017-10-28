@@ -54,16 +54,17 @@ $route['404_override']         = '';
 $route['translate_uri_dashes'] = false;
 
 // Routes patterns.
-Route::pattern('id', '[0-9]+');
-Route::pattern('key', '[A-Za-z0-9\_\-]+');
-Route::pattern('method', '[A-Za-z0-9\_]+');
+Route::pattern('id',       '[0-9]+');
+Route::pattern('key',      '[A-Za-z0-9\_\-]+');
+Route::pattern('method',   '[a-z\_]+');
 Route::pattern('username', '[A-Za-z0-9]+');
 
 // ------------------------------------------------------------------------
 // Start of Routes.
 // ------------------------------------------------------------------------
 
-
+// Remove this line because it's for demonstration only.
+Route::get('admin/semantic', 'admin/admin/semantic');
 
 // ------------------------------------------------------------------------
 // End of Routes.
@@ -78,8 +79,12 @@ Route::pattern('username', '[A-Za-z0-9]+');
  */
 Route::context('admin', 'admin', array('home' => 'admin/index'));
 
-// Remove this line because it's for demonstration only.
-Route::get('admin/semantic', 'admin/admin/semantic');
+/**
+ * For AJAX calls, I made a class Ajax_Controller that should
+ * be used for controllers requiring AJAX calls.
+ * A module can have an ajax controller, just like 'admin' above.
+ */
+Route::context('ajax', 'ajax', array('home' => 'ajax/index'));
 
 // This line should always be kept at the end.
 $route = Route::map($route);

@@ -79,6 +79,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 	require_once(BASEPATH.'core/Common.php');
 
+	// Added by Kader Bouyakoub.
+	require_once APPPATH.'third_party/bkader/common.php';
+	require_once APPPATH.'third_party/bkader/print_d.php';
+
 
 /*
  * ------------------------------------------------------

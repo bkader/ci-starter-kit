@@ -243,8 +243,15 @@ class Route
 	 */
 	public static function resources($name, $options = array(), $nested = false)
 	{
-		if (empty($name)) {
+		if (empty($name))
+		{
 			return;
+		}
+
+		if ($options instanceof Closure)
+		{
+			$nested  = $options;
+			$options = array();
 		}
 
 		$nest_offset = '';
@@ -256,14 +263,16 @@ class Route
 
 		// If a new controller is specified, then we replace the
 		// $name value with the name of the new controller.
-		if (isset($options['controller'])) {
+		if (isset($options['controller']))
+		{
 			$new_name = $options['controller'];
 			unset($options['controller']);
 		}
 
 		// If a new module was specified, simply put that path
 		// in front of the controller.
-		if (isset($options['module'])) {
+		if (isset($options['module']))
+		{
 			$new_name = $options['module'].'/'.$new_name;
 			unset($options['module']);
 		}
@@ -272,7 +281,8 @@ class Route
 		// we need someplace to store them.
 		$id = '([a-zA-Z0-9\-_]+)';
 
-		if (isset($options['constraint'])) {
+		if (isset($options['constraint']))
+		{
 			$id = $options['constraint'];
 			unset($options['constraint']);
 		}
@@ -284,17 +294,23 @@ class Route
 
 		$offset = 0;
 
-		if (isset($options['offset'])) {
+		if (isset($options['offset']))
+		{
 			$offset = (int) $options['offset'];
 			unset($options['offset']);
 		}
 
-		if (is_array(self::$prefix) && !empty(self::$prefix)) {
-			foreach (self::$prefix as $key => $p) {
-				$nest_offset .= '/$'.($key + 1);
-				$offset++;
-			}
-		}
+		// This is to be checked.
+		// See: https://github.com/Patroklo/codeigniter-static-laravel-routes/issues/21
+
+		// if (is_array(self::$prefix) && !empty(self::$prefix))
+		// {
+		// 	foreach (self::$prefix as $key => $p)
+		// 	{
+		// 		$nest_offset .= '/$'.($key + 1);
+		// 		$offset++;
+		// 	}
+		// }
 
 
 		self::get($name, $new_name.'/index'.$nest_offset, $options, $nested);

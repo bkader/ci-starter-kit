@@ -92,8 +92,9 @@ class MY_Model extends CI_Model
     /**
      * Added by Kader Bouyakoub.
      * Whether to use unix_timestamp or datatime.
+     * Set to 'timestamp' or 'Y-m-d H:i:s'
      */
-    protected $unix_timestamp = false;
+    protected $datetime_format = 'Y-m-d H:i:s';
 
     /* --------------------------------------------------------------
      * GENERIC METHODS
@@ -116,7 +117,7 @@ class MY_Model extends CI_Model
         array_unshift($this->before_create, 'protect_attributes');
         array_unshift($this->before_update, 'protect_attributes');
 
-        if ($this->unix_timestamp === true)
+        if ($this->soft_delete === true)
         {
             array_unshift($this->before_delete, 'deleted_at');
         }
@@ -667,19 +668,17 @@ class MY_Model extends CI_Model
      * ------------------------------------------------------------ */
 
     /**
-     * MySQL DATETIME created_at and updated_at
+     * MySQL DATETIME created_at, updated_at and deleted_at
      */
     public function created_at($row)
     {
-        $datetime = $this->unix_timestamp ? time() : date('Y-m-d H:i:s');
-
         if (is_object($row))
         {
-            $row->created_at = $datetime;
+            $row->created_at = $this->_datetime();
         }
         else
         {
-            $row['created_at'] = $datetime;
+            $row['created_at'] = $this->_datetime();
         }
 
         return $row;
@@ -687,15 +686,13 @@ class MY_Model extends CI_Model
 
     public function updated_at($row)
     {
-        $datetime = $this->unix_timestamp ? time() : date('Y-m-d H:i:s');
-
         if (is_object($row))
         {
-            $row->updated_at = $datetime;
+            $row->updated_at = $this->_datetime();
         }
         else
         {
-            $row['updated_at'] = $datetime;
+            $row['updated_at'] = $this->_datetime();
         }
 
         return $row;
@@ -703,18 +700,27 @@ class MY_Model extends CI_Model
 
     public function deleted_at($row)
     {
-        $datetime = $this->unix_timestamp ? time() : date('Y-m-d H:i:s');
-
         if (is_object($row))
         {
-            $row->deleted_at = $datetime;
+            $row->deleted_at = $this->_datetime();
         }
         else
         {
-            $row['deleted_at'] = $datetime;
+            $row['deleted_at'] = $this->_datetime();
         }
 
         return $row;
+    }
+
+    /**
+     * Returns unix timestamp or a date in a given format.
+     * @return string date or unix_timestamp
+     */
+    private function _datetime()
+    {
+    	return ($this->datetime_format == 'timestamp')
+    			? time()
+    			: date($this->datetime_format);
     }
 
     /**
@@ -881,6 +887,34 @@ class MY_Model extends CI_Model
     }
 
     /**
+     * List table's fields.
+     */
+    public function list_fields($table = null)
+    {
+    	$table OR $table = $this->_table;
+    	return $this->_database->list_fields($table);
+    }
+
+    /**
+     * Determine if a particular field exits.
+     * @param 	string 	$field 	the field's name
+     * @param 	string 	$table 	the table's name.
+     * @return 	bool 	TRUE if exists, else false.
+     */
+    public function field_exists($field, $table = null)
+    {
+    	$table OR $table = $this->_table;
+
+    	// Make sure first that the table exists.
+    	if ( ! $this->_database->table_exists($table))
+    	{
+    		return false;
+    	}
+
+    	return $this->_database->field_exists($field, $table);
+    }
+
+    /**
      * Guess the table name by pluralising the model name
      */
     private function _fetch_table()
@@ -969,3 +1003,6 @@ class MY_Model extends CI_Model
         return $this->_temporary_return_type == 'array' ? $method . '_array' : $method;
     }
 }
+
+/* End of file MY_Model.php */
+/* Location: ./application/core/MY_Model.php */

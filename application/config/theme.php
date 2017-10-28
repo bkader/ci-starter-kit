@@ -58,8 +58,8 @@ $config['theme.cdn_server'] = ''; // i.e: 'http://static.myhost.com/';
 // Backup plan :D for site name, desription & keywords
 // ------------------------------------------------------------------------
 
-// Default site title, description and keywords.
-$config['theme.site_title']       = 'CodeIgniter';
+// Default site name, description and keywords.
+$config['theme.site_name']        = 'CodeIgniter';
 $config['theme.site_description'] = 'An amazing PHP Framework.';
 $config['theme.site_keywords']    = 'these, are, dummy, keywords, use, yours, bkader, bouyakoub';
 

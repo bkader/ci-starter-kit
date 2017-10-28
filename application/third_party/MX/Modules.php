@@ -222,7 +222,11 @@ class Modules
 			}
 		}
 
-		if ( ! isset(self::$routes[$module])) return;
+		if ( ! isset(self::$routes[$module]) 
+            OR ! is_array(self::$routes[$module]))
+        {
+            return;
+        }
 			
 		/* parse module routes */
 		foreach (self::$routes[$module] as $key => $val) 
@@ -239,4 +243,216 @@ class Modules
 			}
 		}
 	}
+
+	// Lines below we taken from Bonfire.
+
+    /**
+     * Determine whether a controller exists for a module.
+     *
+     * @param $controller string The controller to look for (without the extension).
+     * @param $module     string The module to look in.
+     *
+     * @return boolean True if the controller is found, else false.
+     */
+    public static function controller_exists($controller = null, $module = null)
+    {
+        if (empty($controller) or empty($module))
+        {
+            return false;
+        }
+
+        // Look in all module paths.
+        foreach (Modules::folders() as $folder)
+        {
+            if (is_file("{$folder}{$module}/controllers/{$controller}.php"))
+            {
+                return true;
+            }
+            elseif (is_file("{$folder}{$module}/controllers/".ucfirst($controller).'.php'))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Find the path to a module's file.
+     *
+     * @param $module string The name of the module to find.
+     * @param $folder string The folder within the module to search for the file
+     * (ie. controllers).
+     * @param $file   string The name of the file to search for.
+     *
+     * @return string The full path to the file.
+     */
+    public static function file_path($module = null, $folder = null, $file = null)
+    {
+        if (empty($module) OR empty($folder) OR empty($file))
+        {
+            return false;
+        }
+
+        foreach (Modules::folders() as $module_folder)
+        {
+            if (is_file("{$module_folder}{$module}/{$folder}/{$file}"))
+            {
+                return "{$module_folder}{$module}/{$folder}/{$file}";
+            }
+            elseif (is_file("{$module_folder}{$module}/{$folder}/".ucfirst($file)))
+            {
+                return "{$module_folder}{$module}/{$folder}/".ucfirst($file);
+            }
+        }
+    }
+
+    /**
+     * Return the path to the module and its specified folder.
+     *
+     * @param $module string The name of the module (must match the folder name).
+     * @param $folder string The folder name to search for (Optional).
+     *
+     * @return string The path, relative to the front controller.
+     */
+    public static function path($module = null, $folder = null)
+    {
+        foreach (Modules::folders() as $module_folder)
+        {
+            // Check each folder for the module's folder.
+            if (is_dir("{$module_folder}{$module}"))
+            {
+                // If $folder was specified and exists, return it.
+                if ( ! empty($folder) && is_dir("{$module_folder}{$module}/{$folder}"))
+                {
+                    return "{$module_folder}{$module}/{$folder}";
+                }
+
+                // Return the module's folder.
+                return "{$module_folder}{$module}/";
+            }
+        }
+    }
+
+    /**
+     * Returns the 'module_config' array from a modules config/config.php file.
+     *
+     * The 'module_config' contains more information about a module, and even
+     * provides enhanced features within the UI. All fields are optional.
+     *
+     * @author Liam Rutherford (http://www.liamr.com)
+     *
+     * <code>
+     * $config['module_config'] = array(
+     *  'name'          => 'Blog',          // The name that is displayed in the UI
+     *  'description'   => 'Simple Blog',   // May appear at various places within the UI
+     *  'author'        => 'Your Name',     // The name of the module's author
+     *  'homepage'      => 'http://...',    // The module's home on the web
+     *  'version'       => '1.0.1',         // Currently installed version
+     *  'menu'          => array(           // A view file containing an <ul> that will be the sub-menu in the main nav.
+     *      'context'   => 'path/to/view'
+     *  )
+     * );
+     * </code>
+     *
+     * @param $module_name string  The name of the module.
+     * @param $return_full boolean Ignored if the 'module_config' portion exists.
+     * Otherwise, if true, will return the entire config array, else an empty array
+     * is returned.
+     *
+     * @return array An array of config settings, or an empty array.
+     */
+    public static function config($module_name = null, $return_full = false)
+    {
+        // Get the path of the file and determine whether it exists.
+        $config_file = Modules::file_path($module_name, 'config', 'config.php');
+        if ( ! file_exists($config_file))
+        {
+            return array();
+        }
+
+        // Include the file and determine whether it contains a config array.
+        include($config_file);
+        if ( ! isset($config))
+        {
+            return array();
+        }
+
+        // Check for the optional module_config and serialize if exists.
+        if (isset($config['module_config']))
+        {
+            return $config['module_config'];
+        }
+        elseif ($return_full === true && is_array($config))
+        {
+            // If 'module_config' did not exist, $return_full is true, and $config
+            // is an array, return it.
+            return $config;
+        }
+
+        // 'module_config' was not found and either $return_full is false or $config
+        // was not an array.
+        return array();
+    }
+
+    /**
+     * Returns an array of the folders in which modules may be stored.
+     *
+     * @return array The folders in which modules may be stored.
+     */
+    public static function folders()
+    {
+        return array_keys(Modules::$locations);
+    }
+
+    /**
+     * Returns a list of all modules in the system.
+     * @return array A list of all modules in the system.
+     */
+    public static function list_modules()
+    {
+    	if ( ! function_exists('directory_map'))
+    	{
+    		// Load any custom version of the function (if any)
+    		$dir_helper = APPPATH.'helpers/MY_directory_helper.php';
+    		(file_exists($dir_helper)) && include_once($dir_helper);
+
+    		// Load CodeIgniter default helper.
+    		require_once BASEPATH.'helpers/directory_helper.php';
+    	}
+
+        $map = array();
+        foreach (Modules::folders() as $folder)
+        {
+            $dirs = directory_map($folder, 1);
+            if (is_array($dirs))
+            {
+                $map = array_merge($map, $dirs);
+            }
+        }
+
+
+        $count = count($map);
+        if (! $count) {
+            return $map;
+        }
+
+        // Clean out any html or php files.
+        for ($i = 0; $i < $count; $i++)
+        {
+            if (stripos($map[$i], '.html') !== false
+                OR stripos($map[$i], '.php') !== false
+            )
+            {
+                unset($map[$i]);
+            }
+            // Added By Kader Bouyakoub <https://github.com/bkader>
+            else
+            {
+            	$map[$i] = rtrim($map[$i], DIRECTORY_SEPARATOR);
+            }
+        }
+
+        return $map;
+    }
 }

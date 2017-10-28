@@ -2,7 +2,7 @@
 	<div class="ui secondary menu">
 		<div class="ui grid container">
 			<div class="eight wide column">
-				<p>&copy; <?php echo date('Y'); ?> - <?php echo @$site_title; ?> <a href="https://github.com/bkader" target="_blank">@bkader</a> &bull; Page rendered in: <strong>{elapsed_time}</strong> seconds.</p>
+				<p>&copy; <?php echo date('Y'); ?> - <?php echo @$site_name; ?> <a href="https://github.com/bkader" target="_blank">@bkader</a> &bull; Page rendered in: <strong>{elapsed_time}</strong> seconds.</p>
 			</div><!--/.column-->
 			<div class="right aligned eight wide column">
 				<span class="navbar-text pull-right text-right">
